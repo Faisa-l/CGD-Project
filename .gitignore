@@ -61,3 +61,9 @@ sysinfo.txt
 # Crashlytics generated file
 crashlytics-build.properties
 
+
+Project/Library/
+
+Project/.vsconfig
+
+Project/UserSettings/
