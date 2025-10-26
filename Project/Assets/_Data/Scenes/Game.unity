@@ -4646,6 +4646,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 460470048}
     m_Modifications:
+    - target: {fileID: 696839202144539364, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: playerNumber
       value: 2
@@ -15071,6 +15075,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 460470048}
     m_Modifications:
+    - target: {fileID: 696839202144539364, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: brakeForce
       value: 75
@@ -15081,7 +15089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: maxSteerAngle
-      value: 50
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: input_test.m_Id
@@ -15157,7 +15165,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1773022933685493602, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: m_Constraints
-      value: 80
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4860262084814405887, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: m_LocalPosition.x
