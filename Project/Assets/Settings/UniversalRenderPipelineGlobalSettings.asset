@@ -59,8 +59,8 @@ MonoBehaviour:
       - rid: 925820020587757571
       - rid: 925820020587757572
       - rid: 925820020587757573
-      - rid: 1481490260763344896
-      - rid: 1481490260763344897
+      - rid: 1481490260962836480
+      - rid: 1481490260962836481
     m_RuntimeSettings:
       m_List: []
   m_AssetVersion: 8
@@ -190,12 +190,12 @@ MonoBehaviour:
         m_xrOcclusionMeshPS: {fileID: 4800000, guid: 4431b1f1f743fbf4eb310a967890cbea, type: 3}
         m_xrMirrorViewPS: {fileID: 4800000, guid: d5a307c014552314b9f560906d708772, type: 3}
         m_xrMotionVector: {fileID: 4800000, guid: f89aac1e4f84468418fe30e611dff395, type: 3}
-    - rid: 1481490260763344896
+    - rid: 1481490260962836480
       type: {class: LightmapSamplingSettings, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_Version: 1
         m_UseBicubicLightmapSampling: 0
-    - rid: 1481490260763344897
+    - rid: 1481490260962836481
       type: {class: VrsRenderPipelineRuntimeResources, ns: UnityEngine.Rendering, asm: Unity.RenderPipelines.Core.Runtime}
       data:
         m_TextureComputeShader: {fileID: 7200000, guid: cacb30de6c40c7444bbc78cb0a81fd2a, type: 3}
