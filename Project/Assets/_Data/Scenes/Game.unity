@@ -15616,7 +15616,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: maxSteerAngle
-      value: 50
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: input_test.m_Id
