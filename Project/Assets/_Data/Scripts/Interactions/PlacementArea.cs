@@ -1,3 +1,4 @@
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -10,31 +11,29 @@ using UnityEngine.SceneManagement;
 
 public class PlacementArea : MonoBehaviour
 {
-    //defining an array that can hold a 3x3x3 cube of objects
-    GameObject[] objects = new GameObject[27];
-
-    //current position of the latest item in the array
-    int current_pos = -1;
+    class ObjectPosition
+    {
+        public Vector3 position;
+        public bool taken;
+    }
 
     //defining an array the has the positions that each object will take
-    Vector3[] positions = new Vector3[27];
+    List<ObjectPosition> positions = new List<ObjectPosition>();
+    int max_length = 27;
 
+    //used to get the index of a place in the positions list
+    List<GameObject> objects = new List<GameObject>();
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         for(int i = 0; i < 27; i++)
         {
-            positions[i] = new Vector3(i%3, i/9, (i/3)%3);
+            positions.Add(new ObjectPosition());
+
+            positions[i].position = new Vector3(i%3, i/9, (i/3)%3);
+            positions[i].taken = false;
         }
-
-        //for(int i = 0; i < 27; i++)
-        //{
-        //    objects[i] = GameObject.CreatePrimitive(PrimitiveType.Cube);
-
-        //    //the nex objects transform = the position in the array it is + the center of the gameobject - half the size of the gameobject + half the height of the placing objects
-        //    objects[i].transform.position = positions[i] + gameObject.transform.position - (gameObject.transform.lossyScale/2) + new Vector3(0,objects[i].transform.localScale.y/2,0);
-        //}
     }
 
     // Update is called once per frame
@@ -45,18 +44,67 @@ public class PlacementArea : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
-        //if the object collider has the physics pickup component, add it to the array
-        if(other.GetComponentInParent<PhysicsPickup>())
+        if(!other.GetComponentInParent<PhysicsPickup>())
         {
-            current_pos++;
-            objects[current_pos] = other.gameObject;
-            objects[current_pos].transform.position = positionInArea(current_pos);
+            return;
+        }
+
+
+        for(int i = 0; i < max_length; i++)
+        {
+            if (!positions[i].taken)
+            {
+                positions[i].taken = true;
+                other.gameObject.transform.position = positionInArea(i, other.gameObject);
+                objects.Add(other.gameObject);
+                return;
+            }
+        }
+        
+    }
+
+    //temporary fix, will probably add function for removing objects from
+    //  the area manually and for when they fall off later when we can discuss
+    //  how we want to implement it
+    private void OnTriggerExit(Collider other)
+    {
+        //check the object leaving the area is a PhysicsPickup
+        if (!other.GetComponentInParent<PhysicsPickup>())
+        {
+            return;
+        }
+
+        int index = -1;
+        //if it's a PhysicsPickup object, then get its index in the list and remove it
+        for(int i = 0; i < objects.Count; i++)
+        {
+            if (objects[i] == other.gameObject)
+            {
+                index = i; 
+                break;
+            }
+        }
+
+        Debug.Log(index);
+
+        objects.RemoveAt(index);
+
+        foreach(ObjectPosition pos in positions)
+        {
+            pos.taken = false;
+        }
+
+        //then go through all the objects and reset their positions
+        for(int i = 0; i < objects.Count; i++)
+        {
+            positions[i].taken=true;
+            objects[i].transform.position = positionInArea(i, objects[i]);
         }
     }
 
-    private Vector3 positionInArea(int idx)
+    private Vector3 positionInArea(int idx, GameObject current_obj)
     {
-        return positions[idx] + gameObject.transform.position - (gameObject.transform.lossyScale / 2) + new Vector3(0, objects[idx].transform.localScale.y / 2, 0);
+        //      position in the area     placement object's position   total scale of the object in its heirarchy   the height needed to get the object out of the floor
+        return positions[idx].position + gameObject.transform.position - (gameObject.transform.lossyScale / 2) + new Vector3(0, current_obj.transform.localScale.y / 2, 0);
     }
 }
