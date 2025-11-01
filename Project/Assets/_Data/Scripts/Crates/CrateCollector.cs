@@ -12,17 +12,22 @@ public class CrateCollector : MonoBehaviour
     float timer = 0f;
     bool canCollect = false;
     List<ICollectable> toCollect;
+    Material material;
+
+    [SerializeField]
+    Color activeColor = Color.green;
+
+    [SerializeField]
+    Color inactiveColor = Color.red;
 
     private void OnValidate()
     {
-        if (TryGetComponent<Collider>(out Collider collectorCollider))
-        {
-            Debug.LogWarning("Collector is missing a collider.");
-        }
+        initialise();
     }
 
     private void Awake()
     {
+        initialise();
         toCollect = new List<ICollectable>();
     }
 
@@ -50,6 +55,20 @@ public class CrateCollector : MonoBehaviour
         }
     }
 
+    void initialise()
+    {
+        if (!TryGetComponent<Collider>(out Collider collectorCollider))
+        {
+            Debug.LogWarning("Collector is missing a collider.");
+        }
+
+        if (TryGetComponent<Renderer>(out Renderer renderer))
+        {
+            material = renderer.sharedMaterial;
+            material.SetColor("_BaseColor", activeColor);
+        }
+    }
+
     // Collects the crate (removes the object and adds some score)
     void CollectCrate(ICollectable collectable)
     {
@@ -60,16 +79,7 @@ public class CrateCollector : MonoBehaviour
 
     private void Update()
     {
-        // Handle visibility
-        Renderer renderer = GetComponent<Renderer>();
-        if (canCollect)
-        {
-            renderer.enabled = true;
-        }
-        else
-        {
-            renderer.enabled = false;
-        }
+        AdjustMaterial();
 
         // Handle timer
         timer += Time.deltaTime;
@@ -87,6 +97,19 @@ public class CrateCollector : MonoBehaviour
             toCollect.Clear();
             timer = 0f;
             canCollect = false;
+        }
+    }
+
+    private void AdjustMaterial()
+    {
+        if (canCollect)
+        {
+            material.SetColor("_BaseColor", activeColor);
+        }
+        else
+        {
+
+            material.SetColor("_BaseColor", inactiveColor);
         }
     }
 }
