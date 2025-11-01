@@ -21,6 +21,8 @@ public class PlayerController : MonoBehaviour
 	
 	// Cache
 	private CharacterController controller;
+
+	[SerializeField] GameObject camera_manager;
 	
 	private void Start()
 	{
@@ -37,10 +39,11 @@ public class PlayerController : MonoBehaviour
 	private void Update()
 	{
 		// Is the player trying to enter a vehicle?
-		if (Input.GetButton("Fire" + playerNumber))
+		if (Input.GetButton("Mouse Left" + playerNumber))
 		{
 			if (currentEnterVehicleTimer >= enterVehicleTime)
 			{
+				camera_manager.GetComponent<CameraManager>().changePerspective3rd(playerNumber);
 				if (TryEnterVehicleInRange())
 				{
 					hudManager.SetVehiclePromptStatus(playerNumber, false);
