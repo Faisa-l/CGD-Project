@@ -9,16 +9,30 @@ public class CrateCollector : MonoBehaviour
     [SerializeField, Range(0f, 60f)]
     float collectionInterval = 30f;
 
-    float timer = 0f;
-    bool canCollect = false;
-    List<ICollectable> toCollect;
-    Material material;
-
     [SerializeField]
     Color activeColor = Color.green;
 
     [SerializeField]
     Color inactiveColor = Color.red;
+
+    float timer = 0f;
+    bool canCollect = false;
+    List<ICollectable> toCollect;
+    Material material;
+
+    void initialise()
+    {
+        if (!TryGetComponent<Collider>(out Collider collectorCollider))
+        {
+            Debug.LogWarning("Collector is missing a collider.");
+        }
+
+        if (TryGetComponent<Renderer>(out Renderer renderer))
+        {
+            material = renderer.sharedMaterial;
+            material.SetColor("_BaseColor", activeColor);
+        }
+    }
 
     private void OnValidate()
     {
@@ -55,18 +69,11 @@ public class CrateCollector : MonoBehaviour
         }
     }
 
-    void initialise()
+    private void Update()
     {
-        if (!TryGetComponent<Collider>(out Collider collectorCollider))
-        {
-            Debug.LogWarning("Collector is missing a collider.");
-        }
-
-        if (TryGetComponent<Renderer>(out Renderer renderer))
-        {
-            material = renderer.sharedMaterial;
-            material.SetColor("_BaseColor", activeColor);
-        }
+        UpdateTimer();
+        AdjustMaterial();
+        HandleCollection();
     }
 
     // Collects the crate (removes the object and adds some score)
@@ -77,29 +84,32 @@ public class CrateCollector : MonoBehaviour
         Destroy(collectable.GameObject);
     }
 
-    private void Update()
+    // Handle timer
+    private bool UpdateTimer()
     {
-        AdjustMaterial();
-
-        // Handle timer
         timer += Time.deltaTime;
-        if (timer < collectionInterval) return;
+        if (timer < collectionInterval) return false;
         canCollect = true;
-
-        // Do collection + timer reset
-        if (toCollect.Count > 0)
-        {
-            Debug.Log("TIME TO COLLECT!");
-            foreach (ICollectable item in toCollect)
-            {
-                CollectCrate(item);
-            }
-            toCollect.Clear();
-            timer = 0f;
-            canCollect = false;
-        }
+        return true;
     }
 
+    // Collects items in toCollect if canCollect is true
+    private void HandleCollection()
+    {
+        if (!canCollect) return;
+        if (toCollect.Count == 0) return;
+        
+        foreach (ICollectable item in toCollect)
+        {
+            CollectCrate(item);
+        }
+        toCollect.Clear();
+        timer = 0f;
+        canCollect = false;
+        
+    }
+
+    // Change material on object based on canCollect state
     private void AdjustMaterial()
     {
         if (canCollect)
@@ -108,7 +118,6 @@ public class CrateCollector : MonoBehaviour
         }
         else
         {
-
             material.SetColor("_BaseColor", inactiveColor);
         }
     }
