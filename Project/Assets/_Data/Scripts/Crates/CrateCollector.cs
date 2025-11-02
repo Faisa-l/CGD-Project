@@ -7,6 +7,9 @@ using UnityEngine.Events;
 /// </summary>
 public class CrateCollector : MonoBehaviour
 {
+    [SerializeField]
+    GameObject marker;
+
     [SerializeField, Range(0f, 60f)]
     float collectionInterval = 30f;
 
@@ -23,7 +26,7 @@ public class CrateCollector : MonoBehaviour
     bool canCollect = false;
     float collectionScore = 0f;
     List<ICollectable> toCollect;
-    Material material;
+    Material markerMaterial;
 
     void initialise()
     {
@@ -32,10 +35,10 @@ public class CrateCollector : MonoBehaviour
             Debug.LogWarning("Collector is missing a collider.");
         }
 
-        if (TryGetComponent<Renderer>(out Renderer renderer))
+        if (marker.TryGetComponent<Renderer>(out Renderer renderer))
         {
-            material = renderer.sharedMaterial;
-            material.SetColor("_BaseColor", activeColor);
+            markerMaterial = renderer.sharedMaterial;
+            markerMaterial.SetColor("_BaseColor", activeColor);
         }
     }
 
@@ -118,11 +121,11 @@ public class CrateCollector : MonoBehaviour
     {
         if (canCollect)
         {
-            material.SetColor("_BaseColor", activeColor);
+            markerMaterial.SetColor("_BaseColor", activeColor);
         }
         else
         {
-            material.SetColor("_BaseColor", inactiveColor);
+            markerMaterial.SetColor("_BaseColor", inactiveColor);
         }
     }
 }
