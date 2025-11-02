@@ -260,7 +260,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 			return true;
 		}
 		
-		return false;
+		//return false;
 	}
 	
 	#endregion IDriveable

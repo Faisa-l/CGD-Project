@@ -1,5 +1,6 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Windows;
 
 // This script is for our game's custom features
 // The other FirstPersonController is for first person movement code
@@ -11,6 +12,7 @@ public class PlayerController : MonoBehaviour
 	// Hold for this many seconds to enter vehicle (like Halo)
 	// Also prevents issue where player exiting gets back in straight away (because they are holding button)
 	[SerializeField] private float enterVehicleTime = 0.5f;
+	[SerializeField] private float speed = 1f;
 	
 	[Header("UI")]
 	[SerializeField] private HudManager hudManager;
@@ -23,8 +25,11 @@ public class PlayerController : MonoBehaviour
 	private CharacterController controller;
 
 	[SerializeField] GameObject camera_manager;
-	
-	private void Start()
+
+    [Tooltip("Animator component for the player model")]
+    public Animator anim;
+
+    private void Start()
 	{
 		controller = GetComponent<CharacterController>();
 	}
@@ -38,12 +43,16 @@ public class PlayerController : MonoBehaviour
 	
 	private void Update()
 	{
+		CameraRotation();
+		move();
+
 		// Is the player trying to enter a vehicle?
-		if (Input.GetButton("Mouse Left" + playerNumber))
+		if (UnityEngine.Input.GetButton("Mouse Left" + playerNumber))
 		{
 			if (currentEnterVehicleTimer >= enterVehicleTime)
 			{
 				camera_manager.GetComponent<CameraManager>().changePerspective3rd(playerNumber);
+
 				if (TryEnterVehicleInRange())
 				{
 					hudManager.SetVehiclePromptStatus(playerNumber, false);
@@ -68,8 +77,63 @@ public class PlayerController : MonoBehaviour
 															// Calculate percentage complete
 		hudManager.SetVehiclePromptProgress(playerNumber, (currentEnterVehicleTimer / enterVehicleTime));
 	}
-	
-	private bool TryEnterVehicleInRange()
+
+    private void move()
+    {
+		Vector3 inputDirection = new Vector3(0,0,0);
+
+		//get the user input
+        if (UnityEngine.Input.GetButton("Horizontal" + playerNumber))
+		{ 
+			inputDirection.x = UnityEngine.Input.GetAxis("Horizontal" + playerNumber) < 0 ? -1 : 1;
+		}
+
+        if (UnityEngine.Input.GetButton("Vertical" + playerNumber))
+        {
+            inputDirection.z = UnityEngine.Input.GetAxis("Vertical" + playerNumber) < 0 ? -1 : 1;
+        }
+
+		Vector3 direction = new(0,0,0);
+
+		//get the angle of the camera in radians
+		float angle = transform.rotation.eulerAngles.y * Mathf.PI/ 180.0f;
+
+		//rotate the direction to match with the camera direction
+		direction.x = inputDirection.x * Mathf.Cos(angle) + inputDirection.z * Mathf.Sin(angle);
+		direction.z = inputDirection.z * Mathf.Cos(angle) - inputDirection.x * Mathf.Sin(angle);
+
+        direction.Normalize();
+
+        // note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
+        // if there is a move input rotate player when the player is moving
+        if (direction.magnitude != 0)
+        {
+            // walk animation
+            if (anim)
+                anim.SetBool("IsMoving", true);
+        }
+        else
+        {
+            // idle animation
+            if (anim)
+                anim.SetBool("IsMoving", false);
+        }
+
+        // move the player
+        controller.Move(direction * (speed * Time.deltaTime));
+    }
+
+    private void CameraRotation()
+    {
+		Vector2 camera_rotation = new(0,0);
+
+		camera_rotation.x = UnityEngine.Input.GetAxis("Mouse Y");
+        camera_rotation.y = UnityEngine.Input.GetAxis("Mouse X");
+
+		transform.eulerAngles += new Vector3(camera_rotation.x, camera_rotation.y, 0);
+    }
+
+    private bool TryEnterVehicleInRange()
 	{
 		if (driveablesInRange.Count > 0)
 		{

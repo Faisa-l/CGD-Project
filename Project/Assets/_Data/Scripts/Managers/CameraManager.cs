@@ -156,6 +156,8 @@ public class CameraManager : MonoBehaviour
 
     public void changePerspective3rd(int player_number)
     {
+        Debug.Log(player_number);
+
         //deactivate the player
         players[player_number - 1].SetActive(false);
 
