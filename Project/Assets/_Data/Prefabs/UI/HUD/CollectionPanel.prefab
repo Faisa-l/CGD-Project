@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8906294882931466347}
   - component: {fileID: 1537300218098824295}
-  - component: {fileID: 6698752128695878094}
   - component: {fileID: 8351663192939640387}
   m_Layer: 5
   m_Name: CollectionText
@@ -46,19 +45,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1042059771219441127}
   m_CullTransparentMesh: 1
---- !u!114 &6698752128695878094
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1042059771219441127}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f276ca9d67792c148bd707ef5eef686a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  display: {fileID: 8351663192939640387}
 --- !u!114 &8351663192939640387
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,6 +151,7 @@ GameObject:
   - component: {fileID: 6113961091146271846}
   - component: {fileID: 8720998898526762817}
   - component: {fileID: 4953866914612115771}
+  - component: {fileID: 2058490929720580238}
   m_Layer: 5
   m_Name: CollectionPanel
   m_TagString: Untagged
@@ -230,3 +217,22 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2058490929720580238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8279144247219420112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f276ca9d67792c148bd707ef5eef686a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  display: {fileID: 8351663192939640387}
+  displayText: 'Collected crates
+
+    Total score
+
+'
+  visbilityDuration: 3

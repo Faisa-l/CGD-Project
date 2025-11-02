@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 /// <summary>
 /// MonoBehaviour that uses the GameObject's collider to detect and collect crates.
@@ -15,8 +16,12 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     Color inactiveColor = Color.red;
 
+    [SerializeField]
+    UnityEvent<float> onCollection;
+
     float timer = 0f;
     bool canCollect = false;
+    float collectionScore = 0f;
     List<ICollectable> toCollect;
     Material material;
 
@@ -64,7 +69,6 @@ public class CrateCollector : MonoBehaviour
             {
                 toCollect.Remove(collectable);
                 Debug.Log("removed object");
-
             }
         }
     }
@@ -80,7 +84,7 @@ public class CrateCollector : MonoBehaviour
     void CollectCrate(ICollectable collectable)
     {
         // Do something with its data
-        Debug.Log("Score from crate: " + collectable.Score);
+        collectionScore += collectable.Score;
         Destroy(collectable.GameObject);
     }
 
@@ -106,7 +110,7 @@ public class CrateCollector : MonoBehaviour
         toCollect.Clear();
         timer = 0f;
         canCollect = false;
-        
+        onCollection.Invoke(collectionScore);
     }
 
     // Change material on object based on canCollect state
