@@ -1339,6 +1339,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 6067264299834313395, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
   m_PrefabInstance: {fileID: 67816568936969832}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &150398152 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 408882851012931050, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+  m_PrefabInstance: {fileID: 67816568936969832}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &153760462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1634,6 +1639,11 @@ Transform:
   - {fileID: 1843411750}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &167649227 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2921014532425223184, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+  m_PrefabInstance: {fileID: 67816568936969832}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &171120022
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4459,6 +4469,11 @@ PrefabInstance:
 Transform:
   m_CorrespondingSourceObject: {fileID: 4062619256373206, guid: a2e435ea5b0f606429670d1f3f1f1504, type: 3}
   m_PrefabInstance: {fileID: 520345502}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &523079456 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2307399329962496751, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+  m_PrefabInstance: {fileID: 67816568936969832}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &530764659
 PrefabInstance:
@@ -9604,6 +9619,11 @@ GameObject:
 --- !u!4 &1314464635 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6866426237311850472, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+  m_PrefabInstance: {fileID: 67816568936969832}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1314834348 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 2699359120268052208, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
   m_PrefabInstance: {fileID: 67816568936969832}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1318017030
@@ -16077,6 +16097,10 @@ PrefabInstance:
       value: Forklift 4
       objectReference: {fileID: 0}
     - target: {fileID: 6586420308949089723, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 150398152}
+    - target: {fileID: 6586420308949089723, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
       propertyPath: playerNumber
       value: 3
       objectReference: {fileID: 0}
@@ -16097,6 +16121,10 @@ PrefabInstance:
       value: Forklift 1
       objectReference: {fileID: 0}
     - target: {fileID: 8521524813510892609, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 167649227}
+    - target: {fileID: 8521524813510892609, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
       propertyPath: camera_manager
       value: 
       objectReference: {fileID: 778707803}
@@ -16105,6 +16133,10 @@ PrefabInstance:
       value: LevelPack
       objectReference: {fileID: 0}
     - target: {fileID: 8916285345084085921, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 1314834348}
+    - target: {fileID: 8916285345084085921, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
       propertyPath: playerNumber
       value: 4
       objectReference: {fileID: 0}
@@ -16112,6 +16144,10 @@ PrefabInstance:
       propertyPath: camera_manager
       value: 
       objectReference: {fileID: 778707803}
+    - target: {fileID: 9137392296133149374, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
+      propertyPath: anim
+      value: 
+      objectReference: {fileID: 523079456}
     - target: {fileID: 9137392296133149374, guid: 76180fa00fe88844688e6ccb3878f65b, type: 3}
       propertyPath: playerNumber
       value: 2
