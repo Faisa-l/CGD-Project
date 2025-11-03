@@ -31,6 +31,9 @@ public class CrateCollector : MonoBehaviour
     UnityEvent<int> onRequirementUpdate;
 
     [SerializeField]
+    UnityEvent<float> onScoreUpdated;
+
+    [SerializeField]
     UnityEvent onCollectionPeriodStarted;
 
     [SerializeField]
@@ -81,6 +84,7 @@ public class CrateCollector : MonoBehaviour
     {
         initialise();
         toCollect = new List<ICollectable>();
+        onScoreUpdated.Invoke(collectionScore);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -153,6 +157,7 @@ public class CrateCollector : MonoBehaviour
         timer = 0f;
         canCollect = false;
         onCollection.Invoke(currentCollectionScore);
+        onScoreUpdated.Invoke(collectionScore);
         currentCollectionScore = 0f;
 
         // Hide text
