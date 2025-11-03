@@ -40,6 +40,7 @@ public class CrateCollector : MonoBehaviour
     bool canCollect = false;
     int collectionRequierment = 1;
     float collectionScore = 0f;
+    float currentCollectionScore = 0f;
     List<ICollectable> toCollect;
     Material markerMaterial;
 
@@ -67,8 +68,8 @@ public class CrateCollector : MonoBehaviour
 
     private void OnValidate()
     {
-        if (requirementRange.x < 0) requirementRange.x = 0;
-        if (requirementRange.y < 0) requirementRange.y = 0;
+        if (requirementRange.x < 0) requirementRange.x = 1; 
+        if (requirementRange.y < 0) requirementRange.y = 1;
         if (requirementRange.x > requirementRange.y)
         {
             requirementRange.x = requirementRange.y;
@@ -117,6 +118,7 @@ public class CrateCollector : MonoBehaviour
     {
         // Do something with its data
         collectionScore += collectable.Score;
+        currentCollectionScore += collectable.Score;
         Destroy(collectable.GameObject);
     }
 
@@ -129,7 +131,9 @@ public class CrateCollector : MonoBehaviour
         if (timer < collectionInterval) return;
 
         canCollect = true;
-        UpdateRequirement();
+
+        // UpdateRequirement();         Randomises the requirement 
+
         OnCollectionStarted();
         return;
     }
@@ -148,7 +152,8 @@ public class CrateCollector : MonoBehaviour
         toCollect.Clear();
         timer = 0f;
         canCollect = false;
-        onCollection.Invoke(collectionScore);
+        onCollection.Invoke(currentCollectionScore);
+        currentCollectionScore = 0f;
 
         // Hide text
         OnCollectionEnded();

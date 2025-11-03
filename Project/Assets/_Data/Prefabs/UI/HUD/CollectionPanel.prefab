@@ -67,7 +67,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'Collected crates
 
-    Total score
+    Score
 
     000'
   m_isRightToLeft: 0
@@ -232,7 +232,7 @@ MonoBehaviour:
   display: {fileID: 8351663192939640387}
   displayText: 'Collected crates
 
-    Total score
+    Score
 
 '
   visbilityDuration: 3
