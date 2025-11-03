@@ -26,6 +26,8 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     UnityEvent<float> onCollection;
 
+    [SerializeField]
+    UnityEvent<int> onRequirementUpdate;
 
     float timer = 0f;
     bool canCollect = false;
@@ -35,7 +37,11 @@ public class CrateCollector : MonoBehaviour
     Material markerMaterial;
 
     bool RequirementMet => (toCollect.Count >= collectionRequierment);
-    void UpdateRequirement() => collectionRequierment = Random.Range(requirementRange.x, requirementRange.y);
+    void UpdateRequirement()
+    {
+        collectionRequierment = Random.Range(requirementRange.x, requirementRange.y);
+        onRequirementUpdate.Invoke(collectionRequierment);
+    }
 
     void initialise()
     {
@@ -100,7 +106,7 @@ public class CrateCollector : MonoBehaviour
     }
 
     // Collects the crate (removes the object and adds some score)
-    void CollectCrate(ICollectable collectable)
+    private void CollectCrate(ICollectable collectable)
     {
         // Do something with its data
         collectionScore += collectable.Score;
@@ -126,6 +132,7 @@ public class CrateCollector : MonoBehaviour
         {
             CollectCrate(item);
         }
+
         toCollect.Clear();
         timer = 0f;
         canCollect = false;
