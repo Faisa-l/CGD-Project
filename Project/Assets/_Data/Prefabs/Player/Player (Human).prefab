@@ -138,7 +138,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 1
-  enterVehicleTime: 2
+  enterVehicleTime: 0.001
   hudManager: {fileID: 0}
 --- !u!1001 &4402292121841486752
 PrefabInstance:

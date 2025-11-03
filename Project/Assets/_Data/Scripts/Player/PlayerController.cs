@@ -7,17 +7,15 @@ public class PlayerController : MonoBehaviour
 {
 	[Header("Settings")]
     [SerializeField][Range(1, 4)] private int playerNumber = 1;
-	//[SerializeField] [Min(0)] private float vehicleEnterDistance = 1f;
-	// Hold for this many seconds to enter vehicle (like Halo)
-	// Also prevents issue where player exiting gets back in straight away (because they are holding button)
-	[SerializeField] private float enterVehicleTime = 0.5f;
 	
 	[Header("UI")]
 	[SerializeField] private HudManager hudManager;
 	
 	// Enter / exiting vehicles
 	private List<IDriveable> driveablesInRange = new List<IDriveable>();
-	private float currentEnterVehicleTimer = 0;
+	// Prevent exiting vehicle and immediately re-entering because Input.GetButtonDown is still being called
+	private static readonly float enterVehicleDelay = 0.01f;
+	private float currentEnterVehicleDelay = 0.0f;
 	
 	// Cache
 	private CharacterController controller;
@@ -31,15 +29,18 @@ public class PlayerController : MonoBehaviour
 	{
 		// Reset
 		driveablesInRange = new List<IDriveable>();
-		currentEnterVehicleTimer = 0;
+		
+		// Prevent exiting vehicle and immediately re-entering because Input.GetButtonDown is still being called
+		currentEnterVehicleDelay = enterVehicleDelay;
 	}
 	
 	private void Update()
 	{
-		// Is the player trying to enter a vehicle?
-		if (Input.GetButton("Fire" + playerNumber))
+		// Ready to enter vehicle
+		if (currentEnterVehicleDelay <= 0)
 		{
-			if (currentEnterVehicleTimer >= enterVehicleTime)
+			// Is the player trying to enter a vehicle?
+			if (Input.GetButtonDown("Fire" + playerNumber))
 			{
 				if (TryEnterVehicleInRange())
 				{
@@ -49,21 +50,17 @@ public class PlayerController : MonoBehaviour
 			}
 			else
 			{
-				if (currentEnterVehicleTimer == 0)
-				{
-					hudManager.SetVehiclePromptText(playerNumber, "Drive Forklift");
-				}
-				
-				currentEnterVehicleTimer += Time.deltaTime;
+				hudManager.SetVehiclePromptText(playerNumber, "Drive Forklift");
 			}
 		}
+		// Not ready to enter vehicle
 		else
 		{
-			currentEnterVehicleTimer = 0;
+			currentEnterVehicleDelay -= Time.deltaTime;
 		}
 		
 															// Calculate percentage complete
-		hudManager.SetVehiclePromptProgress(playerNumber, (currentEnterVehicleTimer / enterVehicleTime));
+		hudManager.SetVehiclePromptProgress(playerNumber/*, (currentEnterVehicleTimer / enterVehicleTime)*/);
 	}
 	
 	private bool TryEnterVehicleInRange()
@@ -78,38 +75,6 @@ public class PlayerController : MonoBehaviour
 			return false;
 		}
 	}
-	
-	/*private bool VehicleCheck()
-	{
-		// Is there a vehicle in front of the player?
-			
-		// Source - https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Physics.SphereCast.html
-		RaycastHit hit;
-		Vector3 p1 = transform.position + controller.center;
-
-		// Cast a sphere wrapping character controller vehicleEnterDistance meters forward
-		// to see if it is about to hit anything.
-		if (Physics.SphereCast(p1, controller.height / 2, transform.forward, out hit, vehicleEnterDistance))
-		{
-			IDriveable drivable = hit.transform.GetComponent<IDriveable>();
-				
-			if (drivable != null)
-			{
-				Debug.Log("Driveable found: " + hit.transform.name);
-				return true;
-			}
-			else
-			{
-				Debug.Log(hit.transform.name + " isn't driveable");
-				return false;
-			}
-		}
-		else
-		{
-			Debug.Log("Nothing there");
-			return false;
-		}
-	}*/
 	
 	public void AddVehicleInRange(IDriveable driveable)
 	{
