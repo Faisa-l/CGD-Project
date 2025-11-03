@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -20,13 +21,21 @@ public class CrateCollector : MonoBehaviour
     Color inactiveColor = Color.red;
 
     [SerializeField]
+    Vector2Int requirementRange;
+
+    [SerializeField]
     UnityEvent<float> onCollection;
+
 
     float timer = 0f;
     bool canCollect = false;
+    int collectionRequierment = 1;
     float collectionScore = 0f;
     List<ICollectable> toCollect;
     Material markerMaterial;
+
+    bool RequirementMet => (toCollect.Count >= collectionRequierment);
+    void UpdateRequirement() => collectionRequierment = Random.Range(requirementRange.x, requirementRange.y);
 
     void initialise()
     {
@@ -40,10 +49,17 @@ public class CrateCollector : MonoBehaviour
             markerMaterial = renderer.sharedMaterial;
             markerMaterial.SetColor("_BaseColor", activeColor);
         }
+        UpdateRequirement();
     }
 
     private void OnValidate()
     {
+        if (requirementRange.x < 0) requirementRange.x = 0;
+        if (requirementRange.y < 0) requirementRange.y = 0;
+        if (requirementRange.x > requirementRange.y)
+        {
+            requirementRange.x = requirementRange.y;
+        }
         initialise();
     }
 
@@ -104,7 +120,7 @@ public class CrateCollector : MonoBehaviour
     private void HandleCollection()
     {
         if (!canCollect) return;
-        if (toCollect.Count == 0) return;
+        if (!RequirementMet) return;
         
         foreach (ICollectable item in toCollect)
         {
@@ -114,6 +130,7 @@ public class CrateCollector : MonoBehaviour
         timer = 0f;
         canCollect = false;
         onCollection.Invoke(collectionScore);
+        UpdateRequirement();
     }
 
     // Change material on object based on canCollect state
