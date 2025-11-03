@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
@@ -29,6 +30,12 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     UnityEvent<int> onRequirementUpdate;
 
+    [SerializeField]
+    UnityEvent onCollectionPeriodStarted;
+
+    [SerializeField]
+    UnityEvent onCollectionPeriodEnded;
+
     float timer = 0f;
     bool canCollect = false;
     int collectionRequierment = 1;
@@ -39,7 +46,7 @@ public class CrateCollector : MonoBehaviour
     bool RequirementMet => (toCollect.Count >= collectionRequierment);
     void UpdateRequirement()
     {
-        collectionRequierment = Random.Range(requirementRange.x, requirementRange.y);
+        collectionRequierment = UnityEngine.Random.Range(requirementRange.x, requirementRange.y);
         onRequirementUpdate.Invoke(collectionRequierment);
     }
 
@@ -114,12 +121,17 @@ public class CrateCollector : MonoBehaviour
     }
 
     // Handle timer
-    private bool UpdateTimer()
+    private void UpdateTimer()
     {
+        if (canCollect == true) return;
+
         timer += Time.deltaTime;
-        if (timer < collectionInterval) return false;
+        if (timer < collectionInterval) return;
+
         canCollect = true;
-        return true;
+        UpdateRequirement();
+        OnCollectionStarted();
+        return;
     }
 
     // Collects items in toCollect if canCollect is true
@@ -137,7 +149,9 @@ public class CrateCollector : MonoBehaviour
         timer = 0f;
         canCollect = false;
         onCollection.Invoke(collectionScore);
-        UpdateRequirement();
+
+        // Hide text
+        OnCollectionEnded();
     }
 
     // Change material on object based on canCollect state
@@ -151,5 +165,18 @@ public class CrateCollector : MonoBehaviour
         {
             markerMaterial.SetColor("_BaseColor", inactiveColor);
         }
+    }
+
+    // These functions could eventually be bound to an action so they aren't directly invoked via code
+    void OnCollectionStarted()
+    {
+        // Show requirement text
+        onCollectionPeriodStarted.Invoke();
+    }
+
+    void OnCollectionEnded()
+    {
+        // Hide requirement text
+        onCollectionPeriodEnded.Invoke();
     }
 }
