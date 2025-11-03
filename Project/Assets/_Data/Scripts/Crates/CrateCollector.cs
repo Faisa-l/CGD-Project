@@ -23,12 +23,18 @@ public class CrateCollector : MonoBehaviour
 
     [SerializeField]
     Vector2Int requirementRange;
+    
+    [SerializeField]
+    bool randomiseRequirementOnCollection = false;
+
+    [Space, Header("Event Bindings")]
 
     [SerializeField]
     UnityEvent<float> onCollection;
 
     [SerializeField]
     UnityEvent<int> onRequirementUpdate;
+
 
     [SerializeField]
     UnityEvent<float> onScoreUpdated;
@@ -135,8 +141,7 @@ public class CrateCollector : MonoBehaviour
         if (timer < collectionInterval) return;
 
         canCollect = true;
-
-        // UpdateRequirement();         Randomises the requirement 
+        if (randomiseRequirementOnCollection) UpdateRequirement();
 
         OnCollectionStarted();
         return;
