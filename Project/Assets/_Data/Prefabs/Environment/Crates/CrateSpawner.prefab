@@ -78,4 +78,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cratePrefab: {fileID: 3767048393502162153, guid: 25706bb730b17b54e80fe11a22508e4b, type: 3}
   spawnInterval: 10
-  points: []
+  points:
+  - {fileID: 8266049594299496574}
