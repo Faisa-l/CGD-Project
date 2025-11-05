@@ -1,76 +1,102 @@
-using UnityEngine;
+using StarterAssets;
 using System.Collections.Generic;
+using Unity.VisualScripting;
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
+using UnityEngine.Windows;
+using static Unity.Burst.Intrinsics.X86;
+using static UnityEditor.PlayerSettings;
 
 // This script is for our game's custom features
 // The other FirstPersonController is for first person movement code
 public class PlayerController : MonoBehaviour
 {
 	[Header("Settings")]
-    [SerializeField][Range(1, 4)] private int playerNumber = 1;
-	//[SerializeField] [Min(0)] private float vehicleEnterDistance = 1f;
-	// Hold for this many seconds to enter vehicle (like Halo)
-	// Also prevents issue where player exiting gets back in straight away (because they are holding button)
+	[SerializeField][Range(1, 4)] private int playerNumber = 1;
 	[SerializeField] private float enterVehicleTime = 0.5f;
-	
-	[Header("UI")]
-	[SerializeField] private HudManager hudManager;
-	
+
+	//[Header("UI")]
+	//[SerializeField] private HudManager hudManager;
+
 	// Enter / exiting vehicles
 	private List<IDriveable> driveablesInRange = new List<IDriveable>();
-	private float currentEnterVehicleTimer = 0;
-	
-	// Cache
-	private CharacterController controller;
-	
-	private void Start()
+
+	[Space(20)]
+	[Header("Player Model")]
+	[SerializeField] GameObject model;
+
+	private ForkliftController current_forklift = null;
+
+	[SerializeField] GameObject camera;
+
+	[SerializeField][Range(0, 1)] float max_rotation = 0.3f;
+
+	public bool driving { get; private set; }
+
+    private void Start()
 	{
-		controller = GetComponent<CharacterController>();
-	}
-	
-	private void OnEnable()
+        driving = false;
+    }
+
+    private void OnEnable()
 	{
 		// Reset
 		driveablesInRange = new List<IDriveable>();
-		currentEnterVehicleTimer = 0;
 	}
-	
-	private void Update()
+
+    private void OnDisable()
+    {
+
+    }
+
+    public void OnInteract()
+    {
+		EnterVehicle();
+    }
+
+    private void EnterVehicle()
 	{
-		// Is the player trying to enter a vehicle?
-		if (Input.GetButton("Fire" + playerNumber))
-		{
-			if (currentEnterVehicleTimer >= enterVehicleTime)
-			{
-				if (TryEnterVehicleInRange())
-				{
-					hudManager.SetVehiclePromptStatus(playerNumber, false);
-					gameObject.SetActive(false);
-				}
-			}
-			else
-			{
-				if (currentEnterVehicleTimer == 0)
-				{
-					hudManager.SetVehiclePromptText(playerNumber, "Drive Forklift");
-				}
-				
-				currentEnterVehicleTimer += Time.deltaTime;
-			}
-		}
-		else
-		{
-			currentEnterVehicleTimer = 0;
-		}
-		
-															// Calculate percentage complete
-		hudManager.SetVehiclePromptProgress(playerNumber, (currentEnterVehicleTimer / enterVehicleTime));
+        if (TryEnterVehicleInRange())
+        {
+            model.SetActive(false);
+			driving = true;
+        }
+    }
+
+	public void drive(StarterAssetsInputs input)
+	{
+		current_forklift.move(input);
 	}
-	
-	private bool TryEnterVehicleInRange()
+
+	public void cameraDrive(float rotation_velocity)
+	{
+		if(camera.transform.localRotation.y < 0.3f && rotation_velocity > 0)
+		{ 
+			camera.transform.Rotate(Vector3.up * rotation_velocity); 
+		}
+        else if (camera.transform.localRotation.y > -0.3f && rotation_velocity < 0)
+        {
+            camera.transform.Rotate(Vector3.up * rotation_velocity);
+        }
+    }
+
+    private void Update()
+    {
+
+    }
+
+    private bool TryEnterVehicleInRange()
 	{
 		if (driveablesInRange.Count > 0)
 		{
 			driveablesInRange[0].TryEnterVehicle(this);
+			current_forklift = (ForkliftController)driveablesInRange[0];
+
+			Transform forklift_camera_root = current_forklift.getCameraRoot();
+			camera.transform.SetPositionAndRotation(forklift_camera_root.transform.position, forklift_camera_root.transform.rotation);
+			camera.transform.parent = current_forklift.transform;
+			
 			return true;
 		}
 		else
@@ -79,7 +105,44 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 	
-	/*private bool VehicleCheck()
+	public void AddVehicleInRange(IDriveable driveable)
+	{
+		// Don't add twice
+		if (!driveablesInRange.Contains(driveable))
+		{
+			driveablesInRange.Add(driveable);
+			
+			//hudManager.SetVehiclePromptStatus(playerNumber, true);
+		}
+		else
+		{
+			Debug.LogWarning("Tried to add a driveable that is already in driveablesInRange");
+		}
+	}
+	
+	public void RemoveVehicleInRange(IDriveable driveable)
+	{
+		if (driveablesInRange.Contains(driveable))
+		{
+			driveablesInRange.Remove(driveable);
+			
+			if (driveablesInRange.Count <= 0)
+			{
+				//hudManager.SetVehiclePromptStatus(playerNumber, false);
+			}
+		}
+		else
+		{
+			Debug.LogWarning("Tried to remove driveable that isn't in driveablesInRange.");
+		}
+	}
+	
+	public int GetPlayerNumber()
+	{
+		return playerNumber;
+	}
+
+    /*private bool VehicleCheck()
 	{
 		// Is there a vehicle in front of the player?
 			
@@ -110,41 +173,4 @@ public class PlayerController : MonoBehaviour
 			return false;
 		}
 	}*/
-	
-	public void AddVehicleInRange(IDriveable driveable)
-	{
-		// Don't add twice
-		if (!driveablesInRange.Contains(driveable))
-		{
-			driveablesInRange.Add(driveable);
-			
-			hudManager.SetVehiclePromptStatus(playerNumber, true);
-		}
-		else
-		{
-			Debug.LogWarning("Tried to add a driveable that is already in driveablesInRange");
-		}
-	}
-	
-	public void RemoveVehicleInRange(IDriveable driveable)
-	{
-		if (driveablesInRange.Contains(driveable))
-		{
-			driveablesInRange.Remove(driveable);
-			
-			if (driveablesInRange.Count <= 0)
-			{
-				hudManager.SetVehiclePromptStatus(playerNumber, false);
-			}
-		}
-		else
-		{
-			Debug.LogWarning("Tried to remove driveable that isn't in driveablesInRange.");
-		}
-	}
-	
-	public int GetPlayerNumber()
-	{
-		return playerNumber;
-	}
 }
