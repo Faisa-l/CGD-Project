@@ -14,7 +14,7 @@ namespace Interaction
             Console.WriteLine("Box picked up!");
         }
 
-        public void Interact(InteractableControl interactableControl)
+        public virtual void Interact(InteractableControl interactableControl)
         {
             ConsolePrint();
             Destroy(gameObject);

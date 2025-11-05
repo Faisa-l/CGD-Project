@@ -8,5 +8,6 @@ public interface Pickupable : Interactable
     public void Drop(PickupController pickupController);
     public void Place(PickupController pickupController);
     public void SetPositionInParent(Transform newParent);
+    public void Destroy(PickupController pickupController);
     public void Use();
 }

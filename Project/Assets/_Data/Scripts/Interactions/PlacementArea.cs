@@ -1,3 +1,4 @@
+using Interaction;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -9,102 +10,90 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal.Internal;
 using UnityEngine.SceneManagement;
 
-public class PlacementArea : MonoBehaviour
+namespace Interaction
 {
-    class ObjectPosition
+    public class PlacementArea : MonoBehaviour, Interactable
     {
-        public Vector3 position;
-        public bool taken;
-    }
-
-    //defining an array the has the positions that each object will take
-    List<ObjectPosition> positions = new List<ObjectPosition>();
-    int max_length = 27;
-
-    //used to get the index of a place in the positions list
-    List<GameObject> objects = new List<GameObject>();
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        for(int i = 0; i < 27; i++)
+        public string MessageInteract => "Place In Area";
+        [SerializeField]
+        private GameObject cubePrefab;
+        [SerializeField]
+        int num_boxes = 0;
+        class ObjectPosition
         {
-            positions.Add(new ObjectPosition());
-
-            positions[i].position = new Vector3(i%3, i/9, (i/3)%3);
-            positions[i].taken = false;
-        }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if(!other.GetComponentInParent<PhysicsPickup>())
-        {
-            return;
+            public Vector3 position;
+            public bool taken;
         }
 
+        //defining an array the has the positions that each object will take
+        List<ObjectPosition> positions = new List<ObjectPosition>();
+        int max_length = 27;
 
-        for(int i = 0; i < max_length; i++)
+        //used to get the index of a place in the positions list
+        List<GameObject> objects = new List<GameObject>();
+
+        // Start is called once before the first execution of Update after the MonoBehaviour is created
+        void Start()
         {
-            if (!positions[i].taken)
+            for (int i = 0; i < 27; i++)
             {
-                positions[i].taken = true;
-                other.gameObject.transform.position = positionInArea(i, other.gameObject);
-                objects.Add(other.gameObject);
-                return;
-            }
-        }
-        
-    }
+                positions.Add(new ObjectPosition());
 
-    //temporary fix, will probably add function for removing objects from
-    //  the area manually and for when they fall off later when we can discuss
-    //  how we want to implement it
-    private void OnTriggerExit(Collider other)
-    {
-        //check the object leaving the area is a PhysicsPickup
-        if (!other.GetComponentInParent<PhysicsPickup>())
-        {
-            return;
-        }
-
-        int index = -1;
-        //if it's a PhysicsPickup object, then get its index in the list and remove it
-        for(int i = 0; i < objects.Count; i++)
-        {
-            if (objects[i] == other.gameObject)
-            {
-                index = i; 
-                break;
+                positions[i].position = new Vector3(i % 3, i / 9, (i / 3) % 3);
+                positions[i].taken = false;
+                objects.Add(Instantiate(cubePrefab));
+                objects[i].transform.position = positionInArea(i, objects[i]);
+                objects[i].SetActive(false);
             }
         }
 
-        Debug.Log(index);
-
-        objects.RemoveAt(index);
-
-        foreach(ObjectPosition pos in positions)
+        // Update is called once per frame
+        void Update()
         {
-            pos.taken = false;
+           
+            //for (int i = 0; i < num_boxes; i++)
+            //{
+            //    objects[i].SetActive(true);
+            //}
+            //
+            //for (int i = 0; i < num_boxes; i++)
+            //{
+            //    objects[i].SetActive(false);
+            //}
+
         }
 
-        //then go through all the objects and reset their positions
-        for(int i = 0; i < objects.Count; i++)
+        public virtual void Interact(InteractableControl interactableControl)
         {
-            positions[i].taken=true;
-            objects[i].transform.position = positionInArea(i, objects[i]);
-        }
-    }
+            var pickupController = interactableControl.GetComponent<PickupController>();
+            
+            
 
-    private Vector3 positionInArea(int idx, GameObject current_obj)
-    {
-        //      position in the area     placement object's position   total scale of the object in its heirarchy   the height needed to get the object out of the floor
-        return positions[idx].position + gameObject.transform.position - (gameObject.transform.lossyScale / 2) + new Vector3(0, current_obj.transform.localScale.y / 2, 0);
+            if (pickupController.HasPickupable)
+            {
+                Debug.Log("Placed");
+                pickupController.currentPickupable.Destroy(pickupController);
+                num_boxes += 1;
+                objects[num_boxes -1].SetActive(true);
+
+            }
+            else
+            {
+                //Debug.Log("Taken");
+                //num_boxes -= 1;
+                //objects[num_boxes - 1].SetActive(true);
+            }
+       
+        }
+
+        //temporary fix, will probably add function for removing objects from
+        //  the area manually and for when they fall off later when we can discuss
+        //  how we want to implement it
+        private Vector3 positionInArea(int idx, GameObject current_obj)
+        {
+            //      position in the area     placement object's position   total scale of the object in its heirarchy   the height needed to get the object out of the floor
+            return positions[idx].position + gameObject.transform.position - (gameObject.transform.lossyScale / 2) + new Vector3(0, current_obj.transform.localScale.y / 2, 0);
+        }
+
     }
 }

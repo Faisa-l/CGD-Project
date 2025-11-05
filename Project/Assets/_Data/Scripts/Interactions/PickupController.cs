@@ -7,7 +7,7 @@ public class PickupController : MonoBehaviour
     [SerializeField]
     Transform pickupHolder;
 
-    Pickupable currentPickupable;
+    public Pickupable currentPickupable;
 
     public bool HasPickupable => currentPickupable != null;
 
@@ -29,7 +29,7 @@ public class PickupController : MonoBehaviour
     
     void CheckDropInput()
     {
-        if (Input.GetKeyDown(KeyCode.Q) && HasPickupable)
+        if (Input.GetKeyDown(KeyCode.P) && HasPickupable)
         {
             currentPickupable.Drop(this);
             currentPickupable = null;

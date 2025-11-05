@@ -52,6 +52,13 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
         SetPhysicsValues(false);
     }
 
+    public virtual void Destroy(PickupController pickupController)
+    {
+        transform.parent = null;
+        pickupController.currentPickupable = null;
+        Destroy(gameObject);
+    }
+
     public void SetPositionInParent(Transform newParent)
 
     {
