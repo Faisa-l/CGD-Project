@@ -30,8 +30,15 @@ public class NamedArrayDrawer : PropertyDrawer
 
 public class CameraManager : MonoBehaviour
 {
+    [NamedArray(new string[] { "Player 1 Camera", "Player 2 Camera", "Player 3 Camera", "Player 4 Camera", "OutOfRange" })]
+    [SerializeField] List<Camera> cameras;
+
     [NamedArray(new string[] { "Player 1", "Player 2", "Player 3", "Player 4", "OutOfRange" })]
     [SerializeField] List<GameObject> players;
+
+    [NamedArray(new string[] { "Forkflift 1", "Forkflift 2", "Forkflift 3", "Forkflift 4", "OutOfRange" })]
+    [SerializeField] List<GameObject> forklifts;
+
 
 
     [SerializeField] Camera blank_camera;
@@ -47,9 +54,14 @@ public class CameraManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        for (int i = 1; i <= 4; i++)
+        {
+            changePerspective1st(i);
+        }
+
         //set the default setup to have the single-player layout
         disableExtraPlayers();
-        players[0].GetComponentInChildren<Camera>().rect = screen_full;
+        cameras[0].rect = screen_full;
     }
 
     // Update is called once per frame, this can be removed later
@@ -61,7 +73,7 @@ public class CameraManager : MonoBehaviour
         if (Input.GetKeyDown(key_switch))
         {
             players_shown++;
-            players_shown %= players.Count;
+            players_shown %= cameras.Count;
 
             setNumberOfPlayers(players_shown);
         }
@@ -82,23 +94,23 @@ public class CameraManager : MonoBehaviour
         //Hard-coded window view manipulation
         if (number_of_players == 0)
         {
-            players[0].GetComponentInChildren<Camera>().rect = screen_full;
+            cameras[0].rect = screen_full;
         }
         else if (number_of_players == 1)
         {
-            players[0].GetComponentInChildren<Camera>().rect = screen_left;
+            cameras[0].rect = screen_left;
 
-            players[1].SetActive(true);
-            players[1].GetComponentInChildren<Camera>().rect = screen_right;
+            activatePlayer(1);
+            cameras[1].rect = screen_right;
         }
         else if (number_of_players == 2)
         {
-            players[0].GetComponentInChildren<Camera>().rect = screen_top_left;
+            cameras[0].rect = screen_top_left;
 
-            players[1].SetActive(true);
-            players[1].GetComponentInChildren<Camera>().rect = screen_top_right;
+            activatePlayer(1);
+            cameras[1].rect = screen_top_right;
 
-            players[2].SetActive(true);
+            activatePlayer(2);
 
             //The blank camera allows the bottom right corner to be a solid colour when there's only 3 players
             //(There might be a better solution, this is currently for proof of concept)
@@ -106,22 +118,74 @@ public class CameraManager : MonoBehaviour
         }
         else if (number_of_players == 3)
         {
-            players[0].GetComponentInChildren<Camera>().rect = screen_top_left;
+            cameras[0].rect = screen_top_left;
 
-            players[1].SetActive(true);
-            players[1].GetComponentInChildren<Camera>().rect = screen_top_right;
+            activatePlayer(1);
+            cameras[1].rect = screen_top_right;
 
-            players[2].SetActive(true);
-            players[3].SetActive(true);
+            activatePlayer(2);
+
+            activatePlayer(3);
         }
+    }
+
+    private void activatePlayer(int player_num)
+    {
+        cameras[player_num].gameObject.SetActive(true);
+        players[player_num].SetActive(true);
+        forklifts[player_num].SetActive(true);
+    }
+
+    private void deactivatePlayer(int player_num)
+    {
+        cameras[player_num].gameObject.SetActive(false);
+        players[player_num].SetActive(false);
+        forklifts[player_num].SetActive(false);
     }
 
     private void disableExtraPlayers()
     {
         //Disabling players 2 to 4
-        for (int i = 1; i < players.Count; i++)
+        for (int i = 1; i < cameras.Count; i++)
         {
-            players[i].SetActive(false);
+            cameras[i].gameObject.SetActive(false);
+            players[i].gameObject.SetActive(false);
+            forklifts[i].gameObject.SetActive(false);
         }
+    }
+
+    public void changePerspective3rd(int player_number)
+    {
+        Debug.Log(player_number);
+
+        //deactivate the player
+        players[player_number - 1].SetActive(false);
+
+        Transform camera_transform = forkliftCameraRoot(player_number);
+        cameras[player_number - 1].transform.parent = camera_transform;
+        cameras[player_number - 1].transform.position = camera_transform.position;
+        cameras[player_number - 1].transform.rotation = camera_transform.rotation;
+    }
+
+    public void changePerspective1st(int player_number)
+    {
+        //activate the player
+        players[player_number - 1].SetActive(true);
+
+        //set the camera position to the camera root of the player
+        Transform camera_transform = playerCameraRoot(player_number);
+        cameras[player_number - 1].transform.parent = camera_transform;
+        cameras[player_number - 1].transform.position = camera_transform.position;
+        cameras[player_number - 1].transform.rotation = camera_transform.rotation;
+    }
+
+    private Transform forkliftCameraRoot(int forklift_num)
+    {
+        return forklifts[forklift_num - 1].transform.Find("ForkliftCameraRoot").transform;
+    }
+
+    private Transform playerCameraRoot(int player_num)
+    {
+        return players[player_num - 1].transform.Find("PlayerCapsule").transform.Find("PlayerCameraRoot").transform;
     }
 }
