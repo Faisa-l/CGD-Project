@@ -35,6 +35,18 @@ public class CrateSpawner : MonoBehaviour
             spawnInterval = 0f;
         }
 
+        // Auto-populate points
+        int count = transform.childCount;
+
+        for (int i = 0; i < count; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (!points.Contains(child))
+            {
+                points.Add(child);
+            }
+        }
+
     }
 
     // Populates spawnedObjects
