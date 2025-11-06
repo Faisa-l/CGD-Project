@@ -12,6 +12,9 @@ namespace Interaction
         TextMeshProUGUI interactText;
 
         [SerializeField]
+        Canvas canvas;
+
+        [SerializeField]
         float interactDistance = 3f;
 
         Interactable currentTargetedInteraction;
@@ -19,7 +22,7 @@ namespace Interaction
         public void Start()
         {
             Debug.Log("Is Awake");
-            interactText.text = string.Empty;
+            interactText.text = "Test";
         }
 
         public void Update()
@@ -46,7 +49,7 @@ namespace Interaction
                 interactText.text = string.Empty;
                 return;
             }
-            //Debug.Log("Looking at Interact");
+            Debug.Log("Looking at Interact");
             interactText.text = currentTargetedInteraction.MessageInteract;
         }
 
