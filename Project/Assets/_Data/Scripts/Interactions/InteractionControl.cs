@@ -16,13 +16,17 @@ namespace Interaction
 
         Interactable currentTargetedInteraction;
 
+        public void Start()
+        {
+            Debug.Log("Is Awake");
+            interactText.text = string.Empty;
+        }
+
         public void Update()
         {
             UpdateCurrentInteratable();
 
             UpdateInteractText();
-
-            CheckForInput();
         }
 
         void UpdateCurrentInteratable()
@@ -38,18 +42,20 @@ namespace Interaction
         {
             if (currentTargetedInteraction == null)
             {
+                //Debug.Log("Not Looking at Interact");
                 interactText.text = string.Empty;
                 return;
             }
+            //Debug.Log("Looking at Interact");
             interactText.text = currentTargetedInteraction.MessageInteract;
         }
 
-        void CheckForInput()
+        public void OnInteract()
         {
-           if (Input.GetKey(KeyCode.E) && currentTargetedInteraction != null)
-           {
-               currentTargetedInteraction.Interact(this);
-           }
+            if (currentTargetedInteraction != null)
+                currentTargetedInteraction.Interact(this);
+            else
+                GetComponent<PickupController>().CheckDropInput();
         }
     }
 }

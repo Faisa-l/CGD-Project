@@ -20,20 +20,21 @@ public class PickupController : MonoBehaviour
 
     public void Update()
     {
-        CheckDropInput();
+        //CheckDropInput();
 
         CheckUsePickupInput();
 
         CheckPlaceInput();
     }   
     
-    void CheckDropInput()
+    public void CheckDropInput()
     {
-        if (Input.GetKeyDown(KeyCode.P) && HasPickupable)
+        if (currentPickupable != null)
         {
             currentPickupable.Drop(this);
             currentPickupable = null;
         }
+ 
     }
 
     void CheckPlaceInput()

@@ -1,4 +1,5 @@
 using System;
+using System.Security.Cryptography.X509Certificates;
 using UnityEngine;
 
 namespace Interaction
@@ -8,7 +9,6 @@ namespace Interaction
 
         public string MessageInteract => "Press E to pick up the box";
 
-
         void ConsolePrint()
         {
             Console.WriteLine("Box picked up!");
@@ -17,7 +17,7 @@ namespace Interaction
         public virtual void Interact(InteractableControl interactableControl)
         {
             ConsolePrint();
-            Destroy(gameObject);
+            Destroy(gameObject);         
         }
     }
 }

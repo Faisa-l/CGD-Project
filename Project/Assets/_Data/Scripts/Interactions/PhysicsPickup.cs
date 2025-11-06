@@ -20,8 +20,8 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     public void Interact(InteractableControl interactableControl)
     {
         var pickupController = interactableControl.GetComponent<PickupController>();
-
-        Grab(pickupController);
+        
+            Grab(pickupController);
     }
 
     public virtual void Grab(PickupController pickupController)
