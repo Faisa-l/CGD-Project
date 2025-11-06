@@ -85,6 +85,22 @@ public class PlayerController : MonoBehaviour
 		}
     }
 
+	public void OnLift()
+	{
+		if(driving)
+		{
+			current_forklift.Lift();
+		}
+	}
+
+	public void OnDrop()
+	{
+		if(driving)
+		{
+			current_forklift.Drop();
+		}
+	}
+
     private void EnterVehicle()
 	{
 
