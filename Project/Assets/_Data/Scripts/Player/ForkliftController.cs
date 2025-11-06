@@ -1,4 +1,7 @@
+using StarterAssets;
 using System.Collections.Generic;
+using Unity.Cinemachine;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -54,6 +57,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
 	private PlayerController driver;
 
+    [SerializeField] private Transform camera_root;
+
 	private void Start()
 	{
 		SetupPlayerModel();
@@ -75,7 +80,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
         HandleLift();
     }
 
-    private void GetInput()
+    public void move(StarterAssetsInputs input)
     {
 		if (!IsVehicleOccupied())
 			return;
@@ -83,10 +88,19 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		
 		
         // Get player input
-        horizontalInput = Input.GetAxis("Horizontal" + playerNumber);
-        verticalInput = Input.GetAxis("Vertical" + playerNumber);
-        isBraking = Input.GetButton("Brake" + playerNumber);
+        horizontalInput = input.move.x;
+        verticalInput = input.move.y;
+        //isBraking = Input.GetButton("Brake" + playerNumber);
 
+    }
+
+    public Transform getCameraRoot()
+    {
+        return camera_root;
+    }
+
+    public void OnLift(InputValue input)
+    {
         // Lift
         if (Input.GetAxis("Lift" + playerNumber) > 0.1f)
         {
@@ -103,22 +117,33 @@ public class ForkliftController : MonoBehaviour, IDriveable
             isLiftGoingUp = false;
             isLiftGoingDown = false;
         }
-		
-		// Is the player trying to exit the vehicle?
-		if (Input.GetButtonDown("Fire" + playerNumber))
-		{
-			TryExitVehicle();
-		}
-		else
-		{
-			hudManager.SetVehiclePromptStatus(playerNumber, false);
-		}
-		
-		if (playerNumber > 0)
-		{
-			// Calculate percentage complete
-			hudManager.SetVehiclePromptProgress(playerNumber/*, (currentExitVehicleTimer / exitVehicleTime)*/);
-		}
+    }
+
+    public void interact()
+    {
+        // Is the player trying to exit the vehicle?
+        if (Input.GetButton("Fire" + playerNumber))
+        {
+            if (currentExitVehicleTimer >= exitVehicleTime)
+            {
+                TryExitVehicle();
+            }
+            else
+            {
+                if (currentExitVehicleTimer == 0)
+                {
+                    hudManager.SetVehiclePromptStatus(playerNumber, true);
+                    hudManager.SetVehiclePromptText(playerNumber, "Exit Forklift");
+                }
+
+                currentExitVehicleTimer += Time.deltaTime;
+            }
+        }
+        else
+        {
+            currentExitVehicleTimer = 0;
+            hudManager.SetVehiclePromptStatus(playerNumber, false);
+        }
     }
 
     private void HandleTorque()
@@ -206,7 +231,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
             lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
         }
     }
-
 	
 	private void SetupPlayerModel()
 	{
@@ -239,7 +263,9 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	{
 		// Prevent a player trying to get in a vehicle another player is currently in
 		if (IsVehicleOccupied())
-			return false;
+        { 
+            return false; 
+        }
 		
 		driver = player;
 		playerNumber = player.GetPlayerNumber();
@@ -283,7 +309,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 			return true;
 		}
 		
-		return false;
+		//return false;
 	}
 	
 	#endregion IDriveable
