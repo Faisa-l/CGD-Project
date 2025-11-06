@@ -42,7 +42,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
-	[SerializeField] SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
+	[SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
+	[SerializeField] private Transform exitTransform;
 
     private float horizontalInput = 0.0f;
     private float verticalInput = 0.0f;
@@ -55,13 +56,18 @@ public class ForkliftController : MonoBehaviour, IDriveable
     private bool isLiftGoingDown = false;
 
 	private PlayerController driver;
-	private float currentExitVehicleTimer = 0;
 
     [SerializeField] private Transform camera_root;
 
 	private void Start()
 	{
 		SetupPlayerModel();
+	}
+
+	// Regular update
+	private void Update()
+	{
+		//GetInput();
 	}
 
     // Physics update
@@ -76,16 +82,16 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void move(StarterAssetsInputs input)
     {
-        if(!IsVehicleOccupied())
-        {
-            return;
+		if (!IsVehicleOccupied())
+		{
+            return; 
         }
-
+		
+		
+		
         // Get player input
         horizontalInput = input.move.x;
         verticalInput = input.move.y;
-        //isBraking = Input.GetButton("Brake" + playerNumber);
-
     }
 
     public Transform getCameraRoot()
@@ -95,14 +101,14 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void OnLift(InputValue input)
     {
+        //TODO: Replace with new input system
+
         // Lift
-        //if (Input.GetKey(KeyCode.Q))
         if (Input.GetAxis("Lift" + playerNumber) > 0.1f)
         {
             isLiftGoingUp = true;
             isLiftGoingDown = false;
         }
-        //else if (Input.GetKey(KeyCode.E))
         else if (Input.GetAxis("Lift" + playerNumber) < -0.1f)
         {
             isLiftGoingUp = false;
@@ -117,12 +123,13 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void interact()
     {
+        TryExitVehicle();
+
         // Is the player trying to exit the vehicle?
-        if (Input.GetButton("Fire" + playerNumber))
+/*        if (Input.GetButton("Fire" + playerNumber))
         {
             if (currentExitVehicleTimer >= exitVehicleTime)
             {
-                TryExitVehicle();
             }
             else
             {
@@ -139,11 +146,24 @@ public class ForkliftController : MonoBehaviour, IDriveable
         {
             currentExitVehicleTimer = 0;
             hudManager.SetVehiclePromptStatus(playerNumber, false);
-        }
+        }*/
+    }
+
+    public Transform getExitTransform()
+    {
+        return exitTransform;
     }
 
     private void HandleTorque()
     {
+		if (!IsVehicleOccupied())
+		{
+			// Automatically apply handbrake when no one is in forklift
+			Brake(brakeForce);
+			return;
+		}
+			
+		
         // Apply movement torque to wheels
         frontLeftWheelCollider.motorTorque = verticalInput * motorTorque;
         frontRightWheelCollider.motorTorque = verticalInput * motorTorque;
@@ -154,17 +174,17 @@ public class ForkliftController : MonoBehaviour, IDriveable
         if (isBraking)
             brakeTorque = brakeForce;
         else
-            brakeTorque = 0;
+            brakeTorque = 0.0f;
 
-        frontLeftWheelCollider.brakeTorque = brakeTorque;
-        frontRightWheelCollider.brakeTorque = brakeTorque;
-        rearLeftWheelCollider.brakeTorque = brakeTorque;
-        rearRightWheelCollider.brakeTorque = brakeTorque;
+        Brake(brakeTorque);
     }
 
     private void HandleSteering()
     {
-        steerAngle = maxSteerAngle * horizontalInput;
+		if (IsVehicleOccupied())
+			steerAngle = maxSteerAngle * horizontalInput;
+		else
+			steerAngle = 0.0f;
 
         // Front wheel drive
         frontLeftWheelCollider.steerAngle = steerAngle;
@@ -173,6 +193,9 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     private void UpdateSteeringWheelPosition()
     {
+		if (!IsVehicleOccupied())
+			return;
+		
         if (horizontalInput > 0.1f)
             steeringWheel.localRotation *= Quaternion.Euler(0, 0, -steeringWheelPower * horizontalInput);
         else if (horizontalInput < -0.1f)
@@ -229,6 +252,14 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		}
 	}
 	
+	private void Brake(float brakePower)
+	{
+		frontLeftWheelCollider.brakeTorque = brakePower;
+        frontRightWheelCollider.brakeTorque = brakePower;
+        rearLeftWheelCollider.brakeTorque = brakePower;
+        rearRightWheelCollider.brakeTorque = brakePower;
+	}
+	
 	#region IDriveable
 	
 	public bool IsVehicleOccupied()
@@ -246,34 +277,26 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		
 		driver = player;
 		playerNumber = player.GetPlayerNumber();
-		currentExitVehicleTimer = 0;
-
+		
 		SetupPlayerModel();
 		
 		return true;
 	}
 	
 	public bool TryExitVehicle()
-	{
-		// TODO check there is space for the player to get out forklift
-		if (true)
-		{
-			driver.transform.position = transform.position + new Vector3(2, 0, 0);
-			driver.gameObject.SetActive(true);
-			
-			
-			
-			driver = null;
-			playerNumber = 0;
-			
-			playerMesh.enabled = false;
-			
-			
-			
-			return true;
-		}
+	{		
+		driver = null;
+		playerNumber = 0;
 		
-		//return false;
+		playerMesh.enabled = false;
+		
+		// Come to a stop over time
+		frontLeftWheelCollider.motorTorque = 0.0f;
+		frontRightWheelCollider.motorTorque = 0.0f;
+		rearLeftWheelCollider.motorTorque = 0.0f;
+		rearRightWheelCollider.motorTorque = 0.0f;
+		
+		return true;
 	}
 	
 	#endregion IDriveable

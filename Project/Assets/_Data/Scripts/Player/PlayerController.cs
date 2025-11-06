@@ -29,6 +29,7 @@ public class PlayerController : MonoBehaviour
 	private ForkliftController current_forklift = null;
 
 	[SerializeField] GameObject camera;
+	[SerializeField] Transform player_camera_root;
 
 	[SerializeField][Range(0, 1)] float max_rotation = 0.3f;
 
@@ -50,13 +51,43 @@ public class PlayerController : MonoBehaviour
 
     }
 
+    private void Update()
+    {
+
+    }
+
     public void OnInteract()
     {
-		EnterVehicle();
+		if(!driving)
+		{ 
+			EnterVehicle();
+		}
+		else
+		{
+			GetComponent<CharacterController>().enabled = false;
+
+			current_forklift.interact();
+			model.SetActive(true);
+			driving = false;
+
+			Transform exit_transform = current_forklift.getExitTransform();
+
+			transform.position = exit_transform.position;
+			transform.rotation = exit_transform.rotation;
+
+			camera.transform.position = player_camera_root.position;
+			camera.transform.rotation = player_camera_root.rotation;
+			camera.transform.parent = gameObject.transform;
+
+			GetComponent<CharacterController>().enabled = true;
+
+            current_forklift = null;
+		}
     }
 
     private void EnterVehicle()
 	{
+
         if (TryEnterVehicleInRange())
         {
             model.SetActive(false);
@@ -79,11 +110,6 @@ public class PlayerController : MonoBehaviour
         {
             camera.transform.Rotate(Vector3.up * rotation_velocity);
         }
-    }
-
-    private void Update()
-    {
-
     }
 
     private bool TryEnterVehicleInRange()
