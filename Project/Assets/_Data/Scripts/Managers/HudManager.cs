@@ -17,12 +17,12 @@ public class HudManager : MonoBehaviour
 		enterVehiclePrompts[playerNumber].SetActive(newStatus);
 	}
 	
-	public void SetVehiclePromptProgress(int playerNumber, float amount)
+	public void SetVehiclePromptProgress(int playerNumber/*, float amount*/)
 	{
 		if (playerNumber <= 0)
 			return;
 		
-		enterVehicleProgressSliders[playerNumber].fillAmount = amount;
+		//enterVehicleProgressSliders[playerNumber].fillAmount = amount;
 	}
 	
 	public void SetVehiclePromptText(int playerNumber, string newText)
