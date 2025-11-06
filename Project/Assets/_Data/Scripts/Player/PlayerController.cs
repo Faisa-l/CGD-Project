@@ -33,6 +33,11 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField][Range(0, 1)] float max_rotation = 0.3f;
 
+	public void setPlayerNumber(int num)
+	{
+		playerNumber = num;
+	}
+
 	public bool driving { get; private set; }
 
     private void Start()

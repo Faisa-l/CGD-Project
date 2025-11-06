@@ -90,9 +90,9 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
 
         // Get player input
+        Debug.Log(playerNumber);
 
-
-        verticalInput = Gamepad.current.rightTrigger.ReadValue() - Gamepad.current.leftTrigger.ReadValue();
+        verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
         horizontalInput = input.move.x;
     }
 

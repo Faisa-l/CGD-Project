@@ -41,6 +41,8 @@ public class PlayerManager : MonoBehaviour
 
         input.GetComponent<CharacterController>().enabled = false;
 
+        input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.playerIndex + 1);
+
         input.gameObject.transform.position = player_positions[input.playerIndex].position;
         input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
 
