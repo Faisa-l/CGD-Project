@@ -67,11 +67,11 @@ public class CrateCollector : MonoBehaviour
             Debug.LogWarning("Collector is missing a collider.");
         }
 
-        if (marker.TryGetComponent<Renderer>(out Renderer renderer))
+/*        if (marker.TryGetComponent<Renderer>(out Renderer renderer))
         {
             markerMaterial = renderer.sharedMaterial;
             markerMaterial.SetColor("_BaseColor", activeColor);
-        }
+        }*/
         UpdateRequirement();
     }
 
@@ -174,11 +174,11 @@ public class CrateCollector : MonoBehaviour
     {
         if (canCollect)
         {
-            markerMaterial.SetColor("_BaseColor", activeColor);
+            //markerMaterial.SetColor("_BaseColor", activeColor);
         }
         else
         {
-            markerMaterial.SetColor("_BaseColor", inactiveColor);
+            //markerMaterial.SetColor("_BaseColor", inactiveColor);
         }
     }
 

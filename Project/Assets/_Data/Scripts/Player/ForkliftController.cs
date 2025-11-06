@@ -67,7 +67,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	// Regular update
 	private void Update()
 	{
-		GetInput();
+		//GetInput();
 	}
 
     // Physics update
@@ -83,15 +83,15 @@ public class ForkliftController : MonoBehaviour, IDriveable
     public void move(StarterAssetsInputs input)
     {
 		if (!IsVehicleOccupied())
-			return;
+		{
+            return; 
+        }
 		
 		
 		
         // Get player input
         horizontalInput = input.move.x;
         verticalInput = input.move.y;
-        //isBraking = Input.GetButton("Brake" + playerNumber);
-
     }
 
     public Transform getCameraRoot()
@@ -101,6 +101,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void OnLift(InputValue input)
     {
+        //TODO: Replace with new input system
+
         // Lift
         if (Input.GetAxis("Lift" + playerNumber) > 0.1f)
         {
@@ -121,12 +123,13 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void interact()
     {
+        TryExitVehicle();
+
         // Is the player trying to exit the vehicle?
-        if (Input.GetButton("Fire" + playerNumber))
+/*        if (Input.GetButton("Fire" + playerNumber))
         {
             if (currentExitVehicleTimer >= exitVehicleTime)
             {
-                TryExitVehicle();
             }
             else
             {
@@ -143,7 +146,12 @@ public class ForkliftController : MonoBehaviour, IDriveable
         {
             currentExitVehicleTimer = 0;
             hudManager.SetVehiclePromptStatus(playerNumber, false);
-        }
+        }*/
+    }
+
+    public Transform getExitTransform()
+    {
+        return exitTransform;
     }
 
     private void HandleTorque()
@@ -276,40 +284,19 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	}
 	
 	public bool TryExitVehicle()
-	{
-		// TODO check there is space for the player to get out forklift
-		if (true)
-		{
-			driver.transform.position = exitTransform.position;
-			
-			// Player should face forwards
-			// Only rotate on the Y axis (don't tip over with the forklift)
-			// Source - https://docs.unity3d.com/6000.0/Documentation/ScriptReference/Quaternion.Euler.html
-			driver.transform.rotation = Quaternion.Euler(0.0f, transform.eulerAngles.y, 0.0f);
-			
-			driver.gameObject.SetActive(true);
-			
-			
-			
-			driver = null;
-			playerNumber = 0;
-			
-			playerMesh.enabled = false;
-			
-			
-			
-			// Come to a stop over time
-			frontLeftWheelCollider.motorTorque = 0.0f;
-			frontRightWheelCollider.motorTorque = 0.0f;
-			rearLeftWheelCollider.motorTorque = 0.0f;
-			rearRightWheelCollider.motorTorque = 0.0f;
-			
-			
-			
-			return true;
-		}
+	{		
+		driver = null;
+		playerNumber = 0;
 		
-		//return false;
+		playerMesh.enabled = false;
+		
+		// Come to a stop over time
+		frontLeftWheelCollider.motorTorque = 0.0f;
+		frontRightWheelCollider.motorTorque = 0.0f;
+		rearLeftWheelCollider.motorTorque = 0.0f;
+		rearRightWheelCollider.motorTorque = 0.0f;
+		
+		return true;
 	}
 	
 	#endregion IDriveable
