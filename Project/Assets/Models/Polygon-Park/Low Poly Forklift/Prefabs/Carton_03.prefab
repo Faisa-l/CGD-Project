@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7338897113546440952}
   - component: {fileID: 8399009065883368031}
   - component: {fileID: 630599812166008983}
+  - component: {fileID: 3128536527248062147}
   m_Layer: 0
   m_Name: Carton_03
   m_TagString: Untagged
@@ -116,10 +117,10 @@ Rigidbody:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9140614522304520493}
-  serializedVersion: 4
+  serializedVersion: 5
   m_Mass: 1000
-  m_Drag: 1
-  m_AngularDrag: 1000
+  m_LinearDamping: 1
+  m_AngularDamping: 1000
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -136,3 +137,16 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &3128536527248062147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9140614522304520493}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a514b6ef3a51f046b533de3c7d9a503, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  score: 1

@@ -1,4 +1,7 @@
+using StarterAssets;
 using System.Collections.Generic;
+using Unity.Cinemachine;
+using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
@@ -6,14 +9,15 @@ using UnityEngine.UI;
 
 // Source - https://www.youtube.com/watch?v=17j-u7z4wlE
 // making a game in one hour (forklift simulation) - Flutter With Gia
-public class ForkliftController : MonoBehaviour
+public class ForkliftController : MonoBehaviour, IDriveable
 {
     [Header("Settings")]
-    [SerializeField][Range(1, 4)] private int playerNumber = 1;
+    [SerializeField][Range(0, 4)] private int playerNumber = 1; // 0 means no player currently controlling
     [SerializeField] private float motorTorque = 100.0f;
     [SerializeField] private float brakeForce = 30.0f;
     [SerializeField] private float maxSteerAngle = 45.0f;
     [SerializeField] private float steeringWheelPower = 3.0f;
+	[SerializeField] private float exitVehicleTime = 0.5f;
 
     [Header("Lift")]
     [SerializeField] private Transform lift;
@@ -33,8 +37,13 @@ public class ForkliftController : MonoBehaviour
     [SerializeField] private Transform rearLeftWheelTransform;
     [SerializeField] private Transform rearRightWheelTransform;
 
+	[Header("UI")]
+	[SerializeField] private HudManager hudManager;
+
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
+	[SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
+	[SerializeField] private Transform exitTransform;
 
     private float horizontalInput = 0.0f;
     private float verticalInput = 0.0f;
@@ -46,10 +55,24 @@ public class ForkliftController : MonoBehaviour
     private bool isLiftGoingUp = false;
     private bool isLiftGoingDown = false;
 
+	private PlayerController driver;
+
+    [SerializeField] private Transform camera_root;
+
+	private void Start()
+	{
+		SetupPlayerModel();
+	}
+
+	// Regular update
+	private void Update()
+	{
+		//GetInput();
+	}
+
     // Physics update
     private void FixedUpdate()
     {
-        GetInput();
         HandleTorque();
         HandleSteering();
         UpdateWheelPosition();
@@ -57,21 +80,35 @@ public class ForkliftController : MonoBehaviour
         HandleLift();
     }
 
-    private void GetInput()
+    public void move(StarterAssetsInputs input)
     {
+		if (!IsVehicleOccupied())
+		{
+            return; 
+        }
+		
+		
+		
         // Get player input
-        horizontalInput = Input.GetAxis("Horizontal" + playerNumber);
-        verticalInput = Input.GetAxis("Vertical" + playerNumber);
-        isBraking = Input.GetButton("Fire" + playerNumber);
+        horizontalInput = input.move.x;
+        verticalInput = input.move.y;
+    }
+
+    public Transform getCameraRoot()
+    {
+        return camera_root;
+    }
+
+    public void OnLift(InputValue input)
+    {
+        //TODO: Replace with new input system
 
         // Lift
-        //if (Input.GetKey(KeyCode.Q))
         if (Input.GetAxis("Lift" + playerNumber) > 0.1f)
         {
             isLiftGoingUp = true;
             isLiftGoingDown = false;
         }
-        //else if (Input.GetKey(KeyCode.E))
         else if (Input.GetAxis("Lift" + playerNumber) < -0.1f)
         {
             isLiftGoingUp = false;
@@ -84,8 +121,49 @@ public class ForkliftController : MonoBehaviour
         }
     }
 
+    public void interact()
+    {
+        TryExitVehicle();
+
+        // Is the player trying to exit the vehicle?
+/*        if (Input.GetButton("Fire" + playerNumber))
+        {
+            if (currentExitVehicleTimer >= exitVehicleTime)
+            {
+            }
+            else
+            {
+                if (currentExitVehicleTimer == 0)
+                {
+                    hudManager.SetVehiclePromptStatus(playerNumber, true);
+                    hudManager.SetVehiclePromptText(playerNumber, "Exit Forklift");
+                }
+
+                currentExitVehicleTimer += Time.deltaTime;
+            }
+        }
+        else
+        {
+            currentExitVehicleTimer = 0;
+            hudManager.SetVehiclePromptStatus(playerNumber, false);
+        }*/
+    }
+
+    public Transform getExitTransform()
+    {
+        return exitTransform;
+    }
+
     private void HandleTorque()
     {
+		if (!IsVehicleOccupied())
+		{
+			// Automatically apply handbrake when no one is in forklift
+			Brake(brakeForce);
+			return;
+		}
+			
+		
         // Apply movement torque to wheels
         frontLeftWheelCollider.motorTorque = verticalInput * motorTorque;
         frontRightWheelCollider.motorTorque = verticalInput * motorTorque;
@@ -96,17 +174,17 @@ public class ForkliftController : MonoBehaviour
         if (isBraking)
             brakeTorque = brakeForce;
         else
-            brakeTorque = 0;
+            brakeTorque = 0.0f;
 
-        frontLeftWheelCollider.brakeTorque = brakeTorque;
-        frontRightWheelCollider.brakeTorque = brakeTorque;
-        rearLeftWheelCollider.brakeTorque = brakeTorque;
-        rearRightWheelCollider.brakeTorque = brakeTorque;
+        Brake(brakeTorque);
     }
 
     private void HandleSteering()
     {
-        steerAngle = maxSteerAngle * horizontalInput;
+		if (IsVehicleOccupied())
+			steerAngle = maxSteerAngle * horizontalInput;
+		else
+			steerAngle = 0.0f;
 
         // Front wheel drive
         frontLeftWheelCollider.steerAngle = steerAngle;
@@ -115,6 +193,9 @@ public class ForkliftController : MonoBehaviour
 
     private void UpdateSteeringWheelPosition()
     {
+		if (!IsVehicleOccupied())
+			return;
+		
         if (horizontalInput > 0.1f)
             steeringWheel.localRotation *= Quaternion.Euler(0, 0, -steeringWheelPower * horizontalInput);
         else if (horizontalInput < -0.1f)
@@ -158,4 +239,65 @@ public class ForkliftController : MonoBehaviour
             lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
         }
     }
+	
+	private void SetupPlayerModel()
+	{
+		if (IsVehicleOccupied())
+		{
+			playerMesh.enabled = true;
+		}
+		else
+		{
+			playerMesh.enabled = false;
+		}
+	}
+	
+	private void Brake(float brakePower)
+	{
+		frontLeftWheelCollider.brakeTorque = brakePower;
+        frontRightWheelCollider.brakeTorque = brakePower;
+        rearLeftWheelCollider.brakeTorque = brakePower;
+        rearRightWheelCollider.brakeTorque = brakePower;
+	}
+	
+	#region IDriveable
+	
+	public bool IsVehicleOccupied()
+	{
+		return (playerNumber > 0);
+	}
+	
+	public bool TryEnterVehicle(PlayerController player)
+	{
+		// Prevent a player trying to get in a vehicle another player is currently in
+		if (IsVehicleOccupied())
+        { 
+            return false; 
+        }
+		
+		driver = player;
+		playerNumber = player.GetPlayerNumber();
+		
+		SetupPlayerModel();
+		
+		return true;
+	}
+	
+	public bool TryExitVehicle()
+	{		
+		driver = null;
+		playerNumber = 0;
+		
+		playerMesh.enabled = false;
+		
+		// Come to a stop over time
+		frontLeftWheelCollider.motorTorque = 0.0f;
+		frontRightWheelCollider.motorTorque = 0.0f;
+		rearLeftWheelCollider.motorTorque = 0.0f;
+		rearRightWheelCollider.motorTorque = 0.0f;
+		
+		return true;
+	}
+	
+	#endregion IDriveable
 }
