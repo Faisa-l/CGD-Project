@@ -18,6 +18,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
     [SerializeField] private float maxSteerAngle = 45.0f;
     [SerializeField] private float steeringWheelPower = 3.0f;
 	[SerializeField] private float exitVehicleTime = 0.5f;
+    [SerializeField] private float downwardForce = 9.81f;
+	[SerializeField] private Vector3 centerOfMass = new Vector3 (0, -0.9f, 0);
 
     [Header("Lift")]
     [SerializeField] private Transform lift;
@@ -58,10 +60,21 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	private PlayerController driver;
 
     [SerializeField] private Transform camera_root;
+	
+	private Rigidbody rb;
+
+	private void Awake()
+	{
+		rb = GetComponent<Rigidbody>();
+	}
 
 	private void Start()
 	{
 		SetupPlayerModel();
+		
+		// Anti-tipping
+		// Source - https://discussions.unity.com/t/how-to-stop-my-car-tipping-over/34753
+		rb.centerOfMass = centerOfMass;
 	}
 
 	// Regular update
@@ -78,6 +91,10 @@ public class ForkliftController : MonoBehaviour, IDriveable
         UpdateWheelPosition();
         UpdateSteeringWheelPosition();
         HandleLift();
+		
+		// Anti-tipping
+        // Source - https://www.reddit.com/r/Unity3D/comments/e808la/how_to_make_my_car_not_tip_over/
+        rb.AddForce(Vector3.down * downwardForce, ForceMode.Force);
     }
 
     public void move(StarterAssetsInputs input)
