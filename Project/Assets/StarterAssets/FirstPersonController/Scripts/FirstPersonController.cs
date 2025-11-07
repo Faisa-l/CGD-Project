@@ -177,8 +177,8 @@ namespace StarterAssets
 				return;
 			}
 
-			// set target speed based on move speed, sprint speed and if sprint is pressed
-			float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            // set target speed based on move speed, sprint speed and if sprint is pressed
+            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
@@ -186,8 +186,18 @@ namespace StarterAssets
 			// if there is no input, set the target speed to 0
 			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
 
-			// a reference to the players current horizontal velocity
-			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
+			//If the player is moveing, play the walking sound
+			if(targetSpeed != 0.0f)
+			{
+                GetComponent<PlayerWalkingAudioScript>().Enable();
+            }
+			else
+			{
+				GetComponent<PlayerWalkingAudioScript>().Disable();
+			}
+
+				// a reference to the players current horizontal velocity
+				float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
 			float speedOffset = 0.1f;
 			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;

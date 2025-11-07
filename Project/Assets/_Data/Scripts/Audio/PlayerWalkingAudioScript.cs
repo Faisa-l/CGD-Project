@@ -1,20 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerWalkingAudioScript : MonoBehaviour
 {
-    public AudioSource footstepsSound;
+    [SerializeField]
+    AudioSource footstepsSound;
 
-    void Update()
+    public void Enable()
     {
-        if (Input.GetKey(KeyCode.W) || Input.GetKey(KeyCode.A) || Input.GetKey(KeyCode.S) || Input.GetKey(KeyCode.D))
-        {
-            footstepsSound.enabled = true;
-        }
-        else
-        {
-            footstepsSound.enabled = false;
-        }
+        if (footstepsSound.isPlaying) return;
+        footstepsSound.Play();
+    }
+
+    public void Disable()
+    {
+        if (!footstepsSound.isPlaying) return;
+        footstepsSound.Stop();
     }
 }
