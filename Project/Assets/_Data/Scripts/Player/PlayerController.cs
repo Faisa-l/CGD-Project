@@ -87,7 +87,7 @@ public class PlayerController : MonoBehaviour
 			Transform exit_transform = current_forklift.getExitTransform();
 
 			transform.position = exit_transform.position;
-			transform.rotation = exit_transform.rotation;
+			transform.eulerAngles = new Vector3(0,exit_transform.rotation.y,0);
 
 			camera.transform.position = player_camera_root.position;
 			camera.transform.rotation = player_camera_root.rotation;
