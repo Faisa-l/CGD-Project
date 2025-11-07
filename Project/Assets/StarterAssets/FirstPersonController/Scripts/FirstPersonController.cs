@@ -173,6 +173,7 @@ namespace StarterAssets
 		{
 			if(GetComponent<PlayerController>().driving)
 			{
+				GetComponent<PlayerWalkingAudioScript>().Disable();
 				GetComponent<PlayerController>().drive(_input);
 				return;
 			}

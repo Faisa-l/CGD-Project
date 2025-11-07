@@ -104,13 +104,25 @@ public class ForkliftController : MonoBehaviour, IDriveable
             return; 
         }
 
-
-
         // Get player input
         Debug.Log(playerNumber);
 
         verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
         horizontalInput = input.move.x;
+
+        if (Gamepad.all[playerNumber-1].leftTrigger.ReadValue() != 0)
+        {
+            GetComponent<ForkliftReverseAudio>().Enable();
+        }
+        else
+        {
+            GetComponent<ForkliftReverseAudio>().Disable();
+        }
+
+        if (verticalInput != 0)
+        {
+            GetComponent<ForkliftDrivingAudio>().Enable();
+        }
     }
 
     public Transform getCameraRoot()
@@ -120,7 +132,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void Lift()
     {
-        Debug.Log("Lifting");
+        GetComponent<ForkliftArmsAudio>().Enable();
 
         isLiftGoingUp = true;
         isLiftGoingDown = false;
@@ -128,7 +140,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void Drop()
     {
-        Debug.Log("Dropping");
+        GetComponent<ForkliftArmsAudio>().Enable();
+
 
         isLiftGoingUp = false;
         isLiftGoingDown = true;
@@ -136,7 +149,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void cancelLift()
     {
-        Debug.Log("Cancelled lift");
+        GetComponent<ForkliftArmsAudio>().Disable();
 
         isLiftGoingUp = false;
         isLiftGoingDown = false;
@@ -300,8 +313,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		playerNumber = player.GetPlayerNumber();
 		
 		SetupPlayerModel();
-		
-		return true;
+
+        return true;
 	}
 	
 	public bool TryExitVehicle()
@@ -316,8 +329,10 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		frontRightWheelCollider.motorTorque = 0.0f;
 		rearLeftWheelCollider.motorTorque = 0.0f;
 		rearRightWheelCollider.motorTorque = 0.0f;
-		
-		return true;
+
+        GetComponent<ForkliftDrivingAudio>().Disable();
+
+        return true;
 	}
 	
 	#endregion IDriveable
