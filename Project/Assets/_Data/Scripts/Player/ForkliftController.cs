@@ -17,7 +17,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
     [SerializeField] private float brakeForce = 30.0f;
     [SerializeField] private float maxSteerAngle = 45.0f;
     [SerializeField] private float steeringWheelPower = 3.0f;
-	[SerializeField] private float exitVehicleTime = 0.5f;
     [SerializeField] private float downwardForce = 9.81f;
 	[SerializeField] private Vector3 centerOfMass = new Vector3 (0, -0.9f, 0);
 
@@ -46,6 +45,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
     [SerializeField] private Transform steeringWheel;
 	[SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
 	[SerializeField] private Transform exitTransform;
+    [SerializeField] private Transform look_at_transform;
 
     private float horizontalInput = 0.0f;
     private float verticalInput = 0.0f;
@@ -104,11 +104,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
             return; 
         }
 
-
-
         // Get player input
-        Debug.Log(playerNumber);
-
         verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
         horizontalInput = input.move.x;
     }
@@ -173,6 +169,11 @@ public class ForkliftController : MonoBehaviour, IDriveable
     public Transform getExitTransform()
     {
         return exitTransform;
+    }
+
+    public Vector3 getLookAtTransform()
+    {
+        return look_at_transform.position;
     }
 
     private void HandleTorque()
