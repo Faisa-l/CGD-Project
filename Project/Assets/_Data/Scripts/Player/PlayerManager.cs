@@ -37,7 +37,7 @@ public class PlayerManager : MonoBehaviour
 
     public void OnPlayerJoined(PlayerInput input)
     {
-        input.SwitchCurrentControlScheme(Gamepad.all[input.playerIndex]);
+        input.SwitchCurrentControlScheme(Gamepad.all[input.devices[0].deviceId- Gamepad.all[0].deviceId]);
 
         input.GetComponent<CharacterController>().enabled = false;
 
