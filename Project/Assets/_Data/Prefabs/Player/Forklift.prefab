@@ -1640,11 +1640,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerNumber: 0
-  motorTorque: 50
+  motorTorque: 200
   brakeForce: 50
   maxSteerAngle: 45
   steeringWheelPower: 3
   exitVehicleTime: 2
+  downwardForce: 9.81
+  centerOfMass: {x: 0, y: -0.9, z: 0}
   lift: {fileID: 3846148368281736309}
   liftSpeed: 3
   minimumLiftPosition: 2.4
