@@ -117,6 +117,14 @@ public class ForkliftController : MonoBehaviour, IDriveable
         isLiftGoingDown = true;
     }
 
+    public void cancelLift()
+    {
+        Debug.Log("Cancelled lift");
+
+        isLiftGoingUp = false;
+        isLiftGoingDown = false;
+    }
+
     public void interact()
     {
         TryExitVehicle();

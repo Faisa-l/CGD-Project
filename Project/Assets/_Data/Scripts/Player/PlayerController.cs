@@ -33,6 +33,9 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField][Range(0, 1)] float max_rotation = 0.3f;
 
+	[SerializeField] InputActionReference lifting_action;
+	[SerializeField] InputActionReference dropping_action;
+
 	public void setPlayerNumber(int num)
 	{
 		playerNumber = num;
@@ -43,6 +46,12 @@ public class PlayerController : MonoBehaviour
     private void Start()
 	{
         driving = false;
+
+		lifting_action.action.started += context => { Lift(); };
+		lifting_action.action.canceled += context => { cancelLift(); };
+
+        dropping_action.action.started += context => { Drop(); };
+        dropping_action.action.canceled += context => { cancelLift(); };
     }
 
     private void OnEnable()
@@ -90,7 +99,7 @@ public class PlayerController : MonoBehaviour
 		}
     }
 
-	public void OnLift()
+	private void Lift()
 	{
 		if(driving)
 		{
@@ -98,11 +107,19 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	public void OnDrop()
+	private void Drop()
 	{
 		if(driving)
 		{
 			current_forklift.Drop();
+		}
+	}
+
+	private void cancelLift()
+	{
+		if(driving)
+		{
+			current_forklift.cancelLift();
 		}
 	}
 
