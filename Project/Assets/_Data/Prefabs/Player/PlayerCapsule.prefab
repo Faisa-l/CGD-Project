@@ -222,6 +222,8 @@ MonoBehaviour:
   camera: {fileID: 9101577913518838361}
   player_camera_root: {fileID: 5256199717208499900}
   max_rotation: 0.3
+  lifting_action: {fileID: 1046326361886059075, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
+  dropping_action: {fileID: -7610966646257763666, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
 --- !u!114 &6926370266666694871
 MonoBehaviour:
   m_ObjectHideFlags: 0

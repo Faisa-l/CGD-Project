@@ -33,11 +33,25 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField][Range(0, 1)] float max_rotation = 0.3f;
 
+	[SerializeField] InputActionReference lifting_action;
+	[SerializeField] InputActionReference dropping_action;
+
+	public void setPlayerNumber(int num)
+	{
+		playerNumber = num;
+	}
+
 	public bool driving { get; private set; }
 
     private void Start()
 	{
         driving = false;
+
+		lifting_action.action.started += context => { Lift(); };
+		lifting_action.action.canceled += context => { cancelLift(); };
+
+        dropping_action.action.started += context => { Drop(); };
+        dropping_action.action.canceled += context => { cancelLift(); };
     }
 
     private void OnEnable()
@@ -73,7 +87,7 @@ public class PlayerController : MonoBehaviour
 			Transform exit_transform = current_forklift.getExitTransform();
 
 			transform.position = exit_transform.position;
-			transform.rotation = exit_transform.rotation;
+			transform.eulerAngles = new Vector3(0,exit_transform.rotation.y,0);
 
 			camera.transform.position = player_camera_root.position;
 			camera.transform.rotation = player_camera_root.rotation;
@@ -84,6 +98,30 @@ public class PlayerController : MonoBehaviour
             current_forklift = null;
 		}
     }
+
+	private void Lift()
+	{
+		if(driving)
+		{
+			current_forklift.Lift();
+		}
+	}
+
+	private void Drop()
+	{
+		if(driving)
+		{
+			current_forklift.Drop();
+		}
+	}
+
+	private void cancelLift()
+	{
+		if(driving)
+		{
+			current_forklift.cancelLift();
+		}
+	}
 
     private void EnterVehicle()
 	{

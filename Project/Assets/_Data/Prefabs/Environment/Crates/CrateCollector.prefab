@@ -96,7 +96,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5927151463584524728}
   - component: {fileID: 4703953586703455807}
-  - component: {fileID: 437079716972164701}
+  - component: {fileID: -8470803039637684445}
   m_Layer: 0
   m_Name: CrateCollector
   m_TagString: Untagged
@@ -136,12 +136,25 @@ MonoBehaviour:
   collectionInterval: 30
   activeColor: {r: 0, g: 1, b: 0, a: 0.47058824}
   inactiveColor: {r: 1, g: 0, b: 0, a: 0.47058824}
+  requirementRange: {x: 1, y: 10}
+  randomiseRequirementOnCollection: 0
   onCollection:
     m_PersistentCalls:
       m_Calls: []
-  requirementRange: {x: 1, y: 10}
---- !u!65 &437079716972164701
-BoxCollider:
+  onRequirementUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  onScoreUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onCollectionPeriodStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onCollectionPeriodEnded:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!136 &-8470803039637684445
+CapsuleCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -158,6 +171,8 @@ BoxCollider:
   m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 3, y: 2, z: 3}
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Height: 10
+  m_Direction: 1
+  m_Center: {x: 0, y: 2.5, z: 0}

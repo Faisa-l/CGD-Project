@@ -103,12 +103,14 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		{
             return; 
         }
-		
-		
-		
+
+
+
         // Get player input
+        Debug.Log(playerNumber);
+
+        verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
         horizontalInput = input.move.x;
-        verticalInput = input.move.y;
     }
 
     public Transform getCameraRoot()
@@ -116,26 +118,28 @@ public class ForkliftController : MonoBehaviour, IDriveable
         return camera_root;
     }
 
-    public void OnLift(InputValue input)
+    public void Lift()
     {
-        //TODO: Replace with new input system
+        Debug.Log("Lifting");
 
-        // Lift
-        if (Input.GetAxis("Lift" + playerNumber) > 0.1f)
-        {
-            isLiftGoingUp = true;
-            isLiftGoingDown = false;
-        }
-        else if (Input.GetAxis("Lift" + playerNumber) < -0.1f)
-        {
-            isLiftGoingUp = false;
-            isLiftGoingDown = true;
-        }
-        else
-        {
-            isLiftGoingUp = false;
-            isLiftGoingDown = false;
-        }
+        isLiftGoingUp = true;
+        isLiftGoingDown = false;
+    }
+
+    public void Drop()
+    {
+        Debug.Log("Dropping");
+
+        isLiftGoingUp = false;
+        isLiftGoingDown = true;
+    }
+
+    public void cancelLift()
+    {
+        Debug.Log("Cancelled lift");
+
+        isLiftGoingUp = false;
+        isLiftGoingDown = false;
     }
 
     public void interact()
