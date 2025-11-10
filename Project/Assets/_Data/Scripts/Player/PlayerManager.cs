@@ -23,13 +23,11 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] UnityEvent<int> playerJoined;
 
     List<Transform> player_positions = new List<Transform>();
-    int player_count = 1;
+    int player_count = 0;
     [Space(20)]
     [Header("Player Debug Mode")]
     [SerializeField] bool debug_mode_on = false;
     [SerializeField] GameObject player_prefab;
-
-    List<Transform> player_positions = new();
 
     List<PlayerInput> players = new();
 
@@ -50,6 +48,8 @@ public class PlayerManager : MonoBehaviour
             for (int i = 0; i < input_manager.maxPlayerCount; i++)
             {
                 PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+                player_count++;
+                playerJoined.Invoke(player_count);
             }
         }
     }
@@ -81,10 +81,8 @@ public class PlayerManager : MonoBehaviour
         {            
             input.SwitchCurrentControlScheme(Gamepad.all[input.devices[0].deviceId - Gamepad.all[0].deviceId]);
 
-        input.GetComponent<CharacterController>().enabled = true;
+            input.GetComponent<CharacterController>().enabled = true;
 
-        player_count++;
-        playerJoined.Invoke(player_count);
             input.GetComponent<CharacterController>().enabled = false;
 
             input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.devices[0].deviceId - Gamepad.all[0].deviceId + 1);
@@ -98,5 +96,8 @@ public class PlayerManager : MonoBehaviour
 
             input.GetComponent<CharacterController>().enabled = true;
         }
+
+        player_count++;
+        playerJoined.Invoke(player_count);
     }
 }
