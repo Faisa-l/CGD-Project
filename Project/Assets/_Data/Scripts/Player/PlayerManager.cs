@@ -95,9 +95,8 @@ public class PlayerManager : MonoBehaviour
             temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
 
             input.GetComponent<CharacterController>().enabled = true;
+            player_count++;
+            playerJoined.Invoke(player_count);
         }
-
-        player_count++;
-        playerJoined.Invoke(player_count);
     }
 }
