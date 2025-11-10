@@ -82,7 +82,10 @@ public class PlayerController : MonoBehaviour
 		{ 
 			EnterVehicle();
 
-            camera.transform.LookAt(current_forklift.getLookAtTransform());
+			if(current_forklift!=null)
+			{ 
+				camera.transform.LookAt(current_forklift.getLookAtTransform()); 
+			}
         }
 		else
 		{
