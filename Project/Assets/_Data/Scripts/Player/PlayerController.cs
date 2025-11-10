@@ -32,6 +32,9 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] GameObject camera;
 	[SerializeField] Transform player_camera_root;
 
+	[SerializeField] InputActionReference lifting_action;
+	[SerializeField] InputActionReference dropping_action;
+
 	private float enter_vehicle_start_height;
 
 	public void setPlayerNumber(int num)
@@ -79,7 +82,10 @@ public class PlayerController : MonoBehaviour
 		{ 
 			EnterVehicle();
 
-            camera.transform.LookAt(current_forklift.getLookAtTransform());
+			if(current_forklift!=null)
+			{ 
+				camera.transform.LookAt(current_forklift.getLookAtTransform()); 
+			}
         }
 		else
 		{
@@ -130,7 +136,6 @@ public class PlayerController : MonoBehaviour
 
     private void EnterVehicle()
 	{
-
         if (TryEnterVehicleInRange())
         {
 			enter_vehicle_start_height = camera.transform.position.y;
@@ -155,7 +160,18 @@ public class PlayerController : MonoBehaviour
 	{
 		if (driveablesInRange.Count > 0)
 		{
-			driveablesInRange[0].TryEnterVehicle(this);
+			if (driveablesInRange[0] == null)
+			{
+				Debug.LogError("Closest vehicle is null");
+				return false;
+			}
+
+			if(!driveablesInRange[0].TryEnterVehicle(this))
+			{
+				Debug.LogWarning("Failed to enter vehicle");
+				return false;
+			}
+
 			current_forklift = (ForkliftController)driveablesInRange[0];
 
 			Transform forklift_camera_root = current_forklift.getCameraRoot();
