@@ -63,9 +63,13 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	
 	private Rigidbody rb;
 
-	private void Awake()
+    private AudioEnabler audio_enabler;
+
+
+    private void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
+        audio_enabler = GetComponent<AudioEnabler>();
 	}
 
 	private void Start()
@@ -75,10 +79,11 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		// Anti-tipping
 		// Source - https://discussions.unity.com/t/how-to-stop-my-car-tipping-over/34753
 		rb.centerOfMass = centerOfMass;
-	}
 
-	// Regular update
-	private void Update()
+    }
+
+    // Regular update
+    private void Update()
 	{
 		//GetInput();
 	}
@@ -107,6 +112,20 @@ public class ForkliftController : MonoBehaviour, IDriveable
         // Get player input
         verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
         horizontalInput = input.move.x;
+
+        if (Gamepad.all[playerNumber-1].leftTrigger.ReadValue() != 0)
+        {
+            audio_enabler.Enable("reverse");
+        }
+        else
+        {
+            audio_enabler.Disable("reverse");
+        }
+
+        if (verticalInput != 0)
+        {
+            audio_enabler.Enable("driving");
+        }
     }
 
     public Transform getCameraRoot()
@@ -116,7 +135,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void Lift()
     {
-        Debug.Log("Lifting");
+        audio_enabler.Enable("arms");
 
         isLiftGoingUp = true;
         isLiftGoingDown = false;
@@ -124,7 +143,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void Drop()
     {
-        Debug.Log("Dropping");
+        audio_enabler.Enable("arms");
+
 
         isLiftGoingUp = false;
         isLiftGoingDown = true;
@@ -132,7 +152,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void cancelLift()
     {
-        Debug.Log("Cancelled lift");
+        audio_enabler.Disable("arms");
 
         isLiftGoingUp = false;
         isLiftGoingDown = false;
@@ -301,8 +321,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		playerNumber = player.GetPlayerNumber();
 		
 		SetupPlayerModel();
-		
-		return true;
+
+        return true;
 	}
 	
 	public bool TryExitVehicle()
@@ -317,8 +337,10 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		frontRightWheelCollider.motorTorque = 0.0f;
 		rearLeftWheelCollider.motorTorque = 0.0f;
 		rearRightWheelCollider.motorTorque = 0.0f;
-		
-		return true;
+
+        audio_enabler.Disable("driving");
+
+        return true;
 	}
 	
 	#endregion IDriveable
