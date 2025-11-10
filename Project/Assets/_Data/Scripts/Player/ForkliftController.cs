@@ -45,6 +45,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
     [SerializeField] private Transform steeringWheel;
 	[SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
 	[SerializeField] private Transform exitTransform;
+    [SerializeField] private Transform look_at_transform;
 
     private float horizontalInput = 0.0f;
     private float verticalInput = 0.0f;
@@ -168,6 +169,11 @@ public class ForkliftController : MonoBehaviour, IDriveable
     public Transform getExitTransform()
     {
         return exitTransform;
+    }
+
+    public Vector3 getLookAtTransform()
+    {
+        return look_at_transform.position;
     }
 
     private void HandleTorque()

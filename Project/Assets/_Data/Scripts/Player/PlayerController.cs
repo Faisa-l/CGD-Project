@@ -1,8 +1,10 @@
 using StarterAssets;
+using System;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
 using UnityEngine.Windows;
 using static Unity.Burst.Intrinsics.X86;
@@ -33,6 +35,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] InputActionReference lifting_action;
 	[SerializeField] InputActionReference dropping_action;
 
+	private float enter_vehicle_start_height;
+
 	public void setPlayerNumber(int num)
 	{
 		playerNumber = num;
@@ -43,12 +47,6 @@ public class PlayerController : MonoBehaviour
     private void Start()
 	{
         driving = false;
-
-		lifting_action.action.started += context => { Lift(); };
-		lifting_action.action.canceled += context => { cancelLift(); };
-
-        dropping_action.action.started += context => { Drop(); };
-        dropping_action.action.canceled += context => { cancelLift(); };
     }
 
     private void OnEnable()
@@ -64,7 +62,18 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-
+        if(Gamepad.all[playerNumber - 1].rightShoulder.IsPressed())
+		{
+			Lift();
+		}
+		else if(Gamepad.all[playerNumber - 1].leftShoulder.IsPressed())
+		{
+			Drop();
+		}
+		else
+		{
+			cancelLift();
+		}
     }
 
     public void OnInteract()
@@ -72,7 +81,9 @@ public class PlayerController : MonoBehaviour
 		if(!driving)
 		{ 
 			EnterVehicle();
-		}
+
+            camera.transform.LookAt(current_forklift.getLookAtTransform());
+        }
 		else
 		{
 			GetComponent<CharacterController>().enabled = false;
@@ -90,13 +101,13 @@ public class PlayerController : MonoBehaviour
 			camera.transform.rotation = player_camera_root.rotation;
 			camera.transform.parent = gameObject.transform;
 
-			GetComponent<CharacterController>().enabled = true;
+            GetComponent<CharacterController>().enabled = true;
 
             current_forklift = null;
 		}
     }
 
-	private void Lift()
+	public void Lift()
 	{
 		if(driving)
 		{
@@ -104,9 +115,9 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
-	private void Drop()
+	public void Drop()
 	{
-		if(driving)
+        if (driving)
 		{
 			current_forklift.Drop();
 		}
@@ -114,7 +125,7 @@ public class PlayerController : MonoBehaviour
 
 	private void cancelLift()
 	{
-		if(driving)
+        if (driving)
 		{
 			current_forklift.cancelLift();
 		}
@@ -124,6 +135,7 @@ public class PlayerController : MonoBehaviour
 	{
         if (TryEnterVehicleInRange())
         {
+			enter_vehicle_start_height = camera.transform.position.y;
             model.SetActive(false);
 			driving = true;
         }
@@ -136,14 +148,9 @@ public class PlayerController : MonoBehaviour
 
 	public void cameraDrive(float rotation_velocity)
 	{
-		if(camera.transform.localRotation.y < 0.3f && rotation_velocity > 0)
-		{ 
-			camera.transform.Rotate(Vector3.up * rotation_velocity); 
-		}
-        else if (camera.transform.localRotation.y > -0.3f && rotation_velocity < 0)
-        {
-            camera.transform.Rotate(Vector3.up * rotation_velocity);
-        }
+		camera.transform.position = new Vector3(camera.transform.position.x, enter_vehicle_start_height, camera.transform.position.z);
+		camera.transform.RotateAround(current_forklift.transform.position, Vector3.up, rotation_velocity);
+		camera.transform.LookAt(current_forklift.getLookAtTransform());
     }
 
     private bool TryEnterVehicleInRange()
