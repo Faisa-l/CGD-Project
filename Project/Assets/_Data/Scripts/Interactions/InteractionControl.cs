@@ -44,13 +44,12 @@ namespace Interaction
         {
             if (currentTargetedInteraction == null)
             {
-                //Debug.Log("Not Looking at Interact");
                 interactText.text = string.Empty;
                 return;
             }
             interactText.text = currentTargetedInteraction.MessageInteract;
         }
-
+        
         public void OnInteract()
         {
             if (currentTargetedInteraction != null)
