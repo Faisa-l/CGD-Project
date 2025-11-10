@@ -206,6 +206,9 @@ MonoBehaviour:
   CinemachineCameraTarget: {fileID: 7754375586921978431}
   TopClamp: 90
   BottomClamp: -90
+  DrivingTopClamp: 45
+  DrivingBottomClamp: 20
+  use_camera_pitch: 1
 --- !u!114 &7863955024410015519
 MonoBehaviour:
   m_ObjectHideFlags: 0
