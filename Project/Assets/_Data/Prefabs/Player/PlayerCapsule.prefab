@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 6926370266666694871}
   - component: {fileID: 8548459099340749342}
   - component: {fileID: 4726076074902505128}
-  - component: {fileID: 5442692982386098383}
+  - component: {fileID: -5221479011545455313}
   m_Layer: 8
   m_Name: PlayerCapsule
   m_TagString: Player
@@ -352,7 +352,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5442692982386098383
+--- !u!114 &-5221479011545455313
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -361,10 +361,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 434561073841790944}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc5f880828ed59d4ca5f386b1ee678c2, type: 3}
+  m_Script: {fileID: 11500000, guid: 960f28106e982524eb33a3af701411e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  footstepsSound: {fileID: 4726076074902505128}
+  audio_source:
+  - {fileID: 4726076074902505128}
+  names:
+  - player
 --- !u!1 &2584533954743167000
 GameObject:
   m_ObjectHideFlags: 0

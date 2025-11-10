@@ -78,6 +78,8 @@ namespace StarterAssets
 
 		private const float _threshold = 0.01f;
 
+		private AudioEnabler _audioEnabler;
+
 		private bool IsCurrentDeviceMouse
 		{
 			get
@@ -110,6 +112,7 @@ namespace StarterAssets
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
+			_audioEnabler = GetComponent<AudioEnabler>();
 
 			// reset our timeouts on start
 			_jumpTimeoutDelta = JumpTimeout;
@@ -173,7 +176,7 @@ namespace StarterAssets
 		{
 			if(GetComponent<PlayerController>().driving)
 			{
-				GetComponent<PlayerWalkingAudioScript>().Disable();
+				_audioEnabler.Disable("player");
 				GetComponent<PlayerController>().drive(_input);
 				return;
 			}
@@ -190,11 +193,11 @@ namespace StarterAssets
 			//If the player is moveing, play the walking sound
 			if(targetSpeed != 0.0f)
 			{
-                GetComponent<PlayerWalkingAudioScript>().Enable();
+                _audioEnabler.Enable("player");
             }
 			else
 			{
-				GetComponent<PlayerWalkingAudioScript>().Disable();
+				_audioEnabler.Disable("player");
 			}
 
 				// a reference to the players current horizontal velocity

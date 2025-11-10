@@ -63,9 +63,13 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	
 	private Rigidbody rb;
 
-	private void Awake()
+    private AudioEnabler audio_enabler;
+
+
+    private void Awake()
 	{
 		rb = GetComponent<Rigidbody>();
+        audio_enabler = GetComponent<AudioEnabler>();
 	}
 
 	private void Start()
@@ -75,10 +79,11 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		// Anti-tipping
 		// Source - https://discussions.unity.com/t/how-to-stop-my-car-tipping-over/34753
 		rb.centerOfMass = centerOfMass;
-	}
 
-	// Regular update
-	private void Update()
+    }
+
+    // Regular update
+    private void Update()
 	{
 		//GetInput();
 	}
@@ -107,21 +112,22 @@ public class ForkliftController : MonoBehaviour, IDriveable
         // Get player input
         Debug.Log(playerNumber);
 
+
         verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
         horizontalInput = input.move.x;
 
         if (Gamepad.all[playerNumber-1].leftTrigger.ReadValue() != 0)
         {
-            GetComponent<ForkliftReverseAudio>().Enable();
+            audio_enabler.Enable("reverse");
         }
         else
         {
-            GetComponent<ForkliftReverseAudio>().Disable();
+            audio_enabler.Disable("reverse");
         }
 
         if (verticalInput != 0)
         {
-            GetComponent<ForkliftDrivingAudio>().Enable();
+            audio_enabler.Enable("driving");
         }
     }
 
@@ -132,7 +138,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void Lift()
     {
-        GetComponent<ForkliftArmsAudio>().Enable();
+        audio_enabler.Enable("arms");
 
         isLiftGoingUp = true;
         isLiftGoingDown = false;
@@ -140,7 +146,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void Drop()
     {
-        GetComponent<ForkliftArmsAudio>().Enable();
+        audio_enabler.Enable("arms");
 
 
         isLiftGoingUp = false;
@@ -149,7 +155,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public void cancelLift()
     {
-        GetComponent<ForkliftArmsAudio>().Disable();
+        audio_enabler.Disable("arms");
 
         isLiftGoingUp = false;
         isLiftGoingDown = false;
@@ -330,7 +336,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		rearLeftWheelCollider.motorTorque = 0.0f;
 		rearRightWheelCollider.motorTorque = 0.0f;
 
-        GetComponent<ForkliftDrivingAudio>().Disable();
+        audio_enabler.Disable("driving");
 
         return true;
 	}
