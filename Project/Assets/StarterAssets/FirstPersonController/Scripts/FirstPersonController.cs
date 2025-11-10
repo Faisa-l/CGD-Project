@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -54,6 +54,12 @@ namespace StarterAssets
 		public float TopClamp = 90.0f;
 		[Tooltip("How far in degrees can you move the camera down")]
 		public float BottomClamp = -90.0f;
+		public float DrivingTopClamp = 90.0f;
+		public float DrivingBottomClamp = 20.0f;
+
+
+		[Space(20)]
+		public bool use_camera_pitch = true;
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
@@ -155,8 +161,14 @@ namespace StarterAssets
                 {
                     GetComponent<PlayerController>().cameraDrive(_rotationVelocity);
 
-                    // clamp our pitch rotation
-                    _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp/2, TopClamp/2);
+                    if (use_camera_pitch)
+                    {
+                        // clamp our pitch rotation
+                        _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, DrivingBottomClamp, DrivingTopClamp);
+
+                        // Update Cinemachine camera target pitch
+                        CinemachineCameraTarget.GetComponentInChildren<Camera>().transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+                    }
                 }
 				else
 				{
@@ -165,15 +177,16 @@ namespace StarterAssets
 
                     // clamp our pitch rotation
                     _cinemachineTargetPitch = ClampAngle(_cinemachineTargetPitch, BottomClamp, TopClamp);
-                }
-				// Update Cinemachine camera target pitch
-				CinemachineCameraTarget.GetComponentInChildren<Camera>().transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
 
+					// Update Cinemachine camera target pitch
+					CinemachineCameraTarget.GetComponentInChildren<Camera>().transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
+                }
             }
 		}
 
 		private void Move()
 		{
+
 			if(GetComponent<PlayerController>().driving)
 			{
 				_audioEnabler.Disable("player");

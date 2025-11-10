@@ -8,7 +8,7 @@ public class PauseMenuManager : MonoBehaviour
     void Update()
     {
         if (Input.GetKeyDown(KeyCode.P) || Input.GetKeyDown(KeyCode.Escape) ||
-			Gamepad.current != null && Gamepad.current.startButton.isPressed)
+			Gamepad.current != null && Gamepad.current.startButton.wasPressedThisFrame)
         {
 			TogglePause();
         }

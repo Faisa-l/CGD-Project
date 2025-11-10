@@ -27,7 +27,6 @@ namespace Interaction
 
         //defining an array the has the positions that each object will take
         List<ObjectPosition> positions = new List<ObjectPosition>();
-        int max_length = 27;
 
         //used to get the index of a place in the positions list
         List<GameObject> objects = new List<GameObject>();

@@ -13134,6 +13134,8 @@ MonoBehaviour:
   player_4_transform: {fileID: 148530115}
   forklift_prefab: {fileID: 9127728803133528513, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
   spawn_offest: {x: 2, y: 0}
+  debug_mode_on: 0
+  player_prefab: {fileID: 434561073841790944, guid: f603a06dfc613bd4791da85cc95b3ac5, type: 3}
 --- !u!1001 &1618217621
 PrefabInstance:
   m_ObjectHideFlags: 0
