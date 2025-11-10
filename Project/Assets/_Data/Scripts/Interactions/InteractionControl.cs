@@ -21,7 +21,6 @@ namespace Interaction
 
         public void Start()
         {
-            Debug.Log("Is Awake");
             interactText.text = "Test";
         }
 
@@ -45,14 +44,12 @@ namespace Interaction
         {
             if (currentTargetedInteraction == null)
             {
-                //Debug.Log("Not Looking at Interact");
                 interactText.text = string.Empty;
                 return;
             }
-            Debug.Log("Looking at Interact");
             interactText.text = currentTargetedInteraction.MessageInteract;
         }
-
+        
         public void OnInteract()
         {
             if (currentTargetedInteraction != null)

@@ -14,7 +14,6 @@ public class PlayerController : MonoBehaviour
 {
 	[Header("Settings")]
 	[SerializeField][Range(1, 4)] private int playerNumber = 1;
-	[SerializeField] private float enterVehicleTime = 0.5f;
 
 	//[Header("UI")]
 	//[SerializeField] private HudManager hudManager;
@@ -30,8 +29,6 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField] GameObject camera;
 	[SerializeField] Transform player_camera_root;
-
-	[SerializeField][Range(0, 1)] float max_rotation = 0.3f;
 
 	[SerializeField] InputActionReference lifting_action;
 	[SerializeField] InputActionReference dropping_action;
@@ -125,7 +122,6 @@ public class PlayerController : MonoBehaviour
 
     private void EnterVehicle()
 	{
-
         if (TryEnterVehicleInRange())
         {
             model.SetActive(false);
@@ -154,7 +150,18 @@ public class PlayerController : MonoBehaviour
 	{
 		if (driveablesInRange.Count > 0)
 		{
-			driveablesInRange[0].TryEnterVehicle(this);
+			if (driveablesInRange[0] == null)
+			{
+				Debug.LogError("Closest vehicle is null");
+				return false;
+			}
+
+			if(!driveablesInRange[0].TryEnterVehicle(this))
+			{
+				Debug.LogWarning("Failed to enter vehicle");
+				return false;
+			}
+
 			current_forklift = (ForkliftController)driveablesInRange[0];
 
 			Transform forklift_camera_root = current_forklift.getCameraRoot();
