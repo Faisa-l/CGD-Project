@@ -16,6 +16,9 @@ public class PauseMenuManager : MonoBehaviour
 	
 	public void TogglePause()
 	{
+		if (GameManager.instance.currentState != GameManager.instance.playingState)
+			return;
+		
 		if (pauseMenuPanel.activeInHierarchy)
 			Unpause();
 		else
