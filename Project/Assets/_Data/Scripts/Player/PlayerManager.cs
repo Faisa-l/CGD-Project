@@ -69,29 +69,34 @@ public class PlayerManager : MonoBehaviour
             blankCamera.enabled = true;
         }
 
-        input.GetComponent<CharacterController>().enabled = false;
-
         if (debug_mode_on)
         {
-            input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.playerIndex + 1);
+            input.GetComponent<CharacterController>().enabled = false;
 
             input.gameObject.transform.position = player_positions[input.playerIndex].position;
             input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
+
+            input.GetComponent<CharacterController>().enabled = true;
         }
         else
-        {            
-            input.SwitchCurrentControlScheme(Gamepad.all[input.devices[0].deviceId - Gamepad.all[0].deviceId]);
+        {
+            InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
+            Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
 
-            input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.devices[0].deviceId - Gamepad.all[0].deviceId + 1);
+            input.SwitchCurrentControlScheme(playerGamepad);
+
+            input.GetComponent<CharacterController>().enabled = false;
+
+            input.gameObject.GetComponent<PlayerController>().setPlayerGamepad(playerGamepad);
 
             input.gameObject.transform.position = player_positions[input.playerIndex].position;
             input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
-        }
 
+            input.GetComponent<CharacterController>().enabled = true;
+        }
         GameObject temp = Instantiate(forklift_prefab);
 
         temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
 
-        input.GetComponent<CharacterController>().enabled = true;
     }
 }
