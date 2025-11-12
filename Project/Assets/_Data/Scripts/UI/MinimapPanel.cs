@@ -44,7 +44,7 @@ public class MinimapPanel : MonoBehaviour
 
             // Sets position to bottom centre of the screen
             case 2:
-                AnchorBottomCenter();
+                AnchorMiddleCenter();
                 break;
 
             // Sets position to center of the screen
