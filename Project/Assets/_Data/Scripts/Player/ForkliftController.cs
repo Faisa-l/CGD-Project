@@ -12,7 +12,7 @@ using UnityEngine.UI;
 public class ForkliftController : MonoBehaviour, IDriveable
 {
     [Header("Settings")]
-    [SerializeField][Range(0, 4)] private int playerNumber = 1; // 0 means no player currently controlling
+    [SerializeField][Range(0, 4)] private int playerNumber = 1; // 0 means no player currently 
     [SerializeField] private float motorTorque = 100.0f;
     [SerializeField] private float brakeForce = 30.0f;
     [SerializeField] private float maxSteerAngle = 45.0f;
@@ -65,6 +65,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     private AudioEnabler audio_enabler;
 
+    private Gamepad playerGamepad;
+
 
     private void Awake()
 	{
@@ -110,10 +112,10 @@ public class ForkliftController : MonoBehaviour, IDriveable
         }
 
         // Get player input
-        verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
+        verticalInput = playerGamepad.rightTrigger.ReadValue() - playerGamepad.leftTrigger.ReadValue();
         horizontalInput = input.move.x;
 
-        if (Gamepad.all[playerNumber-1].leftTrigger.ReadValue() != 0)
+        if (playerGamepad.leftTrigger.ReadValue() != 0)
         {
             audio_enabler.Enable("reverse");
         }
@@ -306,7 +308,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	
 	public bool IsVehicleOccupied()
 	{
-		return (playerNumber > 0);
+		return playerGamepad != null;
 	}
 	
 	public bool TryEnterVehicle(PlayerController player)
@@ -318,7 +320,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
         }
 		
 		driver = player;
-		playerNumber = player.GetPlayerNumber();
+        playerGamepad = player.GetPlayerGamepad();
 		
 		SetupPlayerModel();
 
@@ -328,7 +330,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	public bool TryExitVehicle()
 	{		
 		driver = null;
-		playerNumber = 0;
+        playerGamepad = null;
 		
 		playerMesh.enabled = false;
 		
