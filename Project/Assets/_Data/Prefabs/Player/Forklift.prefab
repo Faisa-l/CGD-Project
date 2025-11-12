@@ -1681,7 +1681,6 @@ MonoBehaviour:
   brakeForce: 50
   maxSteerAngle: 45
   steeringWheelPower: 3
-  exitVehicleTime: 2
   downwardForce: 9.81
   centerOfMass: {x: 0, y: -0.9, z: 0}
   lift: {fileID: 3846148368281736309}
@@ -1837,7 +1836,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 4bcb7f66e731c3d47a61693aaf18b95e, type: 3}
   m_Resource: {fileID: 8300000, guid: 4bcb7f66e731c3d47a61693aaf18b95e, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -1934,7 +1933,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: 793cfec0bf184e748b3ae4f0a9a71c30, type: 3}
   m_Resource: {fileID: 8300000, guid: 793cfec0bf184e748b3ae4f0a9a71c30, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -2031,7 +2030,7 @@ AudioSource:
   m_audioClip: {fileID: 8300000, guid: fd8dc785739673e45a7c92166cda07f6, type: 3}
   m_Resource: {fileID: 8300000, guid: fd8dc785739673e45a7c92166cda07f6, type: 3}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.5
   m_Pitch: 1
   Loop: 1
   Mute: 0
