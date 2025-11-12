@@ -1,0 +1,17 @@
+using UnityEngine;
+using Interaction;
+
+public class GameOverButtonInteractable : MonoBehaviour, Interactable
+{
+	public delegate void OnPressed();
+	public static event OnPressed onPressed;
+	
+    public virtual string MessageInteract => "Press X to self-destruct warehouse";
+
+    public void Interact(InteractableControl interactableControl)
+    {
+		// Let other scripts know
+        if (onPressed != null)
+			onPressed();
+    }
+}
