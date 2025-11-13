@@ -2,6 +2,7 @@ using System;
 using Interaction;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PhysicsPickup : MonoBehaviour, Pickupable
 {
@@ -14,6 +15,11 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     [SerializeField]
     Vector3 pickupPositionOffset;
 
+    [SerializeField]
+    float impactThreshold = 0.5f;
+
+    [SerializeField]
+    UnityEvent onImpactThresholdMet;
 
     public virtual string MessageInteract => "Press E to pick up the object";
 
@@ -78,6 +84,13 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     {
         pickupRigidBody.isKinematic = wasPickedUp;
         pickupCollider.enabled = !wasPickedUp;
-
+    }
+    void OnCollisionEnter(Collision collision)
+    {
+        Vector3 velocity = collision.relativeVelocity;
+        if (velocity.x > impactThreshold || velocity.y > impactThreshold  || velocity.z > impactThreshold)
+        {
+            onImpactThresholdMet.Invoke();
+        }
     }
 }
