@@ -14,6 +14,7 @@ public class MinimapPanel : MonoBehaviour
     float width;
     float height;
 
+
     private void OnValidate()
     {
         if (!TryGetComponent<RectTransform>(out rectTransform))
