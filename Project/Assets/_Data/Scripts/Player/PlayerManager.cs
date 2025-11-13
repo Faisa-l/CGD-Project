@@ -29,8 +29,6 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] bool debug_mode_on = false;
     [SerializeField] GameObject player_prefab;
 
-    List<Transform> player_positions = new();
-
     private int players = 0;
     [SerializeField] private Camera blankCamera;
 
