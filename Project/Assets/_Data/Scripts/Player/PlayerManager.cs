@@ -57,38 +57,21 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void OnPlayerJoined(PlayerInput input)
-    {
-        if(debug_mode_on)
-        {
-            input.GetComponent<CharacterController>().enabled = false;
+    {           
+        input.SwitchCurrentControlScheme(Gamepad.all[input.devices[0].deviceId - Gamepad.all[0].deviceId]);
 
-            input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.playerIndex + 1);
+        input.GetComponent<CharacterController>().enabled = false;
 
-            input.gameObject.transform.position = player_positions[input.playerIndex].position;
-            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
+        input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.devices[0].deviceId - Gamepad.all[0].deviceId + 1);
 
-            GameObject temp = Instantiate(forklift_prefab);
+        input.gameObject.transform.position = player_positions[input.playerIndex].position;
+        input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
 
-            temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
+        GameObject temp = Instantiate(forklift_prefab);
 
-            input.GetComponent<CharacterController>().enabled = true;
-        }
-        else
-        {            
-            input.SwitchCurrentControlScheme(Gamepad.all[input.devices[0].deviceId - Gamepad.all[0].deviceId]);
+        temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
 
-            input.GetComponent<CharacterController>().enabled = false;
-
-            input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.devices[0].deviceId - Gamepad.all[0].deviceId + 1);
-
-            input.gameObject.transform.position = player_positions[input.playerIndex].position;
-            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
-
-            GameObject temp = Instantiate(forklift_prefab);
-
-            temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
-
-            input.GetComponent<CharacterController>().enabled = true;
-        }
+        input.GetComponent<CharacterController>().enabled = true;
+        
     }
 }
