@@ -6,22 +6,38 @@ namespace Interaction
 {
     public class DoorButton : MonoBehaviour, Interactable
     {
-        [SerializeField] InputAction hold_interaction;
-
         public Door door;
+
         public string MessageInteract => "Hold E to open the door";
 
+        //[SerializeField] InputAction hold_interaction;
+        
+        
+        
         public void Start()
         {
-            hold_interaction.started += _ => { Debug.Log("Started"); };
 
-            hold_interaction.canceled += _ => { Debug.Log("Cancelled"); };
         }
 
         public virtual void Interact(InteractableControl interactableControl)
         {
-            Debug.Log("Pressed");
-            door.moving = true;
+            if (door.timed)
+            {
+                door.moving = true;
+            }
+            if (!door.timed)
+            {
+                if (!door.moving)
+                {
+                    Debug.Log("Openning");
+                    door.moving = true;
+                }
+                else
+                {
+                    Debug.Log("Closing");
+                    door.opening = false;
+                }
+            }
         }
     }
 }

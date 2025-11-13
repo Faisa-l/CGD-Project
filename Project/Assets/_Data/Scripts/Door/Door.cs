@@ -2,15 +2,21 @@ using UnityEngine;
 
 public class Door : MonoBehaviour
 {
-
+    [Header("Changeable Variables")]
     public int moveBy;
     public float speed = 1.0f;
+    public float delay = 0.0f;
 
+    [Header("Boolean Variables")]
     public bool moving = false;
     public bool opening = true;
+    public bool timed = false;
+    
+    
+    
     private Vector3 startPos;
     private Vector3 endPos;
-    private float delay = 0.0f;
+    
 
 
 
@@ -47,10 +53,13 @@ public class Door : MonoBehaviour
         {
             if (opening)
             {
-                delay += Time.deltaTime;
-                if (delay > 1.5f)
+                if (timed)
                 {
-                    opening = false;
+                    delay += Time.deltaTime;
+                    if (delay > 1.5f)
+                    {
+                        opening = false;
+                    }
                 }
             }
             else
