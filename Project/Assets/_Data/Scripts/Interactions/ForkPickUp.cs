@@ -18,10 +18,10 @@ public class ForkPickUp : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Float")
-        {
-            Debug.Log("Press E to PickUp");
-        }
+       //if (other.gameObject.tag == "Float")
+       //{
+       //    Debug.Log("Press E to PickUp");
+       //}
 
     }
 }

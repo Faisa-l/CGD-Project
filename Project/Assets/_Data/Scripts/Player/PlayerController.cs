@@ -1,3 +1,4 @@
+using Interaction;
 using StarterAssets;
 using System;
 using System.Collections.Generic;
@@ -73,7 +74,26 @@ public class PlayerController : MonoBehaviour
 		{
 			cancelLift();
 		}
+		if(driving)
+		{
+			GetComponent<InteractableControl>().interactDistance = 0.0f;
+			
+		}
+		else
+		{
+            GetComponent<InteractableControl>().interactDistance = 3.0f;
+        }
     }
+
+    public void OnForklift_Interact()
+    {
+		if (driving)
+		{
+			Debug.Log("Pressed Interact Forklift");
+			current_forklift.GetComponentInChildren<FloatPickup>().PickUpSelected();
+		}
+    }
+
 
     public void OnInteract()
     {
