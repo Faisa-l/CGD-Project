@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
 	[Header("Settings")]
 	[SerializeField][Range(1, 4)] private int playerNumber = 1;
 
-	Gamepad playerGamepad;
+	Gamepad playerGamepad = null;
 
     //[Header("UI")]
     //[SerializeField] private HudManager hudManager;
@@ -63,6 +63,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+		if(playerGamepad == null)
+		{
+			Debug.LogWarning("Player has no Gamepad connected");
+			return;
+		}
+
         if(playerGamepad.rightShoulder.IsPressed())
 		{
 			Lift();
