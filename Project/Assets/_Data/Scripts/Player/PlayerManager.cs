@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.Windows;
@@ -19,13 +20,14 @@ public class PlayerManager : MonoBehaviour
     [Header("Forklift Spawning")]
     [SerializeField] GameObject forklift_prefab;
     [SerializeField] Vector2 spawn_offest;
+    [SerializeField] UnityEvent<int> playerJoined;
 
+    List<Transform> player_positions = new List<Transform>();
+    int player_count = 0;
     [Space(20)]
     [Header("Player Debug Mode")]
     [SerializeField] bool debug_mode_on = false;
     [SerializeField] GameObject player_prefab;
-
-    List<Transform> player_positions = new();
 
     private int players = 0;
     [SerializeField] private Camera blankCamera;
@@ -47,6 +49,8 @@ public class PlayerManager : MonoBehaviour
             for (int i = 0; i < input_manager.maxPlayerCount; i++)
             {
                 PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+                player_count++;
+                playerJoined.Invoke(player_count);
             }
         }
 
@@ -98,5 +102,7 @@ public class PlayerManager : MonoBehaviour
 
         temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
 
+            player_count++;
+            playerJoined.Invoke(player_count);
     }
 }
