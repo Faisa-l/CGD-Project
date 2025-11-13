@@ -37,6 +37,10 @@ public class PlayerController : MonoBehaviour
 	[SerializeField] InputActionReference dropping_action;
 
 	private float enter_vehicle_start_height;
+	private bool lift_enabled = false;
+
+
+
 
 	public void setPlayerGamepad(Gamepad pad)
 	{
@@ -63,6 +67,25 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
+        if (playerGamepad.buttonEast.wasPressedThisFrame) 
+		{
+			if (!lift_enabled)
+			{
+				Lift();
+                lift_enabled = true;
+
+            }
+			else
+			{
+				Drop();
+				lift_enabled = false;
+
+            }
+			print(lift_enabled);
+		}
+
+        /*
         if(playerGamepad.rightShoulder.IsPressed())
 		{
 			Lift();
@@ -75,6 +98,7 @@ public class PlayerController : MonoBehaviour
 		{
 			cancelLift();
 		}
+		*/
     }
 
     public void OnInteract()
