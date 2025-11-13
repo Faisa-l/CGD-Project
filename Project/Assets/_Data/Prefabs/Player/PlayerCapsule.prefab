@@ -243,6 +243,7 @@ MonoBehaviour:
   interactText: {fileID: 2197094949224341996}
   canvas: {fileID: 6580565609170294242}
   interactDistance: 3
+  input_action: {fileID: -1597520865280613104, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
 --- !u!114 &8548459099340749342
 MonoBehaviour:
   m_ObjectHideFlags: 0
