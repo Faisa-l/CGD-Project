@@ -1,7 +1,6 @@
 using StarterAssets;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
@@ -17,11 +16,13 @@ public class PlayerController : MonoBehaviour
 	[Header("Settings")]
 	[SerializeField][Range(1, 4)] private int playerNumber = 1;
 
-	//[Header("UI")]
-	//[SerializeField] private HudManager hudManager;
+	Gamepad playerGamepad;
 
-	// Enter / exiting vehicles
-	private List<IDriveable> driveablesInRange = new List<IDriveable>();
+    //[Header("UI")]
+    //[SerializeField] private HudManager hudManager;
+
+    // Enter / exiting vehicles
+    private List<IDriveable> driveablesInRange = new List<IDriveable>();
 
 	[Space(20)]
 	[Header("Player Model")]
@@ -37,9 +38,9 @@ public class PlayerController : MonoBehaviour
 
 	private float enter_vehicle_start_height;
 
-	public void setPlayerNumber(int num)
+	public void setPlayerGamepad(Gamepad pad)
 	{
-		playerNumber = num;
+		playerGamepad = pad;
 	}
 
 	public bool driving { get; private set; }
@@ -62,11 +63,11 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        if(Gamepad.all[playerNumber - 1].rightShoulder.IsPressed())
+        if(playerGamepad.rightShoulder.IsPressed())
 		{
 			Lift();
 		}
-		else if(Gamepad.all[playerNumber - 1].leftShoulder.IsPressed())
+		else if(playerGamepad.leftShoulder.IsPressed())
 		{
 			Drop();
 		}
@@ -218,9 +219,9 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 	
-	public int GetPlayerNumber()
+	public Gamepad GetPlayerGamepad()
 	{
-		return playerNumber;
+		return playerGamepad;
 	}
 
     /*private bool VehicleCheck()

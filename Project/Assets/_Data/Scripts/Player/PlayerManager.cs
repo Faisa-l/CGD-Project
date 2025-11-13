@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 using UnityEngine.Windows;
@@ -19,15 +20,17 @@ public class PlayerManager : MonoBehaviour
     [Header("Forklift Spawning")]
     [SerializeField] GameObject forklift_prefab;
     [SerializeField] Vector2 spawn_offest;
+    [SerializeField] UnityEvent<int> playerJoined;
 
+    List<Transform> player_positions = new List<Transform>();
+    int player_count = 0;
     [Space(20)]
     [Header("Player Debug Mode")]
     [SerializeField] bool debug_mode_on = false;
     [SerializeField] GameObject player_prefab;
 
-    List<Transform> player_positions = new();
-
-    List<PlayerInput> players = new();
+    private int players = 0;
+    [SerializeField] private Camera blankCamera;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,8 +49,12 @@ public class PlayerManager : MonoBehaviour
             for (int i = 0; i < input_manager.maxPlayerCount; i++)
             {
                 PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+                player_count++;
+                playerJoined.Invoke(player_count);
             }
         }
+
+        blankCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
     }
 
     // Update is called once per frame
@@ -57,21 +64,45 @@ public class PlayerManager : MonoBehaviour
     }
 
     public void OnPlayerJoined(PlayerInput input)
-    {           
-        input.SwitchCurrentControlScheme(Gamepad.all[input.devices[0].deviceId - Gamepad.all[0].deviceId]);
+    {
+        players++;
 
-        input.GetComponent<CharacterController>().enabled = false;
+        blankCamera.enabled = false;
+        if (players == 3)
+        {
+            blankCamera.enabled = true;
+        }
 
-        input.gameObject.GetComponent<PlayerController>().setPlayerNumber(input.devices[0].deviceId - Gamepad.all[0].deviceId + 1);
+        if (debug_mode_on)
+        {
+            input.GetComponent<CharacterController>().enabled = false;
 
-        input.gameObject.transform.position = player_positions[input.playerIndex].position;
-        input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
+            input.gameObject.transform.position = player_positions[input.playerIndex].position;
+            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
 
+            input.GetComponent<CharacterController>().enabled = true;
+        }
+        else
+        {
+            InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
+            Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
+
+            input.SwitchCurrentControlScheme(playerGamepad);
+
+            input.GetComponent<CharacterController>().enabled = false;
+
+            input.gameObject.GetComponent<PlayerController>().setPlayerGamepad(playerGamepad);
+
+            input.gameObject.transform.position = player_positions[input.playerIndex].position;
+            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
+
+            input.GetComponent<CharacterController>().enabled = true;
+        }
         GameObject temp = Instantiate(forklift_prefab);
 
         temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
 
-        input.GetComponent<CharacterController>().enabled = true;
-        
+            player_count++;
+            playerJoined.Invoke(player_count);
     }
 }
