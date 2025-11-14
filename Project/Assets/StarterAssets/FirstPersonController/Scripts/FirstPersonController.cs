@@ -57,9 +57,9 @@ namespace StarterAssets
 		public float DrivingTopClamp = 90.0f;
 		public float DrivingBottomClamp = 20.0f;
 
-
 		[Space(20)]
 		public bool use_camera_pitch = true;
+		public bool useFixedDrivingCamera = false;
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
@@ -162,9 +162,15 @@ namespace StarterAssets
 
                 if (playerController.driving)
                 {
-					// GetComponent<PlayerController>().cameraDrive(_rotationVelocity);
-                    bool isLookingBack = (_input.look.y <= -_threshold) ? false : true;
-                    playerController.SetCameraPosition(isLookingBack);
+					if (useFixedDrivingCamera)
+					{
+						bool isLookingBack = (_input.look.y <= -_threshold) ? false : true;
+						playerController.SetCameraPosition(isLookingBack);
+					}
+					else
+					{
+						GetComponent<PlayerController>().cameraDrive(_rotationVelocity);
+					}
 
                     /*
                     if (use_camera_pitch)
@@ -192,7 +198,7 @@ namespace StarterAssets
 			else
 			{
 				// Reset camera position if driving and no input is registered
-				if (playerController.driving) playerController.SetCameraPosition(false);
+				if (useFixedDrivingCamera && playerController.driving) playerController.SetCameraPosition(false);
 			}
 		}
 

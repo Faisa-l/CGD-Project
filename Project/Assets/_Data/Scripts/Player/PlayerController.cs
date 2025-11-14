@@ -181,7 +181,7 @@ public class PlayerController : MonoBehaviour
 	{
 		camera.transform.position = new Vector3(camera.transform.position.x, enter_vehicle_start_height, camera.transform.position.z);
 		Debug.Log(camera.transform.position);
-		// camera.transform.RotateAround(current_forklift.transform.position, Vector3.up, rotation_velocity);
+		camera.transform.RotateAround(current_forklift.transform.position, Vector3.up, rotation_velocity);
 		camera.transform.LookAt(current_forklift.getLookAtTransform());
     }
 

@@ -209,6 +209,7 @@ MonoBehaviour:
   DrivingTopClamp: 45
   DrivingBottomClamp: 20
   use_camera_pitch: 0
+  useFixedDrivingCamera: 1
 --- !u!114 &7863955024410015519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -225,6 +226,7 @@ MonoBehaviour:
   model: {fileID: 3654735694416025988}
   camera: {fileID: 9101577913518838361}
   player_camera_root: {fileID: 5256199717208499900}
+  cameraYOffset: 1.622
   lifting_action: {fileID: 1046326361886059075, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   dropping_action: {fileID: -7610966646257763666, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
 --- !u!114 &6926370266666694871
