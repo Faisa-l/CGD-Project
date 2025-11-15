@@ -61,6 +61,11 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
+    Vector3 lookAtPosition;
+    Vector3 cameraReverseOrigin;
+    Vector3 cameraForwardOrigin;
+    float maxCameraReverseDist;
+    float maxCameraForwardDist;
 
     private Rigidbody rb;
 
@@ -70,12 +75,26 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
 
     private void Awake()
-	{
-		rb = GetComponent<Rigidbody>();
+    {
+        rb = GetComponent<Rigidbody>();
         audio_enabler = GetComponent<AudioEnabler>();
-	}
 
-	private void Start()
+        // Camera-transform variables initialisation 
+        UpdateCameraTransformPositions();
+        maxCameraReverseDist = Vector3.Magnitude(lookAtPosition - cameraReverseOrigin);
+        maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
+    }
+
+    // Updates positions based on the camera transforms
+    // Mainly doing this to avoid duplicating this code
+    private void UpdateCameraTransformPositions()
+    {
+        lookAtPosition = look_at_transform.position;
+        cameraReverseOrigin = cameraReversePos.position;
+        cameraForwardOrigin = cameraForwardPos.position;
+    }
+
+    private void Start()
 	{
 		SetupPlayerModel();
 		
@@ -99,6 +118,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
         UpdateWheelPosition();
         UpdateSteeringWheelPosition();
         HandleLift();
+        RepositionCameraTransforms();
 		
 		// Anti-tipping
         // Source - https://www.reddit.com/r/Unity3D/comments/e808la/how_to_make_my_car_not_tip_over/
@@ -308,6 +328,38 @@ public class ForkliftController : MonoBehaviour, IDriveable
         rearLeftWheelCollider.brakeTorque = brakePower;
         rearRightWheelCollider.brakeTorque = brakePower;
 	}
+
+    // Repositions the transforms of cameras based on if they would collide with eachother
+    void RepositionCameraTransforms()
+    {
+        UpdateCameraTransformPositions();
+        RaycastHit hit;
+        Vector3 direction;
+        bool success = false;
+
+        // Forward cam transform
+        direction = cameraForwardOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraForwardDist))
+        {
+            success = true;
+            cameraForwardPos.position = hit.point;
+        }
+
+        // Reverse cam transform
+        direction = cameraReverseOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraReverseDist))
+        {
+            success = true;
+            cameraReversePos.position = hit.point;
+        }
+
+        // If I try to do these in else statements its very buggy
+        if (!success)
+        {
+            cameraForwardPos.position = cameraForwardOrigin;
+            cameraReversePos.position = cameraReverseOrigin;
+        }
+    }
 	
 	#region IDriveable
 	

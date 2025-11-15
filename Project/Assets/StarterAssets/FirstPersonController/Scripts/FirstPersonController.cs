@@ -164,7 +164,7 @@ namespace StarterAssets
                 {
 					if (useFixedDrivingCamera)
 					{
-						bool isLookingBack = (_input.look.y <= -_threshold) ? false : true;
+						bool isLookingBack = _input.look.y > -_threshold;
 						playerController.SetCameraPosition(isLookingBack);
 					}
 					else
