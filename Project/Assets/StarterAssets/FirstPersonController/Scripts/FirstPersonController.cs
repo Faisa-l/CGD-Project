@@ -57,9 +57,9 @@ namespace StarterAssets
 		public float DrivingTopClamp = 90.0f;
 		public float DrivingBottomClamp = 20.0f;
 
-
 		[Space(20)]
 		public bool use_camera_pitch = true;
+		public bool useFixedDrivingCamera = false;
 
 		// cinemachine
 		private float _cinemachineTargetPitch;
@@ -85,8 +85,10 @@ namespace StarterAssets
 		private const float _threshold = 0.01f;
 
 		private AudioEnabler _audioEnabler;
+        private PlayerController playerController;
 
-		private bool IsCurrentDeviceMouse
+
+        private bool IsCurrentDeviceMouse
 		{
 			get
 			{
@@ -107,6 +109,7 @@ namespace StarterAssets
 			}
 
             transform.localRotation = new Quaternion(0, 0, 0, 0);
+			playerController = GetComponent<PlayerController>();
         }
 
         private void Start()
@@ -157,10 +160,19 @@ namespace StarterAssets
                 _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
                 _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
 
-                if (GetComponent<PlayerController>().driving)
+                if (playerController.driving)
                 {
-                    GetComponent<PlayerController>().cameraDrive(_rotationVelocity);
+					if (useFixedDrivingCamera)
+					{
+						bool isLookingBack = _input.look.y > -_threshold;
+						playerController.SetCameraPosition(isLookingBack);
+					}
+					else
+					{
+						GetComponent<PlayerController>().cameraDrive(_rotationVelocity);
+					}
 
+                    /*
                     if (use_camera_pitch)
                     {
                         // clamp our pitch rotation
@@ -169,8 +181,9 @@ namespace StarterAssets
                         // Update Cinemachine camera target pitch
                         CinemachineCameraTarget.GetComponentInChildren<Camera>().transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
                     }
+					*/
                 }
-				else
+                else
 				{
                     // rotate the player left and right
                     transform.Rotate(Vector3.up * _rotationVelocity);
@@ -182,6 +195,11 @@ namespace StarterAssets
 					CinemachineCameraTarget.GetComponentInChildren<Camera>().transform.localRotation = Quaternion.Euler(_cinemachineTargetPitch, 0.0f, 0.0f);
                 }
             }
+			else
+			{
+				// Reset camera position if driving and no input is registered
+				if (useFixedDrivingCamera && playerController.driving) playerController.SetCameraPosition(false);
+			}
 		}
 
 		private void Move()
