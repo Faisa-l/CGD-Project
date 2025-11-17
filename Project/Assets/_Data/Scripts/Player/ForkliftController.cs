@@ -7,6 +7,7 @@ using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
+using TMPro;
 
 // Source - https://www.youtube.com/watch?v=17j-u7z4wlE
 // making a game in one hour (forklift simulation) - Flutter With Gia
@@ -386,6 +387,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
         { 
             return false; 
         }
+		
         Debug.Log("Entered Vehichle");
         onVehichleEnter.Invoke();
         driver = player;
