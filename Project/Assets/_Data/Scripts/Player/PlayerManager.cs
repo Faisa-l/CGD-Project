@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -35,6 +36,8 @@ public class PlayerManager : MonoBehaviour
     List<GameObject> inputs = new();
     [SerializeField] InputActionReference player_join_action;
 
+    [SerializeField] MinimapPanel minimap;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -58,15 +61,11 @@ public class PlayerManager : MonoBehaviour
                 player_count++;
                 playerJoined.Invoke(player_count);
             }
+
+            minimap.RepositionPanel(input_manager.maxPlayerCount);
         }
 
         blankCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 
     public void OnPlayerJoined(PlayerInput input)
@@ -99,6 +98,8 @@ public class PlayerManager : MonoBehaviour
         {
             blankCamera.enabled = true;
         }
+
+        minimap.RepositionPanel(players);
 
         InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
         Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
