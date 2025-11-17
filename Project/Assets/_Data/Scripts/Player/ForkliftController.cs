@@ -61,6 +61,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
+    Vector3 rootForward, rootReverse;
     Vector3 lookAtPosition;
     Vector3 cameraReverseOrigin;
     Vector3 cameraForwardOrigin;
@@ -81,6 +82,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
         // Camera-transform variables initialisation 
         UpdateCameraTransformPositions();
+        rootForward = cameraForwardPos.localPosition;
+        rootReverse = cameraReversePos.localPosition;
         maxCameraReverseDist = Vector3.Magnitude(lookAtPosition - cameraReverseOrigin);
         maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
     }
@@ -335,29 +338,30 @@ public class ForkliftController : MonoBehaviour, IDriveable
         UpdateCameraTransformPositions();
         RaycastHit hit;
         Vector3 direction;
-        bool success = false;
+
+        // Get layer mask we need
+        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI");
 
         // Forward cam transform
         direction = cameraForwardOrigin - lookAtPosition;
-        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraForwardDist))
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraForwardDist, mask))
         {
-            success = true;
             cameraForwardPos.position = hit.point;
+        }
+        else
+        {
+            cameraForwardPos.localPosition = rootForward;
         }
 
         // Reverse cam transform
         direction = cameraReverseOrigin - lookAtPosition;
-        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraReverseDist))
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraReverseDist, mask))
         {
-            success = true;
             cameraReversePos.position = hit.point;
         }
-
-        // If I try to do these in else statements its very buggy
-        if (!success)
+        else
         {
-            cameraForwardPos.position = cameraForwardOrigin;
-            cameraReversePos.position = cameraReverseOrigin;
+            cameraReversePos.localPosition = rootReverse;
         }
     }
 	

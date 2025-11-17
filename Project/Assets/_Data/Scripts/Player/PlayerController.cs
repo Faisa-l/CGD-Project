@@ -117,7 +117,6 @@ public class PlayerController : MonoBehaviour
 		else
 		{
 			GetComponent<CharacterController>().enabled = false;
-			Debug.Log("hi");
 			current_forklift.interact();
 			model.SetActive(true);
 			driving = false;
@@ -176,7 +175,7 @@ public class PlayerController : MonoBehaviour
 	{
 		current_forklift.move(input);
 	}
-
+	
 	public void cameraDrive(float rotation_velocity)
 	{
 		camera.transform.position = new Vector3(camera.transform.position.x, enter_vehicle_start_height, camera.transform.position.z);
