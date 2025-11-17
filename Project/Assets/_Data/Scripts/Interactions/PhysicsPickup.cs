@@ -21,7 +21,7 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     [SerializeField]
     UnityEvent onImpactThresholdMet;
 
-    public virtual string MessageInteract => "Press X to pick up";
+    public virtual string MessageInteract => "Press <sprite name=\"Xbox_X\"> to pick up";
 
     public void Interact(InteractableControl interactableControl)
     {
