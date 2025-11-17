@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
 	[Header("Settings")]
 	[SerializeField][Range(1, 4)] private int playerNumber = 1;
 
-	Gamepad playerGamepad;
+	Gamepad playerGamepad = null;
 
     //[Header("UI")]
     //[SerializeField] private HudManager hudManager;
@@ -69,6 +69,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+		if(playerGamepad == null)
+		{
+			Debug.LogWarning("Player has no Gamepad connected");
+			return;
+		}
+
 
         if (playerGamepad.buttonEast.wasPressedThisFrame) 
 		{
@@ -135,6 +141,7 @@ public class PlayerController : MonoBehaviour
 
             current_forklift = null;
 		}
+
     }
 
 	public void Lift()
@@ -150,14 +157,6 @@ public class PlayerController : MonoBehaviour
         if (driving)
 		{
 			current_forklift.Drop();
-		}
-	}
-
-	private void cancelLift()
-	{
-        if (driving)
-		{
-			current_forklift.cancelLift();
 		}
 	}
 
@@ -221,10 +220,10 @@ public class PlayerController : MonoBehaviour
 		if (!driveablesInRange.Contains(driveable))
 		{
 			driveablesInRange.Add(driveable);
-			
-			//hudManager.SetVehiclePromptStatus(playerNumber, true);
-		}
-		else
+
+            //hudManager.SetVehiclePromptStatus(playerNumber, true);
+        }
+        else
 		{
 			Debug.LogWarning("Tried to add a driveable that is already in driveablesInRange");
 		}

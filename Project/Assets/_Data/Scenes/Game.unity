@@ -14203,25 +14203,15 @@ MonoBehaviour:
   player_3_transform: {fileID: 861747477}
   player_4_transform: {fileID: 148530115}
   forklift_prefab: {fileID: 9127728803133528513, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
-  spawn_offest: {x: 2, y: 0}
+  spawn_offest: {x: 3, y: 0}
   playerJoined:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1249110875}
-        m_TargetAssemblyTypeName: MinimapPanel, Assembly-CSharp
-        m_MethodName: RepositionPanel
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-  debug_mode_on: 0
+      m_Calls: []
+  debug_mode_on: 1
   player_prefab: {fileID: 434561073841790944, guid: f603a06dfc613bd4791da85cc95b3ac5, type: 3}
   blankCamera: {fileID: 1028648378}
+  player_join_action: {fileID: 3128916251527242960, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
+  minimap: {fileID: 1249110875}
 --- !u!1001 &1618217621
 PrefabInstance:
   m_ObjectHideFlags: 0

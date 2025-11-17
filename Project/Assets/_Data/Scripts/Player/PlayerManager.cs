@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
@@ -32,6 +33,11 @@ public class PlayerManager : MonoBehaviour
     private int players = 0;
     [SerializeField] private Camera blankCamera;
 
+    List<GameObject> inputs = new();
+    [SerializeField] InputActionReference player_join_action;
+
+    [SerializeField] MinimapPanel minimap;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -48,61 +54,72 @@ public class PlayerManager : MonoBehaviour
 
             for (int i = 0; i < input_manager.maxPlayerCount; i++)
             {
-                PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+                PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+                player.SwitchCurrentControlScheme(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count-1)]);
+                player.gameObject.GetComponent<PlayerController>().setPlayerGamepad(Gamepad.all[0]);
+
                 player_count++;
                 playerJoined.Invoke(player_count);
             }
+
+            minimap.RepositionPanel(input_manager.maxPlayerCount);
         }
 
         blankCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
-
     public void OnPlayerJoined(PlayerInput input)
     {
+        GameObject temp;
+        blankCamera.enabled = false;
+
+        inputs.Add(input.gameObject);
+
+        if(debug_mode_on)
+        {
+            input.GetComponent<CharacterController>().enabled = false;
+
+            input.gameObject.transform.position = player_positions[input.playerIndex].position;
+            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
+
+            input.GetComponent<CharacterController>().enabled = true;
+
+            temp = Instantiate(forklift_prefab);
+
+            temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
+
+            return;
+        }
+
         players++;
 
-        blankCamera.enabled = false;
+        
         if (players == 3)
         {
             blankCamera.enabled = true;
         }
 
-        if (debug_mode_on)
-        {
-            input.GetComponent<CharacterController>().enabled = false;
+        minimap.RepositionPanel(players);
 
-            input.gameObject.transform.position = player_positions[input.playerIndex].position;
-            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
+        InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
+        Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
 
-            input.GetComponent<CharacterController>().enabled = true;
-        }
-        else
-        {
-            InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
-            Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
+        input.SwitchCurrentControlScheme(playerGamepad);
 
-            input.SwitchCurrentControlScheme(playerGamepad);
+        input.GetComponent<CharacterController>().enabled = false;
 
-            input.GetComponent<CharacterController>().enabled = false;
+        input.gameObject.GetComponent<PlayerController>().setPlayerGamepad(playerGamepad);
 
-            input.gameObject.GetComponent<PlayerController>().setPlayerGamepad(playerGamepad);
+        input.gameObject.transform.position = player_positions[input.playerIndex].position;
+        input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
 
-            input.gameObject.transform.position = player_positions[input.playerIndex].position;
-            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
+        input.GetComponent<CharacterController>().enabled = true;
 
-            input.GetComponent<CharacterController>().enabled = true;
-        }
-        GameObject temp = Instantiate(forklift_prefab);
+        temp = Instantiate(forklift_prefab);
 
         temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
 
-            player_count++;
-            playerJoined.Invoke(player_count);
+        player_count++;
+        playerJoined.Invoke(player_count);
     }
 }
