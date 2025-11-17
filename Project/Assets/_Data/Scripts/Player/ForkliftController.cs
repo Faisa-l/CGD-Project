@@ -12,7 +12,7 @@ using UnityEngine.UI;
 public class ForkliftController : MonoBehaviour, IDriveable
 {
     [Header("Settings")]
-    [SerializeField][Range(0, 4)] private int playerNumber = 1; // 0 means no player currently controlling
+    [SerializeField][Range(0, 4)] private int playerNumber = 1; // 0 means no player currently 
     [SerializeField] private float motorTorque = 100.0f;
     [SerializeField] private float brakeForce = 30.0f;
     [SerializeField] private float maxSteerAngle = 45.0f;
@@ -59,20 +59,45 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
 	private PlayerController driver;
 
-    [SerializeField] private Transform camera_root;
-	
-	private Rigidbody rb;
+    [SerializeField] private Transform cameraForwardPos;
+    [SerializeField] private Transform cameraReversePos;
+    Vector3 rootForward, rootReverse;
+    Vector3 lookAtPosition;
+    Vector3 cameraReverseOrigin;
+    Vector3 cameraForwardOrigin;
+    float maxCameraReverseDist;
+    float maxCameraForwardDist;
+
+    private Rigidbody rb;
 
     private AudioEnabler audio_enabler;
 
+    private Gamepad playerGamepad;
+
 
     private void Awake()
-	{
-		rb = GetComponent<Rigidbody>();
+    {
+        rb = GetComponent<Rigidbody>();
         audio_enabler = GetComponent<AudioEnabler>();
-	}
 
-	private void Start()
+        // Camera-transform variables initialisation 
+        UpdateCameraTransformPositions();
+        rootForward = cameraForwardPos.localPosition;
+        rootReverse = cameraReversePos.localPosition;
+        maxCameraReverseDist = Vector3.Magnitude(lookAtPosition - cameraReverseOrigin);
+        maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
+    }
+
+    // Updates positions based on the camera transforms
+    // Mainly doing this to avoid duplicating this code
+    private void UpdateCameraTransformPositions()
+    {
+        lookAtPosition = look_at_transform.position;
+        cameraReverseOrigin = cameraReversePos.position;
+        cameraForwardOrigin = cameraForwardPos.position;
+    }
+
+    private void Start()
 	{
 		SetupPlayerModel();
 		
@@ -96,6 +121,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
         UpdateWheelPosition();
         UpdateSteeringWheelPosition();
         HandleLift();
+        RepositionCameraTransforms();
 		
 		// Anti-tipping
         // Source - https://www.reddit.com/r/Unity3D/comments/e808la/how_to_make_my_car_not_tip_over/
@@ -110,10 +136,10 @@ public class ForkliftController : MonoBehaviour, IDriveable
         }
 
         // Get player input
-        verticalInput = Gamepad.all[playerNumber-1].rightTrigger.ReadValue() - Gamepad.all[playerNumber-1].leftTrigger.ReadValue();
+        verticalInput = playerGamepad.rightTrigger.ReadValue() - playerGamepad.leftTrigger.ReadValue();
         horizontalInput = input.move.x;
 
-        if (Gamepad.all[playerNumber-1].leftTrigger.ReadValue() != 0)
+        if (playerGamepad.leftTrigger.ReadValue() != 0)
         {
             audio_enabler.Enable("reverse");
         }
@@ -130,8 +156,12 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
     public Transform getCameraRoot()
     {
-        return camera_root;
+        return cameraForwardPos;
     }
+
+    // TODO: change the thing above to a property like what we got going on below:
+
+    public Transform CameraReversePosition => cameraReversePos;
 
     public void Lift()
     {
@@ -301,12 +331,45 @@ public class ForkliftController : MonoBehaviour, IDriveable
         rearLeftWheelCollider.brakeTorque = brakePower;
         rearRightWheelCollider.brakeTorque = brakePower;
 	}
+
+    // Repositions the transforms of cameras based on if they would collide with eachother
+    void RepositionCameraTransforms()
+    {
+        UpdateCameraTransformPositions();
+        RaycastHit hit;
+        Vector3 direction;
+
+        // Get layer mask we need
+        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI");
+
+        // Forward cam transform
+        direction = cameraForwardOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraForwardDist, mask))
+        {
+            cameraForwardPos.position = hit.point;
+        }
+        else
+        {
+            cameraForwardPos.localPosition = rootForward;
+        }
+
+        // Reverse cam transform
+        direction = cameraReverseOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraReverseDist, mask))
+        {
+            cameraReversePos.position = hit.point;
+        }
+        else
+        {
+            cameraReversePos.localPosition = rootReverse;
+        }
+    }
 	
 	#region IDriveable
 	
 	public bool IsVehicleOccupied()
 	{
-		return (playerNumber > 0);
+		return playerGamepad != null;
 	}
 	
 	public bool TryEnterVehicle(PlayerController player)
@@ -318,7 +381,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
         }
 		
 		driver = player;
-		playerNumber = player.GetPlayerNumber();
+        playerGamepad = player.GetPlayerGamepad();
 		
 		SetupPlayerModel();
 
@@ -328,7 +391,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	public bool TryExitVehicle()
 	{		
 		driver = null;
-		playerNumber = 0;
+        playerGamepad = null;
 		
 		playerMesh.enabled = false;
 		
