@@ -18,11 +18,11 @@ namespace Interaction
         {
             if (door.timed)
             {
-                isTimed = "Press E to open the timed door";
+                isTimed = "Press X to open door";
             }
             else
             {
-                isTimed = "Hold E to open the door";
+                isTimed = "Hold X to open door";
             }
         }
 

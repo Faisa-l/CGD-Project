@@ -1907,6 +1907,7 @@ MonoBehaviour:
   playerMesh: {fileID: 2735361621119911603}
   exitTransform: {fileID: 2148080391469445715}
   look_at_transform: {fileID: 3325905161990052438}
+  enterPromptText: {fileID: 7355957186543924399}
   onVehichleEnter:
     m_PersistentCalls:
       m_Calls:

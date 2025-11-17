@@ -7,6 +7,8 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.UIElements;
 using UnityEngine.Windows;
+using UnityEngine.Events;
+using TMPro;
 using static Unity.Burst.Intrinsics.X86;
 using static UnityEditor.PlayerSettings;
 
@@ -37,6 +39,11 @@ public class PlayerController : MonoBehaviour
 
 	[SerializeField] InputActionReference lifting_action;
 	[SerializeField] InputActionReference dropping_action;
+
+	[SerializeField] TMP_Text promptText;
+
+	[Header("Events")]
+	[SerializeField] private UnityEvent onEnteredVehicle;
 
 	private float enter_vehicle_start_height;
 	private bool lift_enabled = false;
@@ -167,6 +174,11 @@ public class PlayerController : MonoBehaviour
 			enter_vehicle_start_height = camera.transform.position.y;
             model.SetActive(false);
 			driving = true;
+			
+			promptText.text = "";
+			
+			if (onEnteredVehicle != null)
+				onEnteredVehicle.Invoke();
         }
     }
 
