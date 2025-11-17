@@ -139,6 +139,7 @@ public class PlayerController : MonoBehaviour
 
             current_forklift = null;
 		}
+
     }
 
 	public void Lift()
@@ -154,14 +155,6 @@ public class PlayerController : MonoBehaviour
         if (driving)
 		{
 			current_forklift.Drop();
-		}
-	}
-
-	private void cancelLift()
-	{
-        if (driving)
-		{
-			current_forklift.cancelLift();
 		}
 	}
 
@@ -223,10 +216,10 @@ public class PlayerController : MonoBehaviour
 		if (!driveablesInRange.Contains(driveable))
 		{
 			driveablesInRange.Add(driveable);
-			
-			//hudManager.SetVehiclePromptStatus(playerNumber, true);
-		}
-		else
+
+            //hudManager.SetVehiclePromptStatus(playerNumber, true);
+        }
+        else
 		{
 			Debug.LogWarning("Tried to add a driveable that is already in driveablesInRange");
 		}
