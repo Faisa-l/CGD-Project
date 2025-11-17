@@ -945,7 +945,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8946032051519497768
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1002,10 +1002,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_UiScaleMode: 0
+  m_UiScaleMode: 1
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
-  m_ReferenceResolution: {x: 800, y: 600}
+  m_ReferenceResolution: {x: 960, y: 540}
   m_ScreenMatchMode: 0
   m_MatchWidthOrHeight: 0
   m_PhysicalUnit: 3
@@ -1075,7 +1075,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7660691cf36b36040b1f104d0b886eea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  message: Press X to enter
+  message: Press <sprite name="Xbox_X"> to enter
 --- !u!65 &6713197109909112224
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -1907,7 +1907,6 @@ MonoBehaviour:
   playerMesh: {fileID: 2735361621119911603}
   exitTransform: {fileID: 2148080391469445715}
   look_at_transform: {fileID: 3325905161990052438}
-  enterPromptText: {fileID: 7355957186543924399}
   onVehichleEnter:
     m_PersistentCalls:
       m_Calls:

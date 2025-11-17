@@ -18,11 +18,11 @@ namespace Interaction
         {
             if (door.timed)
             {
-                isTimed = "Press X to open door";
+                isTimed = "Press <sprite name=\"Xbox_X\"> to open door";
             }
             else
             {
-                isTimed = "Hold X to open door";
+                isTimed = "Hold <sprite name=\"Xbox_X\"> to open door";
             }
         }
 
