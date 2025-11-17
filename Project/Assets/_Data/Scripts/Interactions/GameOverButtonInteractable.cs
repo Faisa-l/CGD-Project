@@ -14,4 +14,6 @@ public class GameOverButtonInteractable : MonoBehaviour, Interactable
         if (onPressed != null)
 			onPressed();
     }
+
+    public virtual void Release() { }
 }

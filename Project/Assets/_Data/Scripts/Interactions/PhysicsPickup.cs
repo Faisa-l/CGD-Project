@@ -26,13 +26,13 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     public void Interact(InteractableControl interactableControl)
     {
         var pickupController = interactableControl.GetComponent<PickupController>();
-        
-            Grab(pickupController);
+
+        Grab(pickupController);
     }
 
     public virtual void Grab(PickupController pickupController)
     {
-        if(pickupController == null || pickupController.HasPickupable)
+        if (pickupController == null || pickupController.HasPickupable)
         {
             return;
         }
@@ -52,7 +52,7 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
 
     public virtual void Place(PickupController pickupController)
     {
-        
+
         transform.position += transform.parent.forward * 2;
         transform.parent = null;
         SetPhysicsValues(false);
@@ -75,7 +75,7 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     }
     public virtual void Use()
     {
-       
+
         Debug.Log("Using the pickupable object");
 
     }
@@ -93,4 +93,6 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
             onImpactThresholdMet.Invoke();
         }
     }
+
+    public virtual void Release() { }
 }

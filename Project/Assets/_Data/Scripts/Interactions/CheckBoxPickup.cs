@@ -19,5 +19,7 @@ namespace Interaction
             ConsolePrint();
             Destroy(gameObject);         
         }
+
+        public void Release() { }
     }
 }

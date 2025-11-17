@@ -94,5 +94,7 @@ namespace Interaction
             return positions[idx].position + gameObject.transform.position - (gameObject.transform.lossyScale / 2) + new Vector3(0, current_obj.transform.localScale.y / 2, 0);
         }
 
+        public virtual void Release() { }
+
     }
 }

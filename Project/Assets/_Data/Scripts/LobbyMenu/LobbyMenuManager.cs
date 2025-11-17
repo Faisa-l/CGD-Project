@@ -11,7 +11,7 @@ public class LobbyMenuManager : MonoBehaviour
 	
 	[SerializeField] private GameObject[] playerControllerImages; // Offset by 1 (0 = player 1)
 	
-	private List<Gamepad> currentPlayers;
+	private List<Gamepad> currentPlayers = new List<Gamepad>();
 	
 	#region Lobby
 	
