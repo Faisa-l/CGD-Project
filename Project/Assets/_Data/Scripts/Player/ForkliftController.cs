@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Unity.Cinemachine;
 using UnityEditor.SearchService;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
@@ -46,6 +47,12 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	[SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
 	[SerializeField] private Transform exitTransform;
     [SerializeField] private Transform look_at_transform;
+
+    [Header("Events")]
+    [SerializeField]
+    UnityEvent onVehichleEnter;
+    [SerializeField]
+    UnityEvent onVehichleExit;
 
     private float horizontalInput = 0.0f;
     private float verticalInput = 0.0f;
@@ -379,8 +386,9 @@ public class ForkliftController : MonoBehaviour, IDriveable
         { 
             return false; 
         }
-		
-		driver = player;
+        Debug.Log("Entered Vehichle");
+        onVehichleEnter.Invoke();
+        driver = player;
         playerGamepad = player.GetPlayerGamepad();
 		
 		SetupPlayerModel();
@@ -389,7 +397,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
 	}
 	
 	public bool TryExitVehicle()
-	{		
+	{
 		driver = null;
         playerGamepad = null;
 		
@@ -403,6 +411,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
         audio_enabler.Disable("driving");
 
+        Debug.Log("Exited Vehichle");
+        onVehichleExit.Invoke();
         return true;
 	}
 	

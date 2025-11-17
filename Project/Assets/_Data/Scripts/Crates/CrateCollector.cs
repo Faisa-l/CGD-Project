@@ -44,6 +44,9 @@ public class CrateCollector : MonoBehaviour
 
     [SerializeField]
     UnityEvent onCollectionPeriodEnded;
+    
+    [SerializeField]
+    UnityEvent onQuotaMet;
 
     float timer = 0f;
     bool canCollect = false;
@@ -130,6 +133,10 @@ public class CrateCollector : MonoBehaviour
         collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
         Destroy(collectable.GameObject);
+        if (RequirementMet)
+        {
+            onQuotaMet.Invoke();
+        }
     }
 
     // Handle timer
