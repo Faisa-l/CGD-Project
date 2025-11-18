@@ -39,7 +39,7 @@ public class FloatPickup : MonoBehaviour
         Debug.Log(held_object);
         object_selected = false;
         forklift_selected = false;
-        if (Physics.Raycast(transform.position, Forkcast.transform.forward, out hit, ray_dist))
+        if (Physics.Raycast(Forkcast.transform.position, Forkcast.transform.forward, out hit, ray_dist))
         {
             if (hit.collider.tag == "LeftSide")
             {
