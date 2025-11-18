@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 namespace Interaction
 {
@@ -15,13 +16,22 @@ namespace Interaction
         Canvas canvas;
 
         [SerializeField]
-        float interactDistance = 3f;
+        public float interactDistance = 3f;
 
-        Interactable currentTargetedInteraction;
+        public Interactable currentTargetedInteraction;
+
+        [SerializeField] InputActionReference input_action;
 
         public void Start()
         {
             interactText.text = "Test";
+
+            input_action.action.canceled+= context => 
+            { 
+                if (currentTargetedInteraction != null)
+                    currentTargetedInteraction.Release();
+            };
+
         }
 
         public void Update()

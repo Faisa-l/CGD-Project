@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -44,6 +43,9 @@ public class CrateCollector : MonoBehaviour
 
     [SerializeField]
     UnityEvent onCollectionPeriodEnded;
+    
+    [SerializeField]
+    UnityEvent onQuotaMet;
 
     float timer = 0f;
     bool canCollect = false;
@@ -53,6 +55,7 @@ public class CrateCollector : MonoBehaviour
     List<ICollectable> toCollect;
     Material markerMaterial;
 
+    public int Quota => collectionRequierment;
     bool RequirementMet => (toCollect.Count >= collectionRequierment);
     void UpdateRequirement()
     {
@@ -130,6 +133,10 @@ public class CrateCollector : MonoBehaviour
         collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
         Destroy(collectable.GameObject);
+        if (RequirementMet)
+        {
+            onQuotaMet.Invoke();
+        }
     }
 
     // Handle timer
