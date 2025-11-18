@@ -135,6 +135,8 @@ public class PlayerController : MonoBehaviour
 			{ 
 				camera.transform.LookAt(current_forklift.getLookAtTransform()); 
 			}
+
+			GetComponent<Collider>().enabled = false;
         }
 		else
 		{
@@ -154,6 +156,8 @@ public class PlayerController : MonoBehaviour
 			camera.transform.GetChild(0).transform.localPosition = new Vector3(0f, cameraYOffset, 0f);
 
             GetComponent<CharacterController>().enabled = true;
+
+			GetComponent<Collider>().enabled = true;
 
             current_forklift = null;
 		}
