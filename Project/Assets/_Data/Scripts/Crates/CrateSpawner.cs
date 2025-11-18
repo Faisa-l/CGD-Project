@@ -144,9 +144,7 @@ public class CrateSpawner : MonoBehaviour
         {
             n--;
             int k = rnd.Next(0, n + 1);
-            T v = list[k];
-            list[k] = list[n];
-            list[n] = v;
+            (list[n], list[k]) = (list[k], list[n]);
         }
     }
 }
