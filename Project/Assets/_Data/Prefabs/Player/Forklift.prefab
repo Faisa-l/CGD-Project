@@ -95,7 +95,7 @@ Transform:
   m_GameObject: {fileID: 245632516213508495}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.56, y: 3.94, z: -2.06}
+  m_LocalPosition: {x: -1.55, y: 3.94, z: -2.06}
   m_LocalScale: {x: 1.9009374, y: 6.193878, z: 6.425}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -175,6 +175,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!1 &348965441336735577
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1701528152267735697}
+  m_Layer: 0
+  m_Name: ForkliftBackTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1701528152267735697
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348965441336735577}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -1, z: 5.4}
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3846148368281736309}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &364160405198055572
 GameObject:
   m_ObjectHideFlags: 0
@@ -203,7 +234,7 @@ Transform:
   m_GameObject: {fileID: 364160405198055572}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.16, y: 3.9400003, z: -6.15}
+  m_LocalPosition: {x: 0.16, y: 3.9400003, z: -4.75}
   m_LocalScale: {x: 1.625, y: 6.193878, z: 5.9817734}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -293,7 +324,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2682083932651785604}
   - component: {fileID: 2125324533077630810}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: C_Wheel_L_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -364,7 +395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1282265530664613412}
   m_Layer: 0
-  m_Name: ForkliftTransform
+  m_Name: ForkliftLeftTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -379,7 +410,7 @@ Transform:
   m_GameObject: {fileID: 1035734622458721485}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.81, z: 1.73}
+  m_LocalPosition: {x: -2.2, y: -1, z: 2.5}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -482,7 +513,7 @@ GameObject:
   - component: {fileID: 2468662380623212021}
   - component: {fileID: 2606515559904544793}
   - component: {fileID: 3479853000511585572}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: T_Wheel_R_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -685,7 +716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3824831652499881732}
   - component: {fileID: 349420474976718859}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: C_Wheel_L_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -774,7 +805,7 @@ Transform:
   m_GameObject: {fileID: 2833143252477430518}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.33, y: 3.9400003, z: -2.06}
+  m_LocalPosition: {x: 1.55, y: 3.9400003, z: -2.06}
   m_LocalScale: {x: 1.9009374, y: 6.193878, z: 6.425}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -899,7 +930,7 @@ GameObject:
   - component: {fileID: 5896697718319638678}
   - component: {fileID: 6700016947358796804}
   - component: {fileID: 2557771582779212690}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: T_Wheel_R_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1009,6 +1040,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1282265530664613412}
+  - {fileID: 3383499975239251174}
+  - {fileID: 1701528152267735697}
   - {fileID: 8009039583921029665}
   - {fileID: 3202439875482396673}
   m_Father: {fileID: 4773819098820074584}
@@ -1079,7 +1112,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1100,7 +1133,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1121,7 +1154,7 @@ BoxCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_LayerOverridePriority: 0
   m_IsTrigger: 0
   m_ProvidesContacts: 0
@@ -1298,7 +1331,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5845218968434846800}
   - component: {fileID: 4208067949702493496}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: C_Wheel_R_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1456,7 +1489,7 @@ GameObject:
   - component: {fileID: 1875599527216935721}
   - component: {fileID: 5646496241379908200}
   - component: {fileID: 7250642303603637699}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: T_Wheel_L_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1573,7 +1606,7 @@ GameObject:
   - component: {fileID: 4349160905457002593}
   - component: {fileID: 188643702991795335}
   - component: {fileID: 3448440408480691005}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: T_Wheel_L_Front
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1658,7 +1691,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2684918530967068112}
   - component: {fileID: 5366741994901285519}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: C_Wheel_R_Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1993,6 +2026,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4860262084814405887}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8941348109879055386
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3383499975239251174}
+  m_Layer: 0
+  m_Name: ForkliftRightTransform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3383499975239251174
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8941348109879055386}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 2.2, y: -1, z: 2.5}
+  m_LocalScale: {x: 5, y: 5, z: 5}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3846148368281736309}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &9127728803133528513
 GameObject:
   m_ObjectHideFlags: 0
@@ -2088,8 +2152,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1.248645, y: 1.479645, z: 1.674819}
-  m_Center: {x: 0, y: 0.8793497, z: -0.4498792}
+  m_Size: {x: 1.25, y: 1.479645, z: 1.674819}
+  m_Center: {x: 0, y: 0.9, z: -0.4}
 --- !u!114 &1674581232711070709
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2587,7 +2651,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Forkcast: {fileID: 608236076347334205}
   PickupLocation: {fileID: 6606990605837857292}
-  ForkliftLocation: {fileID: 1035734622458721485}
+  ForkliftLeftLocation: {fileID: 1035734622458721485}
+  ForkliftRightLocation: {fileID: 8941348109879055386}
+  ForkliftBackLocation: {fileID: 348965441336735577}
   pickupPositionOffset: {x: 0, y: 0, z: 0}
   force_multiplier: 70
   force_exponent: 2

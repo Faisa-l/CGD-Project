@@ -6,7 +6,9 @@ public class FloatPickup : MonoBehaviour
 {
     [SerializeField] GameObject Forkcast;
     [SerializeField] GameObject PickupLocation;
-    [SerializeField] GameObject ForkliftLocation;
+    [SerializeField] GameObject ForkliftLeftLocation;
+    [SerializeField] GameObject ForkliftRightLocation;
+    [SerializeField] GameObject ForkliftBackLocation;
     [SerializeField] Vector3 pickupPositionOffset;
 
     [SerializeField] float force_multiplier;
@@ -21,8 +23,6 @@ public class FloatPickup : MonoBehaviour
     [SerializeField] private GameObject held_object;
     float timer = 0;
 
-
-
     public string MessageInteract => "Picks Up";
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -35,16 +35,21 @@ public class FloatPickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(has_forklift);
-        Debug.Log(held_object);
+        //Debug.Log(has_forklift);
+        //Debug.Log(held_object);
         object_selected = false;
         forklift_selected = false;
         if (Physics.Raycast(Forkcast.transform.position, Forkcast.transform.forward, out hit, ray_dist))
         {
+            Debug.DrawRay(
+                Forkcast.transform.position, 
+                transform.TransformDirection(Vector3.forward) * hit.distance, 
+                Color.blue);
+
             if (hit.collider.tag == "LeftSide")
             {
                 Debug.Log("Looking at Left Side");
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.blue);
+                
                 forklift_selected = true;
                 if (has_forklift == true)
                 {
@@ -55,7 +60,6 @@ public class FloatPickup : MonoBehaviour
             if (hit.collider.tag == "BackSide")
             {
                 Debug.Log("Looking at Back Side");
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.blue);
                 //pickupPositionOffset = new Vector3(0, 0, -1);
                 forklift_selected = true;
                 if(has_forklift == true)
@@ -67,7 +71,6 @@ public class FloatPickup : MonoBehaviour
             if (hit.collider.tag == "RightSide")
             {
                 Debug.Log("Looking at Right Side");
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.blue);
                 forklift_selected = true;
 
                 if (has_forklift == true)
@@ -122,18 +125,38 @@ public class FloatPickup : MonoBehaviour
     {
         if (forklift_selected == true && !has_object && has_forklift == false)
         {
-            Debug.Log("Forklift Interaction");
+            Debug.Log($"Forklift Interaction with {hit.collider.name}");
+
+            GameObject lifting_forklift = hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+            lifting_forklift.GetComponent<Collider>().enabled = false;
+
             if (hit.collider.tag == "LeftSide")
             {
-                ForkliftLocation.transform.rotation = Quaternion.Euler(0f, -90f, 0f); ;
-                SetForkliftPositionInParent(hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform);   
-                held_object = hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+                SetForkliftPositionInParent(lifting_forklift.transform, ForkliftLeftLocation.transform);   
+                lifting_forklift.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
+                held_object = lifting_forklift;
+                has_forklift = true;
+            }
+
+            if (hit.collider.tag == "RightSide")
+            {
+                SetForkliftPositionInParent(lifting_forklift.transform, ForkliftRightLocation.transform);
+                lifting_forklift.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+                held_object = lifting_forklift;
+                has_forklift = true;
+            }
+
+            if (hit.collider.tag == "BackSide")
+            {
+                lifting_forklift.transform.rotation = Forkcast.transform.rotation;
+                SetForkliftPositionInParent(lifting_forklift.transform, ForkliftBackLocation.transform);
+                held_object = lifting_forklift;
                 has_forklift = true;
             }
         }
         else if (forklift_selected == false && held_object != null && has_forklift == true)
         {
-            Debug.Log("Dropping Forklift");
+            //Debug.Log("Dropping Forklift");
             ray_dist = 1.5f;
             UnsetPositionInParent(held_object.transform);
             has_forklift = false;
@@ -165,19 +188,19 @@ public class FloatPickup : MonoBehaviour
         newPosition.GetComponent<Rigidbody>().isKinematic = true;
     }
 
-    public void SetForkliftPositionInParent(Transform newPosition)
+    public void SetForkliftPositionInParent(Transform newPosition, Transform pickUptransform)
     {        
-        newPosition.parent = ForkliftLocation.transform;
-        //newPosition.transform.position = ForkliftLocation.transform.position;
-        newPosition.transform.rotation = ForkliftLocation.transform.rotation;
+        newPosition.parent = pickUptransform.transform;
+        newPosition.transform.position = pickUptransform.transform.position;
         newPosition.GetComponentInParent<Rigidbody>().isKinematic = true;
     }
 
     public void UnsetPositionInParent(Transform newPosition)
-
     {
         newPosition.parent = null;
-        //newPosition.GetComponent<Rigidbody>().isKinematic = false;
+        newPosition.GetComponent<Rigidbody>().isKinematic = false;
+
+        newPosition.GetComponent<Collider>().enabled = true;
     }
 
     void SetPhysicsValues(GameObject gameobject)
