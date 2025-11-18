@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ShowMessageArea : MonoBehaviour
 {
-	[SerializeField] private string message;
+	[SerializeField] [TextArea] private string message;
 	
 	#region Getters
 	
