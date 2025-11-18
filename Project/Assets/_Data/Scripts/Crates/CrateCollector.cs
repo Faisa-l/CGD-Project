@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Security.Cryptography;
-using System.Xml;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -57,6 +55,7 @@ public class CrateCollector : MonoBehaviour
     List<ICollectable> toCollect;
     Material markerMaterial;
 
+    public int Quota => collectionRequierment;
     bool RequirementMet => (toCollect.Count >= collectionRequierment);
     void UpdateRequirement()
     {

@@ -1,8 +1,5 @@
-
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -23,13 +20,18 @@ public class CrateSpawner : MonoBehaviour
     [SerializeField, Tooltip("Spawns one crate at each point")]
     List<Transform> points;
 
+    // I have the potential to do something incredibly funny here to get the quota
+    // Really it should be a value thats practically globally accessible so instead this will reference the crate collector
+    // The alternative would be to either make a singleton that holds this type of data or a ScriptableObject which holds the value
+    [SerializeField]
+    CrateCollector collector;
+
     // Key is where the spawned crate came from
     // Very important nothing directly indexes this otherwise bad things will happen
     Dictionary<Transform, GameObject> spawnedObjects;
     float timer = 0f;
 
-    [SerializeField]
-    int quota = 10;
+    int Quota => collector ? collector.Quota : 10;
 
     private void OnValidate()
     {
@@ -118,7 +120,7 @@ public class CrateSpawner : MonoBehaviour
         ShuffleList<Transform>(spawnPoints);
         
         // Only spawn enough crates to meet quota (truncate spawnPoints)
-        int diff = quota - spawned + spawnExtra;
+        int diff = Quota - spawned + spawnExtra;
         if (diff > 0)
         {
             diff = math.clamp(diff, 0, spawnPoints.Count);
