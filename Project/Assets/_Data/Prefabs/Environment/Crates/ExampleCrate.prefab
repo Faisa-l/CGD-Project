@@ -19,7 +19,7 @@ GameObject:
   - component: {fileID: 3960147188473178597}
   m_Layer: 0
   m_Name: ExampleCrate
-  m_TagString: Untagged
+  m_TagString: Float
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -51,7 +51,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a514b6ef3a51f046b533de3c7d9a503, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  score: 0
+  score: 100
 --- !u!33 &5113504707291311347
 MeshFilter:
   m_ObjectHideFlags: 0

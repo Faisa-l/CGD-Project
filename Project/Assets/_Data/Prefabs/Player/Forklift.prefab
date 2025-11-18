@@ -184,7 +184,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1701528152267735697}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ForkliftBackTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ Transform:
   m_GameObject: {fileID: 364160405198055572}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.16, y: 3.9400003, z: -4.75}
+  m_LocalPosition: {x: 0.16, y: 2.7, z: -4.75}
   m_LocalScale: {x: 1.625, y: 6.193878, z: 5.9817734}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -394,7 +394,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1282265530664613412}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ForkliftLeftTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -894,7 +894,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7271128899107651726}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: CarryHitboxes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1295,7 +1295,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6658249397307923881}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Wheels
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1333,7 +1333,7 @@ GameObject:
   - component: {fileID: 5418968310952490655}
   - component: {fileID: 1009648551484112012}
   - component: {fileID: 8086897782696030521}
-  m_Layer: 5
+  m_Layer: 2
   m_Name: Canvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1424,6 +1424,37 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 0
+--- !u!1 &5464678710521275829
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4772259750914084470}
+  m_Layer: 2
+  m_Name: Camera Reverse Root
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4772259750914084470
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5464678710521275829}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 2.2, z: 4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4860262084814405887}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5711239133222717556
 GameObject:
   m_ObjectHideFlags: 0
@@ -1435,7 +1466,7 @@ GameObject:
   - component: {fileID: 6331054873170009285}
   - component: {fileID: 9006648237979083353}
   - component: {fileID: 6713197109909112224}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ShowPromptTrigger
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1743,7 +1774,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8009039583921029665}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LiftedTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1759,7 +1790,7 @@ Transform:
   m_GameObject: {fileID: 6606990605837857292}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.19, z: 2.31}
+  m_LocalPosition: {x: 0, y: 1.29, z: 2.31}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2139,7 +2170,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3325730291855204369}
-  m_Layer: 2
+  m_Layer: 3
   m_Name: Wheels Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2205,7 +2236,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3383499975239251174}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ForkliftRightTransform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2247,7 +2278,7 @@ GameObject:
   - component: {fileID: 660509750987994943}
   - component: {fileID: 6575178007448525318}
   - component: {fileID: 85168752108625695}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Forklift
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2271,10 +2302,12 @@ Transform:
   - {fileID: 2602024912977447341}
   - {fileID: 6053323438921265298}
   - {fileID: 4984584100628000045}
-  - {fileID: 650682265428573640}
+  - {fileID: 4772259750914084470}
   - {fileID: 2148080391469445715}
   - {fileID: 3325905161990052438}
   - {fileID: 6878999291484142854}
+  - {fileID: 6331054873170009285}
+  - {fileID: 8946032051519497768}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1773022933685493602
@@ -2392,7 +2425,7 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
   cameraForwardPos: {fileID: 4984584100628000045}
-  cameraReversePos: {fileID: 650682265428573640}
+  cameraReversePos: {fileID: 4772259750914084470}
 --- !u!143 &5082399596852400733
 CharacterController:
   m_ObjectHideFlags: 0
@@ -2822,8 +2855,8 @@ MonoBehaviour:
   - {fileID: 5434339888425413921}
   - {fileID: 149636443516487714}
   - {fileID: 5281218984497139308}
-  - {fileID: 4057717274770902264}
-  - {fileID: 3726811620731319715}
+  - {fileID: 0}
+  - {fileID: 0}
   names:
   - driving
   - arms
@@ -2879,6 +2912,10 @@ PrefabInstance:
     - target: {fileID: 988541662611159397, guid: ccea9648e91374448918383dac3eab3c, type: 3}
       propertyPath: m_Name
       value: CastRay
+      objectReference: {fileID: 0}
+    - target: {fileID: 988541662611159397, guid: ccea9648e91374448918383dac3eab3c, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5022587917799001947, guid: ccea9648e91374448918383dac3eab3c, type: 3}
       propertyPath: ray_dist
@@ -2975,6 +3012,10 @@ PrefabInstance:
     - target: {fileID: 1332618432787148, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1957412144152276, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
+      propertyPath: m_Layer
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4031818889917722, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3443,24 +3484,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4503934701046546708, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
---- !u!114 &8536086794687695540 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1970488738501569880, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
-  m_PrefabInstance: {fileID: 7867455018986137580}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &9028476726651547697 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1181428647940724701, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
@@ -3564,24 +3594,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4503934701046546708, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
       propertyPath: m_Layer
-      value: 5
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
---- !u!114 &7355957186543924399 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1970488738501569880, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
-  m_PrefabInstance: {fileID: 9028882754198411767}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!224 &7865622647028026922 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1181428647940724701, guid: db39bd2a86674f1479055cce9386e0d2, type: 3}
