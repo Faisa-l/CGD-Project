@@ -75,6 +75,10 @@ public class ForkliftController : MonoBehaviour, IDriveable
     private Gamepad playerGamepad;
 
 
+    public Transform CameraForwardTransform => cameraForwardPos;
+    public Transform CameraReverseTransform => cameraReversePos;
+
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -153,15 +157,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
             audio_enabler.Enable("driving");
         }
     }
-
-    public Transform getCameraRoot()
-    {
-        return cameraForwardPos;
-    }
-
-    // TODO: change the thing above to a property like what we got going on below:
-
-    public Transform CameraReversePosition => cameraReversePos;
 
     public void Lift()
     {
