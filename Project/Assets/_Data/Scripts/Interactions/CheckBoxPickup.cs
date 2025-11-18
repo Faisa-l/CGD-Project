@@ -7,7 +7,7 @@ namespace Interaction
     public class CheckBoxPickup : MonoBehaviour, Interactable
     {
 
-        public string MessageInteract => "Press E to pick up the box";
+        public string MessageInteract => "Press <sprite name=\"Xbox_X\"> to pick up the box";
 
         void ConsolePrint()
         {
@@ -19,5 +19,7 @@ namespace Interaction
             ConsolePrint();
             Destroy(gameObject);         
         }
+
+        public void Release() { }
     }
 }
