@@ -261,8 +261,8 @@ public class PlayerController : MonoBehaviour
 	// Sets the position of the camera to either forward of reverse
 	public void SetCameraPosition(bool toReverse)
 	{
-        Transform atForward = current_forklift.getCameraRoot();
-		Transform atReverse = current_forklift.CameraReversePosition;
+        Transform atForward = current_forklift.CameraForwardTransform;
+		Transform atReverse = current_forklift.CameraReverseTransform;
 
 		/// TODO:
 		/// - Needs to lerp or tween between the two positions

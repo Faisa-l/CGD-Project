@@ -169,7 +169,7 @@ namespace StarterAssets
 					}
 					else
 					{
-						GetComponent<PlayerController>().cameraDrive(_rotationVelocity);
+						playerController.cameraDrive(_rotationVelocity);
 					}
 
                     /*
