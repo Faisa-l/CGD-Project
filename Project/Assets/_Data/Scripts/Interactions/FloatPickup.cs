@@ -6,6 +6,7 @@ public class FloatPickup : MonoBehaviour
 {
     [SerializeField] GameObject Forkcast;
     [SerializeField] GameObject PickupLocation;
+    [SerializeField] GameObject ForkliftLocation;
     [SerializeField] Vector3 pickupPositionOffset;
 
     [SerializeField] float force_multiplier;
@@ -13,9 +14,11 @@ public class FloatPickup : MonoBehaviour
     [SerializeField] float added_force;
     [SerializeField] float ray_dist;
     [SerializeField] bool object_selected;
+    [SerializeField] bool forklift_selected;
     [SerializeField] bool has_object;
+    [SerializeField] bool has_forklift;
     [SerializeField] RaycastHit hit;
-    [SerializeField] GameObject held_object;
+    [SerializeField] private GameObject held_object;
     float timer = 0;
 
 
@@ -32,16 +35,51 @@ public class FloatPickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log(has_forklift);
+        Debug.Log(held_object);
         object_selected = false;
+        forklift_selected = false;
         if (Physics.Raycast(transform.position, Forkcast.transform.forward, out hit, ray_dist))
         {
+            if (hit.collider.tag == "LeftSide")
+            {
+                Debug.Log("Looking at Left Side");
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.blue);
+                forklift_selected = true;
+                if (has_forklift == true)
+                {
+                    ray_dist = 0;
+                }
+            }
+            
+            if (hit.collider.tag == "BackSide")
+            {
+                Debug.Log("Looking at Back Side");
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.blue);
+                //pickupPositionOffset = new Vector3(0, 0, -1);
+                forklift_selected = true;
+                if(has_forklift == true)
+                {
+                    ray_dist = 0;
+                }
+            }
+            
+            if (hit.collider.tag == "RightSide")
+            {
+                Debug.Log("Looking at Right Side");
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.blue);
+                forklift_selected = true;
+
+                if (has_forklift == true)
+                {
+                    ray_dist = 0;
+                }
+            }
+
             if (hit.collider.tag != "Float")
                 return;
             
             Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * hit.distance, Color.green);
-
-            //Debug.Log("Hit");
-            // Debug.Log(hit.transform.name);
 
             if (hit.collider.tag == "Float")
             {
@@ -60,9 +98,7 @@ public class FloatPickup : MonoBehaviour
                 hit.rigidbody.AddForce(Vector3.up * (Floatforce(hit.transform.position.y) - hit.rigidbody.GetAccumulatedForce().y));
             }
 
-        }
-        
-         
+        }        
     }
 
     public void PickUpSelected()
@@ -77,9 +113,33 @@ public class FloatPickup : MonoBehaviour
         {
             ray_dist = 1.5f;
             UnsetPositionInParent(held_object.transform);
-            has_object= false;
+            held_object = null;
+            has_object = false;
         }
     }
+
+    public void PickUpSelectedForklift()
+    {
+        if (forklift_selected == true && !has_object && has_forklift == false)
+        {
+            Debug.Log("Forklift Interaction");
+            if (hit.collider.tag == "LeftSide")
+            {
+                ForkliftLocation.transform.rotation = Quaternion.Euler(0f, -90f, 0f); ;
+                SetForkliftPositionInParent(hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform);   
+                held_object = hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+                has_forklift = true;
+            }
+        }
+        else if (forklift_selected == false && held_object != null && has_forklift == true)
+        {
+            Debug.Log("Dropping Forklift");
+            ray_dist = 1.5f;
+            UnsetPositionInParent(held_object.transform);
+            has_forklift = false;
+        }
+    }
+
     float Floatforce(float y)
     {
         float force;
@@ -87,7 +147,6 @@ public class FloatPickup : MonoBehaviour
 
         return force;
     }
-
 
     void RotatetoLift(RaycastHit hit)
     {
@@ -106,11 +165,19 @@ public class FloatPickup : MonoBehaviour
         newPosition.GetComponent<Rigidbody>().isKinematic = true;
     }
 
+    public void SetForkliftPositionInParent(Transform newPosition)
+    {        
+        newPosition.parent = ForkliftLocation.transform;
+        //newPosition.transform.position = ForkliftLocation.transform.position;
+        newPosition.transform.rotation = ForkliftLocation.transform.rotation;
+        newPosition.GetComponentInParent<Rigidbody>().isKinematic = true;
+    }
+
     public void UnsetPositionInParent(Transform newPosition)
 
     {
-        newPosition.parent = null ;
-        newPosition.GetComponent<Rigidbody>().isKinematic = false;
+        newPosition.parent = null;
+        //newPosition.GetComponent<Rigidbody>().isKinematic = false;
     }
 
     void SetPhysicsValues(GameObject gameobject)

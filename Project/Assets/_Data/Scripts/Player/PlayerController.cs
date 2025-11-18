@@ -88,7 +88,10 @@ public class PlayerController : MonoBehaviour
     public void OnForklift_Interact()
     {
 		if (driving)
-		{
+		{		
+			Debug.Log("Picking Up/Dropping Forklift");
+			current_forklift.GetComponentInChildren<FloatPickup>().PickUpSelectedForklift();
+			
 			Debug.Log("Pressed Interact Forklift");
 			current_forklift.GetComponentInChildren<FloatPickup>().PickUpSelected();
 		}
