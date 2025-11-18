@@ -2,6 +2,7 @@ using System;
 using Interaction;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PhysicsPickup : MonoBehaviour, Pickupable
 {
@@ -14,19 +15,24 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     [SerializeField]
     Vector3 pickupPositionOffset;
 
+    [SerializeField]
+    float impactThreshold = 0.5f;
 
-    public virtual string MessageInteract => "Press E to pick up the object";
+    [SerializeField]
+    UnityEvent onImpactThresholdMet;
+
+    public virtual string MessageInteract => "Press <sprite name=\"Xbox_X\"> to pick up";
 
     public void Interact(InteractableControl interactableControl)
     {
         var pickupController = interactableControl.GetComponent<PickupController>();
-        
-            Grab(pickupController);
+
+        Grab(pickupController);
     }
 
     public virtual void Grab(PickupController pickupController)
     {
-        if(pickupController == null || pickupController.HasPickupable)
+        if (pickupController == null || pickupController.HasPickupable)
         {
             return;
         }
@@ -46,7 +52,7 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
 
     public virtual void Place(PickupController pickupController)
     {
-        
+
         transform.position += transform.parent.forward * 2;
         transform.parent = null;
         SetPhysicsValues(false);
@@ -69,7 +75,7 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     }
     public virtual void Use()
     {
-       
+
         Debug.Log("Using the pickupable object");
 
     }
@@ -78,6 +84,15 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     {
         pickupRigidBody.isKinematic = wasPickedUp;
         pickupCollider.enabled = !wasPickedUp;
-
     }
+    void OnCollisionEnter(Collision collision)
+    {
+        Vector3 velocity = collision.relativeVelocity;
+        if (velocity.x > impactThreshold || velocity.y > impactThreshold  || velocity.z > impactThreshold)
+        {
+            onImpactThresholdMet.Invoke();
+        }
+    }
+
+    public virtual void Release() { }
 }

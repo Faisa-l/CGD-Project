@@ -1,5 +1,6 @@
 using UnityEngine;
 using TMPro;
+using UnityEngine.InputSystem;
 
 namespace Interaction
 {
@@ -19,9 +20,18 @@ namespace Interaction
 
         public Interactable currentTargetedInteraction;
 
+        [SerializeField] InputActionReference input_action;
+
         public void Start()
         {
             interactText.text = "Test";
+
+            input_action.action.canceled+= context => 
+            { 
+                if (currentTargetedInteraction != null)
+                    currentTargetedInteraction.Release();
+            };
+
         }
 
         public void Update()
