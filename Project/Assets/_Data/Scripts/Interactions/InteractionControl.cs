@@ -16,9 +16,9 @@ namespace Interaction
         Canvas canvas;
 
         [SerializeField]
-        float interactDistance = 3f;
+        public float interactDistance = 3f;
 
-        Interactable currentTargetedInteraction;
+        public Interactable currentTargetedInteraction;
 
         [SerializeField] InputActionReference input_action;
 

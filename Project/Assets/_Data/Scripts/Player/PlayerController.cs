@@ -1,3 +1,4 @@
+using Interaction;
 using StarterAssets;
 using System;
 using System.Collections.Generic;
@@ -100,21 +101,29 @@ public class PlayerController : MonoBehaviour
 			print(lift_enabled);
 		}
 
-        /*
-        if(playerGamepad.rightShoulder.IsPressed())
+		if(driving)
 		{
-			Lift();
-		}
-		else if(playerGamepad.leftShoulder.IsPressed())
-		{
-			Drop();
+			GetComponent<InteractableControl>().interactDistance = 0.0f;
+			
 		}
 		else
 		{
-			cancelLift();
-		}
-		*/
+            GetComponent<InteractableControl>().interactDistance = 3.0f;
+        }
     }
+
+    public void OnForklift_Interact()
+    {
+		if (driving)
+		{		
+			Debug.Log("Picking Up/Dropping Forklift");
+			current_forklift.GetComponentInChildren<FloatPickup>().PickUpSelectedForklift();
+			
+			Debug.Log("Pressed Interact Forklift");
+			current_forklift.GetComponentInChildren<FloatPickup>().PickUpSelected();
+		}
+    }
+
 
     public void OnInteract()
     {
@@ -286,36 +295,4 @@ public class PlayerController : MonoBehaviour
 	{
 		return playerGamepad;
 	}
-
-    /*private bool VehicleCheck()
-	{
-		// Is there a vehicle in front of the player?
-			
-		// Source - https://docs.unity3d.com/2022.3/Documentation/ScriptReference/Physics.SphereCast.html
-		RaycastHit hit;
-		Vector3 p1 = transform.position + controller.center;
-
-		// Cast a sphere wrapping character controller vehicleEnterDistance meters forward
-		// to see if it is about to hit anything.
-		if (Physics.SphereCast(p1, controller.height / 2, transform.forward, out hit, vehicleEnterDistance))
-		{
-			IDriveable drivable = hit.transform.GetComponent<IDriveable>();
-				
-			if (drivable != null)
-			{
-				Debug.Log("Driveable found: " + hit.transform.name);
-				return true;
-			}
-			else
-			{
-				Debug.Log(hit.transform.name + " isn't driveable");
-				return false;
-			}
-		}
-		else
-		{
-			Debug.Log("Nothing there");
-			return false;
-		}
-	}*/
 }
