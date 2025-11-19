@@ -136,7 +136,6 @@ public class PlayerController : MonoBehaviour
 				GetComponent<Collider>().enabled = false;
 			}
 
-			Debug.Log("Enabling");
             GetComponent<FirstPersonController>().enabled = true;
 
         }
