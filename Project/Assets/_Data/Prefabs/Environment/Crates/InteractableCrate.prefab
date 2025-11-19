@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 2716165824081693986}
   - component: {fileID: 3960147188473178597}
   m_Layer: 0
-  m_Name: ExampleCrate
+  m_Name: InteractableCrate
   m_TagString: Float
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
