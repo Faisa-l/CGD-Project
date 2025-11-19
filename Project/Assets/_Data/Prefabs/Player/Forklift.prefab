@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2397094197761623689}
   m_Layer: 2
   m_Name: Driveable Notify Trigger
-  m_TagString: Untagged
+  m_TagString: TriggerPrompt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1021,7 +1021,7 @@ GameObject:
   - component: {fileID: 6266882859667917882}
   m_Layer: 2
   m_Name: Lift
-  m_TagString: Untagged
+  m_TagString: Lift
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1468,7 +1468,7 @@ GameObject:
   - component: {fileID: 6713197109909112224}
   m_Layer: 2
   m_Name: ShowPromptTrigger
-  m_TagString: Untagged
+  m_TagString: TriggerPrompt
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
