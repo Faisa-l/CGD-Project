@@ -98,7 +98,6 @@ public class PlayerController : MonoBehaviour
 				lift_enabled = false;
 
             }
-			print(lift_enabled);
 		}
 
 		if(driving)
@@ -134,11 +133,11 @@ public class PlayerController : MonoBehaviour
 			if(current_forklift!=null)
 			{ 
 				camera.transform.LookAt(current_forklift.getLookAtTransform()); 
+				GetComponent<Collider>().enabled = false;
 			}
 
-			GetComponent<Collider>().enabled = false;
         }
-		else
+		else if(current_forklift != null)
 		{
 			GetComponent<CharacterController>().enabled = false;
 			current_forklift.interact();
