@@ -343,7 +343,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
         Vector3 direction;
 
         // Get layer mask we need
-        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI");
+        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI", "Crates");
 
         // Forward cam transform
         direction = cameraForwardOrigin - lookAtPosition;
