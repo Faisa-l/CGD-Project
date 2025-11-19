@@ -1,14 +1,5 @@
-using Interaction;
-using NUnit.Framework;
-using System;
 using System.Collections.Generic;
-using System.Drawing;
-using Unity.VisualScripting;
-using UnityEditor.SearchService;
 using UnityEngine;
-using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal.Internal;
-using UnityEngine.SceneManagement;
 
 namespace Interaction
 {

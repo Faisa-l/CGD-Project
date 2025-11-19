@@ -14,7 +14,7 @@ public class CrateSpawner : MonoBehaviour
     [SerializeField, Range(0f, 30f)]
     float spawnInterval = 10f;
 
-    [SerializeField, Range(0, 10)]
+    [SerializeField, Range(0, 100)]
     int spawnExtra = 2;
 
     [SerializeField, Tooltip("Spawns one crate at each point")]
