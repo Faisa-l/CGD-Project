@@ -56,16 +56,13 @@ public class Door : MonoBehaviour
         }
         else
         {
-            if (opening)
+            if (opening && timed)
             {
-                if (timed)
-                {
-                    delay += Time.deltaTime;
-                    if (delay > 1.5f)
-                    {
-                        opening = false;
-                    }
-                }
+               delay += Time.deltaTime;
+               if (delay > 1.5f)
+               {
+                   opening = false;
+               }
             }
             else
             {
