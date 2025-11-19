@@ -35,6 +35,12 @@ public class FloatPickup : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if(held_object == null)
+        {
+            has_object = false;
+            ray_dist = 1.5f;
+        }
+
         //Debug.Log(has_forklift);
         //Debug.Log(held_object);
         object_selected = false;

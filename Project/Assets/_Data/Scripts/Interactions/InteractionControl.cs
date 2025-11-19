@@ -27,7 +27,8 @@ namespace Interaction
             interactText.text = "Test";
 
             input_action.action.canceled+= context => 
-            { 
+            {
+                Debug.Log("Released");
                 if (currentTargetedInteraction != null)
                     currentTargetedInteraction.Release();
             };
