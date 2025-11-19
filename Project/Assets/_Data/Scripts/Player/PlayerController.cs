@@ -136,6 +136,9 @@ public class PlayerController : MonoBehaviour
 				GetComponent<Collider>().enabled = false;
 			}
 
+			Debug.Log("Enabling");
+            GetComponent<FirstPersonController>().enabled = true;
+
         }
 		else if(current_forklift != null)
 		{
@@ -183,6 +186,7 @@ public class PlayerController : MonoBehaviour
 	{
         if (TryEnterVehicleInRange())
         {
+
 			enter_vehicle_start_height = camera.transform.position.y;
             model.SetActive(false);
 			driving = true;

@@ -1,3 +1,4 @@
+using StarterAssets;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -11,8 +12,8 @@ namespace Interaction
         private string isTimed;   
      
         public string MessageInteract => isTimed;
-        
-        
+
+        FirstPersonController current_character;
         
         public void Start()
         {
@@ -28,6 +29,12 @@ namespace Interaction
 
         public virtual void Interact(InteractableControl interactableControl)
         {
+            if(interactableControl.gameObject.GetComponent<PlayerController>().driving)
+            {
+                return;
+            }
+
+
             if (door.timed)
             {
                 door.moving = true;
@@ -35,12 +42,17 @@ namespace Interaction
             if (!door.timed)
             {
                 Debug.Log("Openning");
+                current_character = interactableControl.gameObject.GetComponent<FirstPersonController>();
+                current_character.enabled = false;
                 door.moving = true;
             }
         }
 
         public virtual void Release()
         {
+            current_character.enabled = true;
+            current_character = null;
+
             if (!door.timed)
             {
                 Debug.Log("Closing");
