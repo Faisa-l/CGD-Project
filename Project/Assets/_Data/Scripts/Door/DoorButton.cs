@@ -37,6 +37,7 @@ namespace Interaction
 
             if (door.timed)
             {
+                door.opening = true;
                 door.moving = true;
             }
             if (!door.timed)
@@ -44,6 +45,7 @@ namespace Interaction
                 Debug.Log("Openning");
                 current_character = interactableControl.gameObject.GetComponent<FirstPersonController>();
                 current_character.enabled = false;
+                door.opening = true;
                 door.moving = true;
             }
         }

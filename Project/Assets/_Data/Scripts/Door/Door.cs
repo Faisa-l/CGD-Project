@@ -41,10 +41,10 @@ public class Door : MonoBehaviour
             }
         }
         
-        if(transform.position == startPos)
-        {
-            opening = true;
-        }
+        //if(transform.position == startPos)
+        //{
+        //    opening = true;
+        //}
     }
 
     void MoveDoor(Vector3 goalPos)
@@ -66,8 +66,8 @@ public class Door : MonoBehaviour
             }
             else
             {
-                moving = false;
-                opening = true;
+                //moving = false;
+                //opening = true;
             }
         }
     }
