@@ -133,10 +133,6 @@ public class CrateCollector : MonoBehaviour
         collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
         Destroy(collectable.GameObject);
-        if (RequirementMet)
-        {
-            onQuotaMet.Invoke();
-        }
     }
 
     // Handle timer
@@ -170,6 +166,7 @@ public class CrateCollector : MonoBehaviour
         canCollect = false;
         onCollection.Invoke(currentCollectionScore);
         onScoreUpdated.Invoke(collectionScore);
+        onQuotaMet.Invoke();
         currentCollectionScore = 0f;
 
         // Hide text
