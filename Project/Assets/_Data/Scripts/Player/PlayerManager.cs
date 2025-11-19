@@ -1,12 +1,7 @@
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Utilities;
-using UnityEngine.Windows;
 
 public class PlayerManager : MonoBehaviour
 {

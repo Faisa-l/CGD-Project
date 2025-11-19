@@ -1,5 +1,3 @@
-
-using Interaction;
 using UnityEngine;
 
 public class FloatPickup : MonoBehaviour

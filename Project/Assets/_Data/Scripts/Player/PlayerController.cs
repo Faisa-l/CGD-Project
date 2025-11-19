@@ -2,16 +2,11 @@ using Interaction;
 using StarterAssets;
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.LowLevel;
-using UnityEngine.UIElements;
-using UnityEngine.Windows;
 using UnityEngine.Events;
 using TMPro;
-using static Unity.Burst.Intrinsics.X86;
-using static UnityEditor.PlayerSettings;
+
 
 // This script is for our game's custom features
 // The other FirstPersonController is for first person movement code
