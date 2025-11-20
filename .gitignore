@@ -1,20 +1,7 @@
-# This .gitignore file should be placed at the root of your Unity project directory
-#
-# Get latest from https://github.com/github/gitignore/blob/master/Unity.gitignore
-#
-/[Ll]ibrary/
-/[Tt]emp/
-/[Oo]bj/
-/[Bb]uild/
-/[Bb]uilds/
-/[Ll]ogs/
-/[Mm]emoryCaptures/
 
-# Never ignore Asset meta data
-!/[Aa]ssets/**/*.meta
+Project/Logs/
 
-# Uncomment this line if you wish to ignore the asset store tools plugin
-# /[Aa]ssets/AssetStoreTools*
+Project/obj/Debug/
 
 # TextMesh Pro files
 [Aa]ssets/TextMesh*Pro/
@@ -67,3 +54,9 @@ Project/Library/
 Project/.vsconfig
 
 Project/UserSettings/
+
+Project/Temp/
+
+Project/Logs/
+
+Project/ProjectSettings/
