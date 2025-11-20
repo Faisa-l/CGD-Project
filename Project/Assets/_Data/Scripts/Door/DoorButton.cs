@@ -50,6 +50,7 @@ namespace Interaction
 
         public virtual void Release()
         {
+            Debug.Log("AAAAAAAAAAAAA");
             current_character.enabled = true;
             current_character = null;
 

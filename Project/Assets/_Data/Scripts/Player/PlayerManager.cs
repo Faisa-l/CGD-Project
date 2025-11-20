@@ -50,8 +50,9 @@ public class PlayerManager : MonoBehaviour
             for (int i = 0; i < input_manager.maxPlayerCount; i++)
             {
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+
                 player.SwitchCurrentControlScheme(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count-1)]);
-                player.gameObject.GetComponent<PlayerController>().setPlayerGamepad(Gamepad.all[0]);
+                player.gameObject.GetComponent<PlayerController>().setPlayerGamepad(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
 
                 player_count++;
                 playerJoined.Invoke(player_count);
