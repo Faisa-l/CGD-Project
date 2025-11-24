@@ -21,6 +21,9 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     [SerializeField]
     UnityEvent onImpactThresholdMet;
 
+    // Invoked when object is dropped
+    public Action<ICollectable> OnGrabbed;
+
     public virtual string MessageInteract => "Press <sprite name=\"Xbox_X\"> to pick up";
 
     public void Interact(InteractableControl interactableControl)
@@ -38,9 +41,9 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
         }
 
         pickupController.GrabPickUp(this);
-
         SetPhysicsValues(true);
-
+        OnGrabbed?.Invoke(GetComponent<ICollectable>());
+        OnGrabbed = null;
     }
 
     public virtual void Drop(PickupController pickupController)
@@ -88,7 +91,7 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     void OnCollisionEnter(Collision collision)
     {
         Vector3 velocity = collision.relativeVelocity;
-        if (velocity.x > impactThreshold || velocity.y > impactThreshold  || velocity.z > impactThreshold)
+        if (velocity.x > impactThreshold || velocity.y > impactThreshold || velocity.z > impactThreshold)
         {
             onImpactThresholdMet.Invoke();
         }
