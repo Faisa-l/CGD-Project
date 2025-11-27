@@ -96,26 +96,21 @@ public class CrateCollector : MonoBehaviour
         onScoreUpdated.Invoke(collectionScore);
     }
 
+    // If other is a collectable add it to list
     private void OnTriggerEnter(Collider other)
     {
-        // If collider is a 'collectable'
         if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
         {
-            // CollectCrate(collectable);
-            toCollect.Add(collectable);
-            Debug.Log("Added object");
+            AddCollectableToList(collectable);
         }
     }
 
+    // If other is a collectable remove it from list
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
         {
-            if (toCollect.Contains(collectable))
-            {
-                toCollect.Remove(collectable);
-                Debug.Log("removed object");
-            }
+            RemoveCollectableFromList(collectable);
         }
     }
 
@@ -133,10 +128,6 @@ public class CrateCollector : MonoBehaviour
         collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
         Destroy(collectable.GameObject);
-        if (RequirementMet)
-        {
-            onQuotaMet.Invoke();
-        }
     }
 
     // Handle timer
@@ -170,6 +161,7 @@ public class CrateCollector : MonoBehaviour
         canCollect = false;
         onCollection.Invoke(currentCollectionScore);
         onScoreUpdated.Invoke(collectionScore);
+        onQuotaMet.Invoke();
         currentCollectionScore = 0f;
 
         // Hide text
@@ -200,5 +192,23 @@ public class CrateCollector : MonoBehaviour
     {
         // Hide requirement text
         onCollectionPeriodEnded.Invoke();
+    }
+
+    // Add the collectable to the toCollect list
+    void AddCollectableToList(ICollectable collectable)
+    {
+        if (toCollect.Contains(collectable)) return;
+        toCollect.Add(collectable);
+        collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed += RemoveCollectableFromList;
+        Debug.Log("Added object");
+    }
+
+    // Removes the object in toCollect if it was picked up
+    void RemoveCollectableFromList(ICollectable collectable)
+    {
+        if (!toCollect.Contains(collectable)) return;
+        toCollect.Remove(collectable);
+        collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed -= RemoveCollectableFromList;
+        Debug.Log("Removing object");
     }
 }
