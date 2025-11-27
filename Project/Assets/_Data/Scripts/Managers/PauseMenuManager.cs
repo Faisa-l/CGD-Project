@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class PauseMenuManager : MonoBehaviour
 {
 	[Header("Settings")]
-	[Tooltip("Reference to the pause menu panel game object in the scene. This script can't be placed on the panel itself because it will be deactivated by default (therefore script will never be called)");
+	[Tooltip("Reference to the pause menu panel game object in the scene. This script can't be placed on the panel itself because it will be deactivated by default (therefore script will never be called)")]
 	[SerializeField] GameObject pauseMenuPanel;
 	
     void Update()

@@ -10,7 +10,7 @@ public class LobbyMenuManager : MonoBehaviour
 	// Incase we ever want to adjust the maximum player count in the future
 	private static readonly int maxPlayerCount = 4;
 	
-	[Tooltip("References to the Game Object in the scene each gamepad image is on. Index 0 (the first one) will be player 1 and so on."]
+	[Tooltip("References to the Game Object in the scene each gamepad image is on. Index 0 (the first one) will be player 1 and so on.")]
 	[SerializeField] private GameObject[] playerControllerImages; // Offset by 1 (0 = player 1)
 	
 	// The Gamepads that press the join button are added to this list in order.
