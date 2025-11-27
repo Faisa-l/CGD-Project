@@ -7,6 +7,9 @@ public class Door : MonoBehaviour
     public float speed = 1.0f;
     public float delay = 0.0f;
 
+    [Header("Time the door is open for")]
+    [SerializeField] private float open_time = 5.0f;
+
     [Header("Boolean Variables")]
     public bool moving = false;
     public bool opening = true;
@@ -59,7 +62,7 @@ public class Door : MonoBehaviour
             if (opening && timed)
             {
                delay += Time.deltaTime;
-               if (delay > 1.5f)
+               if (delay > open_time)
                {
                    opening = false;
                }
