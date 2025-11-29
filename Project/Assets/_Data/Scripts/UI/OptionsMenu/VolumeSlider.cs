@@ -20,11 +20,11 @@ public class VolumeSlider : MonoBehaviour
 	[Tooltip("Reference to the UI slider in the scene.")]
     [SerializeField] Slider slider;
 
-    void Start()
+    private void Start()
     {
         // Init setup
 		// TODO load from save code
-        slider.value = GetValue(volumeType);
+        //slider.value = GetValue(volumeType);
     }
 
 	/// <summary>
@@ -70,8 +70,10 @@ public class VolumeSlider : MonoBehaviour
 	/// Get the current float value of the specified audio type
 	/// -1 is a returned error value
 	/// </summary>
-    public static float GetValue(VolumeType volumeType)
+    public float GetValue(VolumeType volumeType)
     {
+		float volume = 1.0f;
+		
         switch (volumeType)
         {
             case VolumeType.SFX:
