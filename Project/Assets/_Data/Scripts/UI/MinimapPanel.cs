@@ -17,8 +17,8 @@ public class MinimapPanel : MonoBehaviour
     [SerializeField]
     float margin = 15f;
 
-    [SerializeField, Range(1f, 100f), Tooltip("Ratio between world distance and map distance.")]
-    float scaleRatio = 1f;
+    [SerializeField, Tooltip("Ratio between world distance and map distance.")]
+    Vector2 scaleRatio;
 
     [SerializeField]
     Color[] playerColors;
@@ -123,7 +123,8 @@ public class MinimapPanel : MonoBehaviour
             float worldRotation = mpi.transform.rotation.eulerAngles.y;
             Vector3 UIRotation = mpi.RectTransform.rotation.eulerAngles;
             UIRotation.z = -worldRotation;
-            UIPosition *= scaleRatio;
+
+            UIPosition.Scale(scaleRatio);
 
             mpi.RectTransform.localPosition = UIPosition;
             mpi.RectTransform.localRotation = Quaternion.Euler(UIRotation);
