@@ -88,5 +88,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f2d1d43f5e1e5714699ead4aa7499894, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  iconPrefab: {fileID: 3208680032023120623, guid: 58ea3a96c76a8174191634234fc0412c, type: 3}
   rectTransform: {fileID: 3652739290431350360}
   margin: 15
+  scaleRatio: 1
+  playerColors:
+  - {r: 1, g: 0, b: 0, a: 1}
+  - {r: 0, g: 1, b: 0, a: 1}
+  - {r: 0, g: 0, b: 1, a: 1}
+  - {r: 1, g: 0, b: 1, a: 1}
+  pointOfReference: {fileID: 0}
