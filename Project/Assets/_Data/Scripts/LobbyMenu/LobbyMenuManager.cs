@@ -7,19 +7,28 @@ using TMPro;
 
 public class LobbyMenuManager : MonoBehaviour
 {
+	// Incase we ever want to adjust the maximum player count in the future
 	private static readonly int maxPlayerCount = 4;
 	
+	[Tooltip("References to the Game Object in the scene each gamepad image is on. Index 0 (the first one) will be player 1 and so on.")]
 	[SerializeField] private GameObject[] playerControllerImages; // Offset by 1 (0 = player 1)
 	
+	// The Gamepads that press the join button are added to this list in order.
+	// So Gamepad 0 will be player 1 and so on.
 	private List<Gamepad> currentPlayers = new List<Gamepad>();
 	
 	#region Lobby
 	
 	private void Update()
 	{
+		// Check every frame (as often as possible) if a player is trying to join
 		PlayerJoinedCheck();
 	}
 	
+	/// <summary>
+	/// Check if a player who hasn't already joined presses the join button (d-pad up).
+	/// If they have call PlayerJoined() passing through the Gamepad object reference
+	/// </summary>
 	private void PlayerJoinedCheck()
 	{
 		// Check all active gamepads
@@ -36,16 +45,25 @@ public class LobbyMenuManager : MonoBehaviour
 		}
 	}
 	
+	/// <summary>
+	/// This will join a Gamepad (player) to the game by adding them into a list of current players.
+	/// It will make sure the same Gamepad isn't being added twice.
+	/// After adding it will update the player Gamepad icons.
+	/// </summary>
 	private void PlayerJoined(Gamepad gamepad)
 	{
+		// Validation
 		if (gamepad == null)
 		{
 			Debug.LogWarning("Called PlayerJoined without passing in a gamepad");
 			return;
 		}
 		
+		// Don't add the same player twice
 		if (!currentPlayers.Contains(gamepad))
 		{
+			// Add the gamepad to the list of current player gamepads.
+			// The first Gamepad (index 0) represents player 1 and so on.
 			currentPlayers.Add(gamepad);
 			
 			// Update amount of player gamepad images shown
@@ -57,6 +75,11 @@ public class LobbyMenuManager : MonoBehaviour
 		}
 	}
 	
+	/// <summary>
+	/// Check how many players have joined by seeing how many Gamepads are in the list
+	/// Show all the player joined icons in the array up to that point.
+	/// For example, if the Gamepad list contains 2 Gamepads (because 2 players have joined), then show the joined icon images index 0 and 1.
+	/// </summary>
 	private void UpdatePlayerGamepadUI()
 	{
 		// Loop through all 4 potential player slots
@@ -76,9 +99,15 @@ public class LobbyMenuManager : MonoBehaviour
 	
 	#region Utility
 	
+	/// <summary>
+	/// Load a scene by specifiing a name. Scene must be added to the Project Build.
+	/// This will unload the current scene then load the specified scene (default Unity way).
+	/// </summary>
 	public void LoadScene(string sceneToLoad)
 	{
+		// Make sure a scene was specified
 		if (sceneToLoad != string.Empty)
+			// Load the scene by first unloading the current scene, then loading the new scene (the default Unity way)
 			SceneManager.LoadScene(sceneToLoad);
 	}
 	
