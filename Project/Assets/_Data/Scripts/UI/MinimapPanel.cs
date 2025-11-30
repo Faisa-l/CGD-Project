@@ -12,6 +12,9 @@ public class MinimapPanel : MonoBehaviour
     GameObject iconPrefab;
 
     [SerializeField]
+    Sprite playerIcon;
+
+    [SerializeField]
     RectTransform rectTransform;
 
     [SerializeField]
@@ -23,16 +26,22 @@ public class MinimapPanel : MonoBehaviour
     [SerializeField]
     Color[] playerColors;
 
-    [SerializeField, Tooltip("Represents the position of the top-left corner of the minimap in world space")]
+    [SerializeField, Tooltip("Represents the position of the top-left corner of the minimap in world space.")]
     Transform pointOfReference;
     
     float width;
     float height;
     List<GameObject> icons;
-    List<MinimapPlayerIcon> playerIcons;
+    List<MinimapIcon> playerIcons;
 
-    // This shouldn't be here
-    bool wasLaunchedInDebug = false;
+    // List of all points of interest this minimap should load
+    static readonly List<MinimapPointOfInterest> POIs = new();
+
+    // Any script that wants to register themselves as a POI should call this function
+    public static void RegisterPointOfInterest(MinimapPointOfInterest poi)
+    {
+        POIs.Add(poi);
+    }
 
     private void OnValidate()
     {
@@ -50,15 +59,28 @@ public class MinimapPanel : MonoBehaviour
     private void Awake()
     {
         icons = new List<GameObject>();
-        playerIcons = new List<MinimapPlayerIcon>();
+        playerIcons = new List<MinimapIcon>();
+
         width = rectTransform.rect.width;
         height = rectTransform.rect.height;
         gameObject.SetActive(false);
     }
 
+    // THIS IS TECHNICALLY TEMPORARY SEE THE COMMENT ON Initialise() FOR A REASON
+    private void Start()
+    {
+        Initialise();
+    }
+
     private void LateUpdate()
     {
         UpdateMinimapPlayerIcons();
+    }
+
+    // Ideally something else would call this function (like a hud manager, but I'm scared of editing that)
+    public void Initialise()
+    {
+        AddPointsOfInterest();
     }
 
     // Repositions the panel based on the player count
@@ -98,12 +120,10 @@ public class MinimapPanel : MonoBehaviour
     // Add their corresponding forklift transform to the list and instantiate their icon
     public void AddPlayerIcon(int playerCount, Transform transform)
     {
+        // TODO: replace null with playerIcon
+        CreateMinimapIcon(playerColors[playerCount - 1], null);
 
-        GameObject icon = Instantiate(iconPrefab, this.transform);
-        icon.GetComponent<UnityEngine.UI.Image>().color = playerColors[playerCount - 1];
-        icons.Add(icon);
-
-        var mpi = new MinimapPlayerIcon
+        var mpi = new MinimapIcon
         {
             transform = transform,
             gameObject = icons[playerCount - 1]
@@ -113,23 +133,64 @@ public class MinimapPanel : MonoBehaviour
         RepositionPanel(playerCount);
     }
 
+    // Adds points of interests to the minimap
+    void AddPointsOfInterest()
+    {
+        foreach (var poi in POIs)
+        {
+            GameObject icon = CreateMinimapIcon(poi.color, poi.sprite);
+            icon.GetComponent<RectTransform>().localPosition = GetMinimapPosition(poi.gameObject.transform);
+        }
+
+        // KILL all POIs (they are already loaded)
+        POIs.Clear();
+    }
+
     // Adjusts the position of each minimap player icon
     void UpdateMinimapPlayerIcons()
     {
         foreach (var mpi in playerIcons)
         {
-            Vector3 relativePosition = mpi.transform.position - pointOfReference.position;
-            Vector2 UIPosition = new(relativePosition.x, relativePosition.z);
-            float worldRotation = mpi.transform.rotation.eulerAngles.y;
-            Vector3 UIRotation = mpi.RectTransform.rotation.eulerAngles;
-            UIRotation.z = -worldRotation;
-
-            UIPosition.Scale(scaleRatio);
-
-            mpi.RectTransform.localPosition = UIPosition;
-            mpi.RectTransform.localRotation = Quaternion.Euler(UIRotation);
+            mpi.RectTransform.localPosition = GetMinimapPosition(mpi.transform);
+            mpi.RectTransform.localRotation = GetMinimapRotation(mpi.transform, mpi.RectTransform);
         }
     }
+
+    #region Utility functions
+
+    // Create a minimap icon with a provided colour and sprite
+    GameObject CreateMinimapIcon(Color color, Sprite sprite)
+    {
+        // TODO: add sprite to image
+        GameObject icon = Instantiate(iconPrefab, this.transform);
+        icon.GetComponent<UnityEngine.UI.Image>().color = color;
+        icons.Add(icon);
+
+        return icon;
+    }
+
+    // Returns the position in the minimap for a given transform
+    Vector2 GetMinimapPosition(Transform transform)
+    {
+        Vector3 relativePosition = transform.position - pointOfReference.position;
+        Vector2 UIPosition = new(relativePosition.x, relativePosition.z);
+        UIPosition.Scale(scaleRatio);
+
+        return UIPosition;
+    }
+
+    // Returns the Y rotation of from as a Z rotation for to (figure out what this means in your own time)
+    Quaternion GetMinimapRotation(Transform from, Transform to)
+    {
+        float worldRotation = from.rotation.eulerAngles.y;
+        Vector3 UIRotation = to.rotation.eulerAngles;
+        UIRotation.z = -worldRotation;
+
+        return Quaternion.Euler(UIRotation);
+    }
+
+    #endregion
+
 
     #region Anchor presets
     void AnchorRightCorner()
@@ -156,11 +217,19 @@ public class MinimapPanel : MonoBehaviour
     #endregion
 
     // Struct represents the player's icon in the minimap
-    // Can reference this struct through MinimapPanel.MinimapPlayerIcon
-    public struct MinimapPlayerIcon
+    // Can reference this struct through MinimapPanel.MinimapIcon
+    public struct MinimapIcon
     {
         public Transform transform;
         public GameObject gameObject;
-        public RectTransform RectTransform => gameObject.GetComponent<RectTransform>();
+        public readonly RectTransform RectTransform => gameObject.GetComponent<RectTransform>();
+    }
+
+    // Struct represents any type of point of interest
+    public struct MinimapPointOfInterest
+    {
+        public Sprite sprite;
+        public Color color;
+        public GameObject gameObject;
     }
 }
