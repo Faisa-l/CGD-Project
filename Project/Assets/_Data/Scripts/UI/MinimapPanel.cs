@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 /// <summary>
 /// Handles positioning the minimap relative to how many players are on the screen
@@ -26,22 +24,19 @@ public class MinimapPanel : MonoBehaviour
     [SerializeField]
     Color[] playerColors;
 
-    [SerializeField, Tooltip("Represents the position of the top-left corner of the minimap in world space.")]
+    [SerializeField, Tooltip("Position the minimap will use to place icons on its map. Represents its centre.")]
     Transform pointOfReference;
     
     float width;
     float height;
-    List<GameObject> icons;
+    List<MinimapIcon> icons;
     List<MinimapIcon> playerIcons;
 
     // List of all points of interest this minimap should load
     static readonly List<MinimapPointOfInterest> POIs = new();
 
-    // Any script that wants to register themselves as a POI should call this function
-    public static void RegisterPointOfInterest(MinimapPointOfInterest poi)
-    {
-        POIs.Add(poi);
-    }
+    // Any script that wants to register themselves as a POI should call this function 
+    public static void RegisterPointOfInterest(MinimapPointOfInterest poi) => POIs.Add(poi);
 
     private void OnValidate()
     {
@@ -58,7 +53,7 @@ public class MinimapPanel : MonoBehaviour
 
     private void Awake()
     {
-        icons = new List<GameObject>();
+        icons = new List<MinimapIcon>();
         playerIcons = new List<MinimapIcon>();
 
         width = rectTransform.rect.width;
@@ -72,7 +67,7 @@ public class MinimapPanel : MonoBehaviour
         Initialise();
     }
 
-    private void LateUpdate()
+    private void FixedUpdate()
     {
         UpdateMinimapPlayerIcons();
     }
@@ -117,18 +112,12 @@ public class MinimapPanel : MonoBehaviour
     }
 
     // Should fire whenever a player joins
-    // Add their corresponding forklift transform to the list and instantiate their icon
+    // Instantiate and add their corresponding forklift transform to the icons list
     public void AddPlayerIcon(int playerCount, Transform transform)
     {
         // TODO: replace null with playerIcon
-        CreateMinimapIcon(playerColors[playerCount - 1], null);
-
-        var mpi = new MinimapIcon
-        {
-            transform = transform,
-            gameObject = icons[playerCount - 1]
-        };
-        playerIcons.Insert(playerCount - 1, mpi);
+        var playerIcon = CreateMinimapIcon(playerColors[playerCount - 1], null, transform);
+        playerIcons.Add(playerIcon);
 
         RepositionPanel(playerCount);
     }
@@ -138,8 +127,8 @@ public class MinimapPanel : MonoBehaviour
     {
         foreach (var poi in POIs)
         {
-            GameObject icon = CreateMinimapIcon(poi.color, poi.sprite);
-            icon.GetComponent<RectTransform>().localPosition = GetMinimapPosition(poi.gameObject.transform);
+            var icon = CreateMinimapIcon(poi.color, poi.sprite, poi.gameObject.transform);
+            icon.RectTransform.localPosition = GetMinimapPosition(icon.worldTransform);
         }
 
         // KILL all POIs (they are already loaded)
@@ -151,22 +140,27 @@ public class MinimapPanel : MonoBehaviour
     {
         foreach (var mpi in playerIcons)
         {
-            mpi.RectTransform.localPosition = GetMinimapPosition(mpi.transform);
-            mpi.RectTransform.localRotation = GetMinimapRotation(mpi.transform, mpi.RectTransform);
+            mpi.RectTransform.localPosition = GetMinimapPosition(mpi.worldTransform);
+            mpi.RectTransform.localRotation = GetMinimapRotation(mpi.worldTransform, mpi.RectTransform);
         }
     }
 
     #region Utility functions
 
     // Create a minimap icon with a provided colour and sprite
-    GameObject CreateMinimapIcon(Color color, Sprite sprite)
+    MinimapIcon CreateMinimapIcon(Color color, Sprite sprite, Transform transform)
     {
-        // TODO: add sprite to image
-        GameObject icon = Instantiate(iconPrefab, this.transform);
-        icon.GetComponent<UnityEngine.UI.Image>().color = color;
-        icons.Add(icon);
+        var mapIcon = new MinimapIcon
+        {
+            worldTransform = transform,
+            gameObject = Instantiate(iconPrefab, this.transform)
+        };
 
-        return icon;
+        // TODO: add sprite to image
+        mapIcon.gameObject.GetComponent<UnityEngine.UI.Image>().color = color;
+        icons.Add(mapIcon);
+
+        return mapIcon;
     }
 
     // Returns the position in the minimap for a given transform
@@ -220,12 +214,13 @@ public class MinimapPanel : MonoBehaviour
     // Can reference this struct through MinimapPanel.MinimapIcon
     public struct MinimapIcon
     {
-        public Transform transform;
+        public Transform worldTransform;
         public GameObject gameObject;
         public readonly RectTransform RectTransform => gameObject.GetComponent<RectTransform>();
     }
 
     // Struct represents any type of point of interest
+    // Can reference this struct through MinimapPanel.MinimapPointOfInterest
     public struct MinimapPointOfInterest
     {
         public Sprite sprite;

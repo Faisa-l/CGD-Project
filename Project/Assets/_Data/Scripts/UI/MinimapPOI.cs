@@ -19,8 +19,11 @@ public class MinimapPOI : MonoBehaviour
 
     bool registered = false;
 
+    // Add this object as a MinimapPointOfInterest to all MinimapPanel instances
     public void RegisterPOI()
     {
+        if (registered) return;
+
         // Pass extra stuff here eventually
         var poi = new MinimapPanel.MinimapPointOfInterest
         {
@@ -36,6 +39,6 @@ public class MinimapPOI : MonoBehaviour
     private void Awake()
     {
         if (!registerOnAwake) return;
-        if (!registered) RegisterPOI();
+        RegisterPOI();
     }
 }
