@@ -16,7 +16,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Forklift Spawning")]
     [SerializeField] GameObject forklift_prefab;
     [SerializeField] Vector2 spawn_offest;
-    [SerializeField] UnityEvent<int> playerJoined;
+    [SerializeField] UnityEvent<int, Transform> playerJoined;
 
     List<Transform> player_positions = new List<Transform>();
     int player_count = 0;
@@ -31,7 +31,7 @@ public class PlayerManager : MonoBehaviour
     List<GameObject> inputs = new();
     [SerializeField] InputActionReference player_join_action;
 
-    [SerializeField] MinimapPanel minimap;
+    // [SerializeField] MinimapPanel minimap;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -53,12 +53,9 @@ public class PlayerManager : MonoBehaviour
 
                 player.SwitchCurrentControlScheme(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count-1)]);
                 player.gameObject.GetComponent<PlayerController>().setPlayerGamepad(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
-
-                player_count++;
-                playerJoined.Invoke(player_count);
             }
 
-            minimap.RepositionPanel(input_manager.maxPlayerCount);
+            // minimap.RepositionPanel(input_manager.maxPlayerCount);
         }
 
         blankCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
@@ -70,8 +67,9 @@ public class PlayerManager : MonoBehaviour
         blankCamera.enabled = false;
 
         inputs.Add(input.gameObject);
+        player_count++;
 
-        if(debug_mode_on)
+        if (debug_mode_on)
         {
             input.GetComponent<CharacterController>().enabled = false;
 
@@ -83,6 +81,7 @@ public class PlayerManager : MonoBehaviour
             temp = Instantiate(forklift_prefab);
 
             temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
+            playerJoined.Invoke(player_count, temp.transform);
 
             return;
         }
@@ -94,8 +93,6 @@ public class PlayerManager : MonoBehaviour
         {
             blankCamera.enabled = true;
         }
-
-        minimap.RepositionPanel(players);
 
         InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
         Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
@@ -114,8 +111,7 @@ public class PlayerManager : MonoBehaviour
         temp = Instantiate(forklift_prefab);
 
         temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
-
-        player_count++;
-        playerJoined.Invoke(player_count);
+        
+        playerJoined.Invoke(player_count, temp.transform);
     }
 }
