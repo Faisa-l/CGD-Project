@@ -37,8 +37,5 @@ public class FullscreenToggle : MonoBehaviour
 		{
 			Screen.fullScreenMode = FullScreenMode.Windowed;
 		}
-		
-		// TODO Persist setting to save data fo future sessions
-		//SaveData.SetScreenMode(status);
     }
 }
