@@ -13,17 +13,38 @@ public class CrateObject : MonoBehaviour, ICollectable
     float score;
 
     [SerializeField]
-    CrateTag tag;
+    CrateTag crateTag;
+
+    [SerializeField]
+    bool useColouredTags = true;
+
+    MaterialPropertyBlock block;
+
+    private void Awake()
+    {
+        block = new MaterialPropertyBlock();
+    }
 
     public float Score
     {
         get { return score; }
         set { score = value; }
     }
+
     public CrateTag Tag
     {
-        get { return tag; }
-        set { tag = value; } 
+        get { return crateTag; }
+        set 
+        { 
+            crateTag = value;
+            if (!useColouredTags) return;
+
+            // Colour this object based on its tag
+            var renderer = GetComponent<Renderer>();
+            renderer.GetPropertyBlock(block);
+            block.SetColor("_BaseColor", GetColourFromTag(value));
+            renderer.SetPropertyBlock(block);
+        } 
     }
 
     public GameObject GameObject { get => gameObject; }
@@ -37,5 +58,17 @@ public class CrateObject : MonoBehaviour, ICollectable
     {
         int length = Enum.GetNames(typeof(CrateTag)).Length;
         return (CrateTag)UnityEngine.Random.Range(0, length - 1);
+    }
+
+    // Returns a colour for a given colour-named tag
+    public static Color GetColourFromTag(CrateTag tag)
+    {
+        return tag switch
+        {
+            CrateTag.Red => Color.red,
+            CrateTag.Green => Color.green,
+            CrateTag.Blue => Color.blue,
+            _ => Color.white,
+        };
     }
 }

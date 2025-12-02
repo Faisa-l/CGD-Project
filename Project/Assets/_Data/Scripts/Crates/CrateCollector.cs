@@ -30,6 +30,9 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     bool requireCorrectCrateTag = false;
 
+    [SerializeField]
+    bool randomiseRequiredCorrectCrateTag = true;
+
     [Space, Header("Event Bindings")]
 
     [SerializeField]
@@ -60,14 +63,21 @@ public class CrateCollector : MonoBehaviour
     Material markerMaterial;
 
     public int Quota => collectionRequierment;
+    public CrateObject.CrateTag RequiredTag => requiredTag;
     bool RequirementMet => (toCollect.Count >= collectionRequierment);
+
     void UpdateRequirement()
     {
         collectionRequierment = UnityEngine.Random.Range(requirementRange.x, requirementRange.y);
         onRequirementUpdate.Invoke(collectionRequierment);
     }
 
-    void initialise()
+    void UpdateRequiredTag()
+    {
+        requiredTag = CrateObject.GetRandomCrateTag();
+    }
+
+    void Initialise()
     {
         if (!TryGetComponent<Collider>(out Collider collectorCollider))
         {
@@ -79,7 +89,9 @@ public class CrateCollector : MonoBehaviour
             markerMaterial = renderer.sharedMaterial;
             markerMaterial.SetColor("_BaseColor", activeColor);
         }
+
         UpdateRequirement();
+        UpdateRequiredTag();
     }
 
     private void OnValidate()
@@ -90,13 +102,12 @@ public class CrateCollector : MonoBehaviour
         {
             requirementRange.x = requirementRange.y;
         }
-        initialise();
+        Initialise();
     }
 
     private void Awake()
     {
-        initialise();
-        requiredTag = CrateObject.GetRandomCrateTag();
+        Initialise();
         toCollect = new List<ICollectable>();
         onScoreUpdated.Invoke(collectionScore);
     }
@@ -144,7 +155,6 @@ public class CrateCollector : MonoBehaviour
         if (timer < collectionInterval) return;
 
         canCollect = true;
-        if (randomiseRequirementOnCollection) UpdateRequirement();
 
         OnCollectionStarted();
         return;
@@ -191,6 +201,9 @@ public class CrateCollector : MonoBehaviour
     {
         // Show requirement text
         onCollectionPeriodStarted.Invoke();
+
+        if (randomiseRequirementOnCollection) UpdateRequirement();
+        if (randomiseRequiredCorrectCrateTag) UpdateRequiredTag();
     }
 
     void OnCollectionEnded()
