@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -26,6 +27,9 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     bool randomiseRequirementOnCollection = false;
 
+    [SerializeField]
+    bool requireCorrectCrateTag = false;
+
     [Space, Header("Event Bindings")]
 
     [SerializeField]
@@ -33,7 +37,6 @@ public class CrateCollector : MonoBehaviour
 
     [SerializeField]
     UnityEvent<int> onRequirementUpdate;
-
 
     [SerializeField]
     UnityEvent<float> onScoreUpdated;
@@ -52,6 +55,7 @@ public class CrateCollector : MonoBehaviour
     int collectionRequierment = 1;
     float collectionScore = 0f;
     float currentCollectionScore = 0f;
+    CrateObject.CrateTag requiredTag;
     List<ICollectable> toCollect;
     Material markerMaterial;
 
@@ -92,6 +96,7 @@ public class CrateCollector : MonoBehaviour
     private void Awake()
     {
         initialise();
+        requiredTag = CrateObject.GetRandomCrateTag();
         toCollect = new List<ICollectable>();
         onScoreUpdated.Invoke(collectionScore);
     }
@@ -198,6 +203,8 @@ public class CrateCollector : MonoBehaviour
     void AddCollectableToList(ICollectable collectable)
     {
         if (toCollect.Contains(collectable)) return;
+        if (collectable.Tag != requiredTag) return;
+
         toCollect.Add(collectable);
         collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed += RemoveCollectableFromList;
         Debug.Log("Added object");
@@ -207,6 +214,7 @@ public class CrateCollector : MonoBehaviour
     void RemoveCollectableFromList(ICollectable collectable)
     {
         if (!toCollect.Contains(collectable)) return;
+
         toCollect.Remove(collectable);
         collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed -= RemoveCollectableFromList;
         Debug.Log("Removing object");

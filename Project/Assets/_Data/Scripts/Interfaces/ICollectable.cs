@@ -8,5 +8,6 @@ public interface ICollectable
 {
     float Score { get; set; }
     GameObject GameObject { get; }
+    CrateObject.CrateTag Tag { get; set; }
 
 }
