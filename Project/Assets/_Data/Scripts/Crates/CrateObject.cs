@@ -57,7 +57,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     public static CrateTag GetRandomCrateTag()
     {
         int length = Enum.GetNames(typeof(CrateTag)).Length;
-        return (CrateTag)UnityEngine.Random.Range(0, length - 1);
+        return (CrateTag)UnityEngine.Random.Range(0, length);
     }
 
     // Returns a colour for a given colour-named tag

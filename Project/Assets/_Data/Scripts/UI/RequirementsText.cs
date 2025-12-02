@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using UnityEngine;
 
@@ -15,9 +16,10 @@ public class RequirementsText : MonoBehaviour
     }
 
     // This can be assigned to an event to update the displayed score
-    public void UpdateText(int requirement)
+    public void UpdateText(CrateSpawner.CrateRequirement requirement)
     {
-        display.SetText(displayText + requirement);
+        string tag = Enum.GetName(typeof(CrateObject.CrateTag), requirement.requiredTag);
+        display.SetText($"{displayText}{tag} : {requirement.requiredCount}");
     }
 
     // Shows the text box

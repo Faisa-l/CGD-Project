@@ -12,6 +12,7 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     GameObject marker;
 
+    [Space, Header("Settings")]
     [SerializeField, Range(0f, 60f)]
     float collectionInterval = 30f;
 
@@ -39,7 +40,7 @@ public class CrateCollector : MonoBehaviour
     UnityEvent<float> onCollection;
 
     [SerializeField]
-    UnityEvent<int> onRequirementUpdate;
+    UnityEvent<CrateSpawner.CrateRequirement> onRequirementUpdate;
 
     [SerializeField]
     UnityEvent<float> onScoreUpdated;
@@ -55,26 +56,26 @@ public class CrateCollector : MonoBehaviour
 
     float timer = 0f;
     bool canCollect = false;
-    int collectionRequierment = 1;
+    CrateSpawner.CrateRequirement collectionRequierment;
     float collectionScore = 0f;
     float currentCollectionScore = 0f;
-    CrateObject.CrateTag requiredTag;
     List<ICollectable> toCollect;
     Material markerMaterial;
 
-    public int Quota => collectionRequierment;
-    public CrateObject.CrateTag RequiredTag => requiredTag;
-    bool RequirementMet => (toCollect.Count >= collectionRequierment);
+    public int Quota => collectionRequierment.requiredCount;
+    public CrateObject.CrateTag RequiredTag => collectionRequierment.requiredTag;
+    bool RequirementMet => (toCollect.Count >= collectionRequierment.requiredCount);
 
     void UpdateRequirement()
     {
-        collectionRequierment = UnityEngine.Random.Range(requirementRange.x, requirementRange.y);
-        onRequirementUpdate.Invoke(collectionRequierment);
-    }
+        var req = new CrateSpawner.CrateRequirement()
+        {
+            requiredCount = UnityEngine.Random.Range(requirementRange.x, requirementRange.y),
+            requiredTag = randomiseRequiredCorrectCrateTag ? CrateObject.GetRandomCrateTag() : CrateObject.CrateTag.Red,
+        };
 
-    void UpdateRequiredTag()
-    {
-        requiredTag = CrateObject.GetRandomCrateTag();
+        collectionRequierment = req;
+        onRequirementUpdate.Invoke(req);
     }
 
     void Initialise()
@@ -91,7 +92,6 @@ public class CrateCollector : MonoBehaviour
         }
 
         UpdateRequirement();
-        UpdateRequiredTag();
     }
 
     private void OnValidate()
@@ -203,7 +203,6 @@ public class CrateCollector : MonoBehaviour
         onCollectionPeriodStarted.Invoke();
 
         if (randomiseRequirementOnCollection) UpdateRequirement();
-        if (randomiseRequiredCorrectCrateTag) UpdateRequiredTag();
     }
 
     void OnCollectionEnded()
@@ -216,7 +215,7 @@ public class CrateCollector : MonoBehaviour
     void AddCollectableToList(ICollectable collectable)
     {
         if (toCollect.Contains(collectable)) return;
-        if (collectable.Tag != requiredTag) return;
+        if (!requireCorrectCrateTag || collectable.Tag != collectionRequierment.requiredTag) return;
 
         toCollect.Add(collectable);
         collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed += RemoveCollectableFromList;
