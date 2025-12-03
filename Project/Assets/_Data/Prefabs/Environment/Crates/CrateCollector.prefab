@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3778199760876918544}
   - component: {fileID: 6046876716792446090}
   - component: {fileID: 5924337645498668210}
-  m_Layer: 2
+  m_Layer: 6
   m_Name: Marker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,7 +99,7 @@ GameObject:
   - component: {fileID: -8470803039637684445}
   - component: {fileID: 2653370262760568128}
   - component: {fileID: 1400098932431170260}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CrateCollector
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -140,6 +140,8 @@ MonoBehaviour:
   inactiveColor: {r: 1, g: 0, b: 0, a: 0.47058824}
   requirementRange: {x: 1, y: 10}
   randomiseRequirementOnCollection: 0
+  requireCorrectCrateTag: 0
+  randomiseRequiredCorrectCrateTag: 1
   onCollection:
     m_PersistentCalls:
       m_Calls: []
