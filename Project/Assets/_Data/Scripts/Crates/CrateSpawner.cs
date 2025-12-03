@@ -1,8 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using Unity.Mathematics;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 /// <summary>
@@ -16,29 +13,16 @@ public class CrateSpawner : MonoBehaviour
     [SerializeField, Range(0f, 30f)]
     float spawnInterval = 10f;
 
-    [SerializeField, Range(0, 100)]
-    int spawnExtra = 2;
+    [SerializeField, Tooltip("Spawns one crate at each of the transform's children with the provided tag.")]
+    List<SpawnNode> spawnGroups;
 
-    [SerializeField, Tooltip("Spawns one crate at each point with a given tag.")]
-    List<SpawnNode> points;
-
-    [SerializeField]
+    [SerializeField, Tooltip("How many objects should be spawned for a given tag.")]
     List<CrateRequirement> spawnRequirements;
 
-    // I have the potential to do something incredibly funny here to get the quota
-    // Really it should be a value thats practically globally accessible so instead this will reference the crate collector
-    // The alternative would be to either make a singleton that holds this type of data or a ScriptableObject which holds the value
-    [SerializeField]
-    CrateCollector collector;
-
-    // Key is the specific node for the Value gameobject
-    // Very important nothing directly indexes this otherwise bad things will happen
+    // Maps a spawn point to its spawned object
     // This shouldn't be resizing in gameplay; its size should be predetermined in Initalise()
     Dictionary<SpawnNode, GameObject> spawnedObjects;
     float timer = 0f;
-
-    // int Quota => collector ? collector.Quota : 10;
-    // CrateObject.CrateTag CollectorRequiredTag => collector ? collector.RequiredTag : CrateObject.CrateTag.Red;
 
     private void OnValidate()
     {
@@ -53,20 +37,6 @@ public class CrateSpawner : MonoBehaviour
         {
             spawnInterval = 0f;
         }
-
-        /*
-        int count = transform.childCount;
-        points = new List<SpawnNode>();
-        for (int i = 0; i < count; i++)
-        {
-            SpawnNode node = new()
-            {
-                tag = CrateObject.CrateTag.Red,
-                transform = transform.GetChild(i),
-            };
-            points.Add(node);
-        }
-        */
     }
 
     // Populates spawnedObjects
@@ -74,9 +44,18 @@ public class CrateSpawner : MonoBehaviour
     {
         spawnedObjects = new Dictionary<SpawnNode, GameObject>();
 
-        foreach (SpawnNode node in points)
+        // Get the individual transforms in the spawn groups 
+        foreach (var group in spawnGroups)
         {
-            spawnedObjects.Add(node, null);
+            foreach (Transform t in group.transform.GetComponentInChildren<Transform>())
+            {
+                var n = new SpawnNode()
+                {
+                    tag = group.tag,
+                    transform = t
+                };
+                spawnedObjects.Add(n, null);
+            }
         }
     }
 
@@ -110,19 +89,14 @@ public class CrateSpawner : MonoBehaviour
     // Attempts to spawn a crate at each point if its mapped GameObject is null
     void TrySpawnCrates()
     {
-        List<SpawnNode> spawnPoints = new List<SpawnNode>();
-        int spawned = 0;
+        List<SpawnNode> spawnPoints = new();
 
-        // Get nodes to spawn
+        // Get nodes to spawn and randomise the order to spawn
         foreach (var pair in spawnedObjects)
         {
             if (pair.Value == null)
             {
                 spawnPoints.Add(pair.Key);
-            }
-            else
-            {
-                spawned++;
             }
         }
         ShuffleList(spawnPoints);
@@ -140,12 +114,9 @@ public class CrateSpawner : MonoBehaviour
                 spawnedObjects[node] = Instantiate(cratePrefab, node.transform);
                 spawnedObjects[node].GetComponent<ICollectable>().Tag = tag;
             }
-
         }
-
-
+        /* Keeping this code here incase we want to revert back to quota based spawning
         // Only spawn enough crates to meet quota (truncate spawnPoints)
-        /*
         int diff = Quota - spawned + spawnExtra;
         if (diff > 0)
         {
@@ -176,14 +147,14 @@ public class CrateSpawner : MonoBehaviour
     }
 
     // Returns whether a given requirement is met
+    // KINDA INEFFICIENT there should be like a list references to collectables to check rather than this
     bool HasMatchedRequirement(CrateRequirement requirement)
     {
         int i = 0;
         foreach (var pair in spawnedObjects)
         {
             if (pair.Value == null) continue;
-            ICollectable item;
-            pair.Value.TryGetComponent(out item);
+            pair.Value.TryGetComponent(out ICollectable item);
 
             if (item == null) continue;
             if (item.Tag == requirement.requiredTag) i++;
@@ -219,6 +190,7 @@ public class CrateSpawner : MonoBehaviour
     }
 
     // Struct defining a spawn node; a transform for where to spawn and a tag for its spawned object
+    // This class also uses the transform's children as points
     [Serializable]
     public struct SpawnNode
     {
