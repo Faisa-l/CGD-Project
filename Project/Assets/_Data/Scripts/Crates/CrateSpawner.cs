@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static CrateExtensions;
 
 /// <summary>
 /// MonoBehaviour which handles spawning collectable crates.
@@ -105,7 +106,7 @@ public class CrateSpawner : MonoBehaviour
         // Will only spawn in crates to fulfil a spawn requirement - ignores node that already meets requirements
         foreach (SpawnNode node in spawnPoints)
         {
-            CrateObject.CrateTag tag = node.tag;
+            CrateTag tag = node.tag;
             if (GetRequirementFromTag(tag, out CrateRequirement requirement))
             {
                 if (HasMatchedRequirement(requirement)) continue;
@@ -165,7 +166,7 @@ public class CrateSpawner : MonoBehaviour
     }
 
     // Gets a requirement from a given tag and outputs whether this requirement exists or not
-    bool GetRequirementFromTag(CrateObject.CrateTag tag, out CrateRequirement requirement)
+    bool GetRequirementFromTag(CrateTag tag, out CrateRequirement requirement)
     {
         requirement = new();
 
@@ -177,24 +178,8 @@ public class CrateSpawner : MonoBehaviour
                 return true;
             }
         }
-
         return false;
     }
 
-    // Struct defining any type of spawn requirement
-    [Serializable]
-    public struct CrateRequirement
-    {
-        public CrateObject.CrateTag requiredTag;
-        public int requiredCount;
-    }
-
-    // Struct defining a spawn node; a transform for where to spawn and a tag for its spawned object
-    // This class also uses the transform's children as points
-    [Serializable]
-    public struct SpawnNode
-    {
-        public Transform transform;
-        public CrateObject.CrateTag tag;
-    }
+    
 }

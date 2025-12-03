@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+using static CrateExtensions;
 
 /// <summary>
 /// MonoBehaviour that uses the GameObject's collider to detect and collect crates.
@@ -39,7 +40,7 @@ public class CrateCollector : MonoBehaviour
     UnityEvent<float> onCollection;
 
     [SerializeField]
-    UnityEvent<CrateSpawner.CrateRequirement> onRequirementUpdate;
+    UnityEvent<CrateRequirement> onRequirementUpdate;
 
     [SerializeField]
     UnityEvent<float> onScoreUpdated;
@@ -55,22 +56,22 @@ public class CrateCollector : MonoBehaviour
 
     float timer = 0f;
     bool canCollect = false;
-    CrateSpawner.CrateRequirement collectionRequierment;
+    CrateRequirement collectionRequierment;
     float collectionScore = 0f;
     float currentCollectionScore = 0f;
     List<ICollectable> toCollect;
     Material markerMaterial;
 
     public int Quota => collectionRequierment.requiredCount;
-    public CrateObject.CrateTag RequiredTag => collectionRequierment.requiredTag;
+    public CrateTag RequiredTag => collectionRequierment.requiredTag;
     bool RequirementMet => (toCollect.Count >= collectionRequierment.requiredCount);
 
     void UpdateRequirement()
     {
-        var req = new CrateSpawner.CrateRequirement()
+        var req = new CrateRequirement()
         {
-            requiredCount = UnityEngine.Random.Range(requirementRange.x, requirementRange.y),
-            requiredTag = randomiseRequiredCorrectCrateTag ? CrateObject.GetRandomCrateTag() : CrateObject.CrateTag.Red,
+            requiredCount = UnityEngine.Random.Range(requirementRange.x, requirementRange.y + 1),
+            requiredTag = randomiseRequiredCorrectCrateTag ? GetRandomCrateTag() : CrateTag.Red,
         };
 
         collectionRequierment = req;

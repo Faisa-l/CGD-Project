@@ -2,6 +2,7 @@ using System;
 using TMPro;
 using UnityEngine;
 
+
 public class RequirementsText : MonoBehaviour 
 {
     [SerializeField]
@@ -16,9 +17,9 @@ public class RequirementsText : MonoBehaviour
     }
 
     // This can be assigned to an event to update the displayed score
-    public void UpdateText(CrateSpawner.CrateRequirement requirement)
+    public void UpdateText(CrateExtensions.CrateRequirement requirement)
     {
-        string tag = Enum.GetName(typeof(CrateObject.CrateTag), requirement.requiredTag);
+        string tag = Enum.GetName(typeof(CrateExtensions.CrateTag), requirement.requiredTag);
         display.SetText($"{displayText}{tag} : {requirement.requiredCount}");
     }
 
