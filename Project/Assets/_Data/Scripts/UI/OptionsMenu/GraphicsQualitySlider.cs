@@ -12,9 +12,9 @@ public class GraphicsQualitySlider : MonoBehaviour
 {
 	[Header("Cache")]
 	[Tooltip("Reference to the UI slider in the scene.")]
-    [SerializeField] Slider slider;
+    [SerializeField] private Slider slider;
 	[Tooltip("Reference to the text in the scene that will display the quality setting (e.g. low, medium, or high).")]
-	[SerializeField] TMP_Text qualitySettingText;
+	[SerializeField] private TMP_Text qualitySettingText;
 	
     private void Start()
     {

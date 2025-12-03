@@ -23,8 +23,8 @@ public class VolumeSlider : MonoBehaviour
     private void Start()
     {
         // Init setup
-		// TODO load from save code
-        //slider.value = GetValue(volumeType);
+		// Load from save data
+        slider.value = GetValue(volumeType);
     }
 
 	/// <summary>
@@ -47,8 +47,7 @@ public class VolumeSlider : MonoBehaviour
 				audioMixer.SetFloat("SFX", Mathf.Log(slider.value) * 20);
 				
 				// Persist for future playthroughs
-				// TODO add save code here
-				//SaveData.SetSfxVolume(slider.value); // Persist for future playthroughs
+				SaveManager.instance.currentSaveData.audio.sfxVolume = slider.value;
 				break;
 			
             case VolumeType.MUSIC:
@@ -56,8 +55,8 @@ public class VolumeSlider : MonoBehaviour
                 audioMixer.SetFloat("Music", Mathf.Log(slider.value) * 20);
 				
 				// Persist for future playthroughs
-				// TODO add save code here
-                //SaveData.SetMusicVolume(slider.value);
+				SaveManager.instance.currentSaveData.audio.musicVolume = slider.value;
+				
 				break;
 				
             default:
@@ -77,13 +76,11 @@ public class VolumeSlider : MonoBehaviour
         switch (volumeType)
         {
             case VolumeType.SFX:
-				// TODO get from save system
-                //return SaveData.GetSfxVolume();
-				return 1.0f;
+				// Get from save system
+                return SaveManager.instance.currentSaveData.audio.sfxVolume;
             case VolumeType.MUSIC:
-				// TODO get from save system
-                //return SaveData.GetMusicVolume();
-				return 1.0f;
+				// Get from save system
+				return SaveManager.instance.currentSaveData.audio.musicVolume;
             default:
                 return -1; // Return error value
         }
