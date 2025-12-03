@@ -116,7 +116,7 @@ public class MinimapPanel : MonoBehaviour
     public void AddPlayerIcon(int playerCount, Transform transform)
     {
         // TODO: replace null with playerIcon
-        var playerIcon = CreateMinimapIcon(playerColors[playerCount - 1], null, transform);
+        var playerIcon = CreateMinimapIcon(playerColors[playerCount - 1], this.playerIcon, transform);
         playerIcons.Add(playerIcon);
 
         RepositionPanel(playerCount);
@@ -156,8 +156,9 @@ public class MinimapPanel : MonoBehaviour
             gameObject = Instantiate(iconPrefab, this.transform)
         };
 
-        // TODO: add sprite to image
-        mapIcon.gameObject.GetComponent<UnityEngine.UI.Image>().color = color;
+        var image = mapIcon.gameObject.GetComponent<UnityEngine.UI.Image>();
+        image.sprite = sprite ? sprite : null;
+        image.color = color;
         icons.Add(mapIcon);
 
         return mapIcon;
