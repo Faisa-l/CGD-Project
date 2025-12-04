@@ -22,7 +22,7 @@ public class CrateSpawner : MonoBehaviour
 
     // Maps a spawn point to its spawned object
     // This shouldn't be resizing in gameplay; its size should be predetermined in Initalise()
-    Dictionary<SpawnNode, GameObject> spawnedObjects;
+    Dictionary<SpawnNode, ICollectable> spawnedObjects;
     float timer = 0f;
 
     private void OnValidate()
@@ -43,7 +43,7 @@ public class CrateSpawner : MonoBehaviour
     // Populates spawnedObjects
     void Initalise()
     {
-        spawnedObjects = new Dictionary<SpawnNode, GameObject>();
+        spawnedObjects = new Dictionary<SpawnNode, ICollectable>();
 
         // Get the individual transforms in the spawn groups 
         foreach (var group in spawnGroups)
@@ -112,8 +112,8 @@ public class CrateSpawner : MonoBehaviour
                 if (HasMatchedRequirement(requirement)) continue;
 
                 // Spawn crate and set its tag
-                spawnedObjects[node] = Instantiate(cratePrefab, node.transform);
-                spawnedObjects[node].GetComponent<ICollectable>().Tag = tag;
+                spawnedObjects[node] = Instantiate(cratePrefab, node.transform).GetComponent<ICollectable>();
+                spawnedObjects[node].Tag = tag;
             }
         }
         /* Keeping this code here incase we want to revert back to quota based spawning
@@ -148,14 +148,12 @@ public class CrateSpawner : MonoBehaviour
     }
 
     // Returns whether a given requirement is met
-    // KINDA INEFFICIENT there should be like a list references to collectables to check rather than this
     bool HasMatchedRequirement(CrateRequirement requirement)
     {
         int i = 0;
         foreach (var pair in spawnedObjects)
         {
-            if (pair.Value == null) continue;
-            pair.Value.TryGetComponent(out ICollectable item);
+            ICollectable item = pair.Value;
 
             if (item == null) continue;
             if (item.Tag == requirement.requiredTag) i++;
@@ -181,5 +179,5 @@ public class CrateSpawner : MonoBehaviour
         return false;
     }
 
-    
+
 }
