@@ -18,7 +18,7 @@ public class TimeManager : MonoBehaviour
 	// Time until the level ends
     public float CurrentTimeRemaining { get; private set; }
 	// Encourage players to hurry up with red text
-	public readonly static float timerNearlyRanOutThreshhold = 5.0f;
+	public readonly static float timerNearlyRanOutThreshhold = 15.0f;
 	
 	// Make sure event is only called once
 	private bool timerNearlyRunOutTriggered = false;
@@ -38,7 +38,7 @@ public class TimeManager : MonoBehaviour
 	private void Start()
 	{
 		// TODO get time from Level ScriptableObject (or other way) rather than hardcoding
-		CurrentTimeRemaining = 10.0f;
+		CurrentTimeRemaining = 300.0f;
 		
 		// Subscribe to events
 		GameOverState.onEntered += StopTimer;
