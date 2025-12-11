@@ -139,6 +139,7 @@ MonoBehaviour:
   activeColor: {r: 0, g: 1, b: 0, a: 0.47058824}
   inactiveColor: {r: 1, g: 0, b: 0, a: 0.47058824}
   requirementRange: {x: 1, y: 10}
+  scoreObject: {fileID: 11400000, guid: a81eb5c0ad339a34ebbcbe11b677fbaa, type: 2}
   randomiseRequirementOnCollection: 0
   requireCorrectCrateTag: 0
   randomiseRequiredCorrectCrateTag: 1

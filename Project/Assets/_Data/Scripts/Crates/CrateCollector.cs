@@ -24,6 +24,9 @@ public class CrateCollector : MonoBehaviour
 
     [SerializeField]
     Vector2Int requirementRange;
+
+    [SerializeField]
+    ScoreObject scoreObject;
     
     [SerializeField]
     bool randomiseRequirementOnCollection = false;
@@ -53,6 +56,9 @@ public class CrateCollector : MonoBehaviour
     
     [SerializeField]
     UnityEvent onQuotaMet;
+
+    [SerializeField]
+    StarScore StarScore;
 
     float timer = 0f;
     bool canCollect = false;
@@ -143,6 +149,7 @@ public class CrateCollector : MonoBehaviour
         // Do something with its data
         collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
+        scoreObject.currentScore = collectionScore;
         Destroy(collectable.GameObject);
     }
 
@@ -178,6 +185,10 @@ public class CrateCollector : MonoBehaviour
         onScoreUpdated.Invoke(collectionScore);
         onQuotaMet.Invoke();
         currentCollectionScore = 0f;
+
+
+        StarScore.CheckStarScore();
+
 
         // Hide text
         OnCollectionEnded();
