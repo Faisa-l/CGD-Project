@@ -10839,6 +10839,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1127615680}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &543317289 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 1773022933685493602, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+  m_PrefabInstance: {fileID: 1800233504}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &549238273
 GameObject:
   m_ObjectHideFlags: 0
@@ -13017,7 +13022,7 @@ GameObject:
   - component: {fileID: 624166581}
   - component: {fileID: 624166580}
   - component: {fileID: 624166579}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Flooring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16390,6 +16395,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db4ffda7b303fcd43afe67c994b8a756, type: 3}
+--- !u!1 &768681262 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3443842060001372276, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+  m_PrefabInstance: {fileID: 1800233504}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &772685213
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -20884,6 +20894,22 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: body
+      value: 
+      objectReference: {fileID: 1193538200}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: rigidBody
+      value: 
+      objectReference: {fileID: 1230645399}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: groundCheck
+      value: 
+      objectReference: {fileID: 1230645387}
     - target: {fileID: 85168752108625695, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -25268,6 +25294,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 7126262966641103128, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
   m_PrefabInstance: {fileID: 78040122}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1193538200 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3443842060001372276, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+  m_PrefabInstance: {fileID: 1040923648}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1195912531
 GameObject:
   m_ObjectHideFlags: 0
@@ -26009,6 +26040,11 @@ Mesh:
 --- !u!4 &1230645387 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4860262084814405887, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+  m_PrefabInstance: {fileID: 1040923648}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1230645399 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 1773022933685493602, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
   m_PrefabInstance: {fileID: 1040923648}
   m_PrefabAsset: {fileID: 0}
 --- !u!43 &1244143859
@@ -35279,6 +35315,22 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: body
+      value: 
+      objectReference: {fileID: 768681262}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: rigidBody
+      value: 
+      objectReference: {fileID: 543317289}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: groundCheck
+      value: 
+      objectReference: {fileID: 280126153}
+    - target: {fileID: -245255317538100421, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: groundMask.m_Bits
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 85168752108625695, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: m_Enabled
       value: 0
@@ -35293,7 +35345,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1674581232711070709, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: playerNumber

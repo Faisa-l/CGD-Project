@@ -1163,6 +1163,37 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.4580331, y: 0.1815307, z: 4.54247}
   m_Center: {x: 2.17627, y: -2.03701, z: 0.38629174}
+--- !u!1 &3408116735923504557
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 991374653987402780}
+  m_Layer: 2
+  m_Name: Grounded Check Transform
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &991374653987402780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3408116735923504557}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.24, z: -0.349}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4860262084814405887}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3443842060001372276
 GameObject:
   m_ObjectHideFlags: 0
@@ -2271,6 +2302,7 @@ GameObject:
   - component: {fileID: 1773022933685493602}
   - component: {fileID: 2398115538353509990}
   - component: {fileID: 1674581232711070709}
+  - component: {fileID: -245255317538100421}
   - component: {fileID: 5082399596852400733}
   - component: {fileID: -5220215563985875057}
   - component: {fileID: 5434339888425413921}
@@ -2308,6 +2340,7 @@ Transform:
   - {fileID: 3325905161990052438}
   - {fileID: 6331054873170009285}
   - {fileID: 8946032051519497768}
+  - {fileID: 991374653987402780}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!54 &1773022933685493602
@@ -2370,25 +2403,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77093488e4b177e48b72c50fb933cefe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 0
-  motorTorque: 200
-  brakeForce: 50
-  maxSteerAngle: 45
-  steeringWheelPower: 3
-  downwardForce: 9.81
-  centerOfMass: {x: 0, y: -0.9, z: 0}
   lift: {fileID: 3846148368281736309}
   liftSpeed: 3
   minimumLiftPosition: 2.4
   maxLiftPosition: 9.5
-  frontLeftWheelCollider: {fileID: 2125324533077630810}
-  frontRightWheelCollider: {fileID: 4208067949702493496}
-  rearLeftWheelCollider: {fileID: 349420474976718859}
-  rearRightWheelCollider: {fileID: 5366741994901285519}
-  frontLeftWheelTransform: {fileID: 4349160905457002593}
-  frontRightWheelTransform: {fileID: 5896697718319638678}
-  rearLeftWheelTransform: {fileID: 1875599527216935721}
-  rearRightWheelTransform: {fileID: 2468662380623212021}
   hudManager: {fileID: 0}
   steeringWheel: {fileID: 3358673181307754969}
   playerMesh: {fileID: 2735361621119911603}
@@ -2426,6 +2444,43 @@ MonoBehaviour:
         m_CallState: 2
   cameraForwardPos: {fileID: 4984584100628000045}
   cameraReversePos: {fileID: 4772259750914084470}
+--- !u!114 &-245255317538100421
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9127728803133528513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a09a0b27403329743b18923c7174c7ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 1773022933685493602}
+  acceleration: 3
+  break_multiplier: 2
+  speed: 0
+  max_speed: 9
+  rotate_speed: 150
+  Movement: {x: 0, y: 0}
+  groundCheck: {fileID: 991374653987402780}
+  is_grounded: 0
+  groundMask:
+    serializedVersion: 2
+    m_Bits: 8
+  groundDistance: 0.4
+  wheelRadius: 0.5
+  gravity: -9.81
+  vehicleMass: 500
+  downwardVelocity: 0
+  body: {fileID: 3443842060001372276}
+  maxRotation: 30
+  driftAnimation: {fileID: 0}
+  manualDriftAnim: 1
+  manualAnimationSpeed: 1
+  drifting: 0
+  driftInput: {fileID: 6863291933066584566, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
+  driftMultiplier: 2
 --- !u!143 &5082399596852400733
 CharacterController:
   m_ObjectHideFlags: 0
