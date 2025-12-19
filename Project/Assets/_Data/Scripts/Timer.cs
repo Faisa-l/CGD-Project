@@ -7,23 +7,30 @@ using UnityEngine.Events;
 /// </summary>
 public class Timer : MonoBehaviour
 {
-    [SerializeField, Range(0f, 100f), Tooltip("How long the timer will continue.")]
-    float duration = 1f;
+    /* Not using InvokeRepeating since:
+     * I don't know if its better to call it than calculating the time.
+     * You can set this component to inactive to cease the timer's calculations.
+     * Don't feel like figuring out a smart way to call CancelInvoke thats not annoying.
+    */
 
-    [SerializeField, Tooltip("Make the timer automatically restart once it passes its duration.")]
-    bool repeat = false;
+    [Range(0f, 100f), Tooltip("How long the timer will continue.")]
+    public float duration = 1f;
 
-    [SerializeField, Tooltip("Make the timer immediately begin on Start")]
-    bool autoStart = true;
+    [Tooltip("Make the timer automatically restart once it passes its duration.")]
+    public bool repeat = false;
+
+    [Tooltip("Make the timer immediately begin on Start")]
+    public bool autoStart = true;
 
     [Tooltip("Events to run when the timer expires.")]
     public UnityEvent timeout;
 
+
+    [HideInInspector]
+    public bool paused;
     float currentTime;
-    bool running;
 
     public float ElapsedTime => currentTime;
-    public bool IsRunning => running;
 
     private void Awake()
     {
@@ -32,55 +39,40 @@ public class Timer : MonoBehaviour
 
     private void Start()
     {
-        if (autoStart) Begin();
+        if (autoStart) paused = false;
     }
 
     // Increments current time each frame
     private void Update()
     {
-        if (running)
+        if (paused) return;
+        
+        currentTime += Time.deltaTime;
+
+        // Is this timer expired
+        if (currentTime > duration)
         {
-            currentTime += Time.deltaTime;
+            timeout.Invoke();
 
-            // Is this timer expired
-            if (currentTime > duration)
+            // Restart timer if it should repeat
+            if (repeat)
             {
-                timeout.Invoke();
+                Restart();
 
-                // Restart timer if it should repeat
-                if (repeat)
-                {
-                    Restart();
-
-                }
-                else
-                {
-                    Pause();
-                }
+            }
+            else
+            {
+                paused = true;
             }
         }
+        
     }
 
+    // Initialiser
     void Initialise()
     {
         currentTime = 0f;
-        running = false;
-    }
-
-    /// <summary>
-    /// Starts the timer.
-    /// </summary>
-    public void Begin()
-    {
-        running = true;
-    }
-
-    /// <summary>
-    /// Stops the timer.
-    /// </summary>
-    public void Pause()
-    {
-        running = false;
+        paused = true;
     }
 
     /// <summary>
