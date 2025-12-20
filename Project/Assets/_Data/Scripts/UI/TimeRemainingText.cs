@@ -1,6 +1,9 @@
 using UnityEngine;
 using TMPro;
 
+// NOTE: The TimeRemainingPanel this is a part of should be its own prefab.
+//       Possible solution -> make a prefab for 'generic panel' and then make a prefab variant
+
 public class TimeRemainingText : MonoBehaviour
 {
 	[Header("Cache")]
@@ -18,6 +21,7 @@ public class TimeRemainingText : MonoBehaviour
 	
 	private void Update()
 	{
+		// TODO: Move this to OnValidate (if this happens while running not much you can do (plus I think Debug functions use a lot of memory))
 		if (!currentTimeRemainingText)
 		{
 			Debug.LogWarning("Current time remaining text not set in the inspector.");
