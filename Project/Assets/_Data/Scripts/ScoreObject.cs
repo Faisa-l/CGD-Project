@@ -22,11 +22,10 @@ public class ScoreObject : ScriptableObject
     public int Stars => GetStars();
 
     /* DISCLAIMER READ THIS ABOUT HOW SCORE RANGES WILL WORK:
-    * (x * 5f) is only valid if star ranges are for each 20%.
+    * (x / range) is only valid if star ranges are for each 20%.
     * If this were to change than you need to alter this value.
     * If we want to have variable size star ranges then this system would need to change.
     */
-    float Range => 1f / starRangePercentage;
 
     /// <summary>
     /// Returns the number of stars that a given ScoreObject has.
@@ -49,6 +48,6 @@ public class ScoreObject : ScriptableObject
         }
 
         // Return the range index which x is in
-        return Mathf.FloorToInt(x * Range);
+        return Mathf.FloorToInt(x / starRangePercentage);
     }
 }
