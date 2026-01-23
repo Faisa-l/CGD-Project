@@ -21,6 +21,16 @@ public class ScoreObject : ScriptableObject
     /// </summary>
     public int Stars => GetStars();
 
+    private void OnEnable()
+    {
+        VictoryState.onExited += Clear;
+    }
+
+    private void OnDisable()
+    {
+        VictoryState.onExited -= Clear;
+    }
+
     /* DISCLAIMER READ THIS ABOUT HOW SCORE RANGES WILL WORK:
     * (x / range) is only valid if star ranges are for each 20%.
     * If this were to change than you need to alter this value.
@@ -47,4 +57,13 @@ public class ScoreObject : ScriptableObject
         // Return the range index which x is in
         return Mathf.FloorToInt(x / starRangePercentage);
     }
+
+    /// <summary>
+    /// Resets the score
+    /// </summary>
+    public void Clear()
+    {
+        currentScore = 0f;
+    }
+
 }

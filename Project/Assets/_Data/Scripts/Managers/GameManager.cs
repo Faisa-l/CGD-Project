@@ -107,6 +107,7 @@ public class GameManager : MonoBehaviour
 
     public void ReloadCurrentScene()
     {
+        currentState.OnExit(this);
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 

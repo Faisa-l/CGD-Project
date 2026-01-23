@@ -96,7 +96,6 @@ public class CrateCollector : MonoBehaviour
             markerMaterial = renderer.sharedMaterial;
             markerMaterial.SetColor("_BaseColor", activeColor);
         }
-
         UpdateRequirement();
     }
 
@@ -108,7 +107,7 @@ public class CrateCollector : MonoBehaviour
         {
             requirementRange.x = requirementRange.y;
         }
-        Initialise();
+        // Initialise();
     }
 
     private void Awake()
