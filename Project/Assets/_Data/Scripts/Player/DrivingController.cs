@@ -107,12 +107,16 @@ public class DrivingController : MonoBehaviour
 
     private void updateRotate()
     {
+        //don't do rotations if the forklift isn't moving or turning
         if (!is_moving || movement.turningValue == 0) return;
 
+        //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotate_speed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
 
+        //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
         float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f));
 
+        //if the forklift isn't drifting, make sure it is looking forward
         if(!drifting)
         {
             body.transform.localRotation = new();
@@ -141,6 +145,7 @@ public class DrivingController : MonoBehaviour
                 driftAnimation.Play();
             }
 
+            //matbe not needed, need animation first if we are using one
             body.transform.RotateAround(
                 body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                 Vector3.up,
