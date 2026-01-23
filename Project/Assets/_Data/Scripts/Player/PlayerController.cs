@@ -299,7 +299,6 @@ public class PlayerController : MonoBehaviour
 
 	public void moveInput(InputValue input)
 	{
-		Debug.Log("Forklift Move");
 		if(current_forklift != null)
 		{
 			current_forklift.GetComponent<DrivingController>().Move(input);

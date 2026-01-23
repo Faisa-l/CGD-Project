@@ -1,3 +1,4 @@
+using System;
 using System.ComponentModel;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
@@ -5,6 +6,11 @@ using UnityEngine.InputSystem;
 
 public class DrivingController : MonoBehaviour
 {
+    struct Movement
+    {
+        public float turningValue;
+        public float movingValue;
+    }
 
     [Header("MainComponents")]
     [SerializeField] Rigidbody rigidBody;
@@ -15,8 +21,8 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float speed = 0f;
     [SerializeField] float max_speed = 35f;
     [SerializeField] float rotate_speed = 5.0f;
-    [SerializeField] Vector2 Movement;
-    [SerializeField] bool is_moving => (Movement.y != 0);
+    [SerializeField] Movement movement;
+    [SerializeField] bool is_moving => (movement.movingValue != 0);
 
     [Header("Gravity Variables")]
     [SerializeField] Transform groundCheck;
@@ -56,14 +62,17 @@ public class DrivingController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //ApplyGravity();
         GroundCheck();  
         updateMove();
         updateRotate();
+
+        transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
     }
 
     private void updateMove()
     {
+        if (!is_grounded) return;
+
         //if triggers held
         if (is_moving)
         {
@@ -80,31 +89,31 @@ public class DrivingController : MonoBehaviour
         //if triggers not held
         else
         {
-            //if speed is around 0 then stop
-            if (Mathf.Abs(speed) <= acceleration * Time.deltaTime * break_multiplier)
-            {
-                speed = 0;
-
-                Movement.x = 0;
-            }
-            //otherwise decelerate
-            else
-            {
-                speed -= acceleration * Time.deltaTime * sign * break_multiplier;
-            }
+           //if speed is around 0 then stop
+           if (Mathf.Abs(speed) <= acceleration * Time.deltaTime * break_multiplier)
+           {
+               speed = 0;    
+               movement.movingValue = 0;
+           }
+           //otherwise decelerate
+           else
+           {
+               speed -= acceleration * Time.deltaTime * sign * break_multiplier;
+           }
         }
 
-        float past_y_vel = rigidBody.linearVelocity.y;
-        rigidBody.linearVelocity = (transform.forward * speed) + new Vector3(0,past_y_vel,0);
+        rigidBody.linearVelocity = (transform.forward * speed) + new Vector3(0,rigidBody.linearVelocity.y,0);
     }
 
     private void updateRotate()
     {
-        transform.Rotate(0, Movement.x * rotate_speed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
+        if (!is_moving || movement.turningValue == 0) return;
+
+        transform.Rotate(0, sign * movement.turningValue * rotate_speed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
 
         float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f));
 
-        if(!drifting || Movement.x == 0)
+        if(!drifting)
         {
             body.transform.localRotation = new();
             body.transform.localPosition = new();
@@ -112,7 +121,7 @@ public class DrivingController : MonoBehaviour
         }
 
         //If the body is fully rotated, then return
-        if (Mathf.Abs(bodyAngle) >= maxRotation) 
+        if (Mathf.Abs(bodyAngle) >= maxRotation && Mathf.Sign(bodyAngle) == MathF.Sign(movement.turningValue)) 
         {
             return;
         }
@@ -123,7 +132,7 @@ public class DrivingController : MonoBehaviour
             body.transform.RotateAround(
                 body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                 Vector3.up,
-                Movement.x* manualAnimationSpeed);
+                sign * movement.turningValue * manualAnimationSpeed);
         }
         else
         {
@@ -135,22 +144,19 @@ public class DrivingController : MonoBehaviour
             body.transform.RotateAround(
                 body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                 Vector3.up,
-                Movement.x * maxRotation);
+                sign * movement.turningValue * maxRotation);
         }
     }
 
     public void OnMove(InputValue value)
     {
-        if (!is_grounded)
-        {
-            return;
-        }
+        if (!is_grounded) return;
 
-        Movement.y = value.Get<Vector2>().y;
+        movement.movingValue = value.Get<Vector2>().y;
 
-        if (Movement.y != 0)
+        if (movement.movingValue != 0)
         {
-            sign = Mathf.Sign(Movement.y);
+            sign = Mathf.Sign(movement.movingValue);
         }
     }
 
@@ -161,28 +167,22 @@ public class DrivingController : MonoBehaviour
             return;
         }
 
-        Movement.y = value.Get<Vector2>().y;
+        movement.movingValue = value.Get<Vector2>().y;
 
-        if (Movement.y != 0)
+        if (movement.movingValue != 0)
         {
-            sign = Mathf.Sign(Movement.y);
+            sign = Mathf.Sign(movement.movingValue);
         }
     }
 
     public void OnTurn(InputValue value)
     {      
-        if (is_moving)
-        {
-            Movement.x = value.Get<Vector2>().x;
-        }      
+        movement.turningValue = value.Get<Vector2>().x;
     }
 
     public void Turn(InputValue value)
     {
-        if (is_moving)
-        {
-            Movement.x = value.Get<Vector2>().x;
-        }
+        movement.turningValue = value.Get<Vector2>().x;
     }
 
     public void ApplyGravity()

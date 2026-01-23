@@ -296,8 +296,6 @@ namespace StarterAssets
 
 		public void OnForkliftMove(InputValue input)
 		{
-			Debug.Log("AAAAAAAAAAAAAAAAAAAAaaa kill me");
-
 			GetComponent<PlayerController>().moveInput(input);
 		}
 
