@@ -4,6 +4,7 @@ public class DeleteSaveData : MonoBehaviour
 {
 	public void Delete()
 	{
-		SaveManager.instance.ClearSave();
+		if (SaveManager.instance)
+			SaveManager.instance.ClearSave();
 	}
 }

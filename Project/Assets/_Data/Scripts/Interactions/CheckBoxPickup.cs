@@ -6,6 +6,8 @@ namespace Interaction
 {
     public class CheckBoxPickup : MonoBehaviour, Interactable
     {
+		[SerializeField]
+		private bool requiresForklift = false;
 
         public string MessageInteract => "Press <sprite name=\"Xbox_X\"> to pick up the box";
 
@@ -21,5 +23,10 @@ namespace Interaction
         }
 
         public void Release() { }
+		
+		public bool RequiresForklift()
+		{
+			return requiresForklift;
+		}
     }
 }

@@ -48,8 +48,17 @@ namespace Interaction
 
             Physics.Raycast(ray, out var hit, interactDistance);
 
-            currentTargetedInteraction = hit.collider?.GetComponent<Interactable>();
-
+			// Make sure it's an object the player can pickup
+			Interactable interactable = hit.collider?.GetComponent<Interactable>();
+			
+			if (interactable != null && interactable.RequiresForklift() == false)
+			{
+			    currentTargetedInteraction = hit.collider?.GetComponent<Interactable>();
+			}
+			else
+			{
+				currentTargetedInteraction = null;
+			}
         }
         void UpdateInteractText()
         {
