@@ -52,6 +52,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   score: 100
+  crateTag: 0
+  useColouredTags: 1
 --- !u!33 &5113504707291311347
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -169,6 +171,7 @@ MonoBehaviour:
   pickupCollider: {fileID: 799914299884088629}
   pickupPositionOffset: {x: 0, y: 0, z: 0}
   impactThreshold: 0.5
+  requiresForklift: 1
   onImpactThresholdMet:
     m_PersistentCalls:
       m_Calls:

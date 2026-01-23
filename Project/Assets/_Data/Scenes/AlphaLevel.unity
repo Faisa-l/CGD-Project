@@ -8103,9 +8103,13 @@ PrefabInstance:
       value: "Press <sprite name=\"Xbox_Y\">\nto pickup or drop other \naforklifts
         and crates"
       objectReference: {fileID: 0}
-    - target: {fileID: 6207329988813323297, guid: a17d909e177d21743a8265dc52968879, type: 3}
+    - target: {fileID: 437208072387123401, guid: a17d909e177d21743a8265dc52968879, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6207329988813323297, guid: a17d909e177d21743a8265dc52968879, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7607861783725560589, guid: a17d909e177d21743a8265dc52968879, type: 3}
       propertyPath: m_LocalScale.x
@@ -14809,6 +14813,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+  requiresForklift: 0
 --- !u!23 &687511300
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -22025,6 +22030,10 @@ PrefabInstance:
     - target: {fileID: 9028667420126313068, guid: a17d909e177d21743a8265dc52968879, type: 3}
       propertyPath: m_Name
       value: PickingUpBoxes
+      objectReference: {fileID: 0}
+    - target: {fileID: 9028667420126313068, guid: a17d909e177d21743a8265dc52968879, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -29614,9 +29623,17 @@ PrefabInstance:
 
         to enter or exit vehicle'
       objectReference: {fileID: 0}
+    - target: {fileID: 440344546140915501, guid: a17d909e177d21743a8265dc52968879, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 6207329988813323297, guid: a17d909e177d21743a8265dc52968879, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6732614331124983451, guid: a17d909e177d21743a8265dc52968879, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7607861783725560589, guid: a17d909e177d21743a8265dc52968879, type: 3}
       propertyPath: m_LocalScale.x
@@ -30806,7 +30823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5950414083422075019, guid: 92fe579b5f2798f43bd723148ebc2f8b, type: 3}
       propertyPath: timed
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7007716964053650567, guid: 92fe579b5f2798f43bd723148ebc2f8b, type: 3}
       propertyPath: m_LocalPosition.x

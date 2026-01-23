@@ -16,6 +16,9 @@ namespace Interaction
         public string MessageInteract => isTimed;
 
         FirstPersonController current_character;
+		
+		[SerializeField]
+		private bool requiresForklift = false;
         
         public void Start()
         {
@@ -56,8 +59,12 @@ namespace Interaction
         public virtual void Release()
         {
             Debug.Log("AAAAAAAAAAAAA");
-            current_character.enabled = true;
-            current_character = null;
+			
+			if (current_character)
+			{
+				current_character.enabled = true;
+				current_character = null;
+			}
 
             if (!door.timed)
             {
@@ -65,5 +72,10 @@ namespace Interaction
                 door.opening = false;
             }
         }
+		
+		public bool RequiresForklift()
+		{
+			return requiresForklift;
+		}
     }
 }
