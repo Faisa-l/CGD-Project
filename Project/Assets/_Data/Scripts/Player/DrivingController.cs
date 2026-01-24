@@ -76,8 +76,8 @@ public class DrivingController : MonoBehaviour
         //if triggers held
         if (is_moving)
         {
-            //if current speed is maxxed out
-            if (Mathf.Abs(speed) >= max_speed)
+            //if current speed is maxxed out and the player is attempting to move in that direction
+            if (Mathf.Abs(speed) >= max_speed && sign == Mathf.Sign(speed))
             {
                 speed = sign * max_speed;
             }
@@ -98,7 +98,7 @@ public class DrivingController : MonoBehaviour
            //otherwise decelerate
            else
            {
-               speed -= acceleration * Time.deltaTime * sign * break_multiplier;
+               speed -= acceleration * Time.deltaTime * Mathf.Sign(speed) * break_multiplier;
            }
         }
 
@@ -107,22 +107,41 @@ public class DrivingController : MonoBehaviour
 
     private void updateRotate()
     {
-        //don't do rotations if the forklift isn't moving or turning
-        if (!is_moving || movement.turningValue == 0) return;
+        //don't do rotations if the forklift isn't moving
+        if (!is_moving) return;
 
         //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotate_speed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
 
         //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
-        float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f));
+        float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f))%360;
+
+        if(movement.turningValue == 0)
+        {
+            if(Mathf.Abs(bodyAngle) >= 0.1f)
+            {
+                body.transform.RotateAround(
+                 body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
+                 Vector3.up,
+                 sign * -Mathf.Sign(bodyAngle) * manualAnimationSpeed);
+            }
+            else
+            {
+                body.transform.localRotation = new();
+                body.transform.localPosition = new();
+            }
+        }
 
         //if the forklift isn't drifting, make sure it is looking forward
-        if(!drifting)
+        if(!drifting || movement.movingValue == -1)
         {
             body.transform.localRotation = new();
             body.transform.localPosition = new();
             return;
         }
+
+
+        //-----If player is drifting-----//
 
         //If the body is fully rotated, then return
         if (Mathf.Abs(bodyAngle) >= maxRotation && Mathf.Sign(bodyAngle) == MathF.Sign(movement.turningValue)) 
