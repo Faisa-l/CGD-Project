@@ -911,6 +911,7 @@ MonoBehaviour:
   panel: {fileID: 611088961426573706}
   eventSystem: {fileID: 7976692024626119509}
   firstButton: {fileID: 2042816119927309933}
+  scoreObject: {fileID: 11400000, guid: a81eb5c0ad339a34ebbcbe11b677fbaa, type: 2}
 --- !u!114 &-7821591097269478592
 MonoBehaviour:
   m_ObjectHideFlags: 0
