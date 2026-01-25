@@ -17,6 +17,9 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
 
     [SerializeField]
     float impactThreshold = 0.5f;
+	
+	[SerializeField]
+	bool requiresForklift = false;
 
     [SerializeField]
     UnityEvent onImpactThresholdMet;
@@ -96,6 +99,11 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
             onImpactThresholdMet.Invoke();
         }
     }
+	
+	public bool RequiresForklift()
+	{
+		return requiresForklift;
+	}
 
     public virtual void Release() { }
 }

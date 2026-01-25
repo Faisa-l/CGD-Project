@@ -24,6 +24,7 @@ public class PlayerManager : MonoBehaviour
     [Header("Player Debug Mode")]
     [SerializeField] bool debug_mode_on = false;
     [SerializeField] GameObject player_prefab;
+	[SerializeField] [Range(1, 4)] int debugPlayerCount = 4;
 
     private int players = 0;
     [SerializeField] private Camera blankCamera;
@@ -41,13 +42,14 @@ public class PlayerManager : MonoBehaviour
         player_positions.Add(player_3_transform);
         player_positions.Add(player_4_transform);
 
+        PlayerInputManager input_manager = GetComponent<PlayerInputManager>();
+
+		// Debug (for testing)
         if (debug_mode_on)
         {
-            PlayerInputManager input_manager = GetComponent<PlayerInputManager>();
+            input_manager.joinBehavior = PlayerJoinBehavior.JoinPlayersWhenJoinActionIsTriggered;
 
-            input_manager.joinBehavior = PlayerJoinBehavior.JoinPlayersManually;
-
-            for (int i = 0; i < input_manager.maxPlayerCount; i++)
+            for (int i = 0; i < debugPlayerCount; i++)
             {
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
 
@@ -57,12 +59,28 @@ public class PlayerManager : MonoBehaviour
 
             // minimap.RepositionPanel(input_manager.maxPlayerCount);
         }
+		// Standard (build)
+		else
+		{
+			print(LobbyMenuManager.currentPlayers.Count);
+			
+			// LobbyMenuManager.currentPlayers = Gamepads in order they pressed join button on lobby screen
+			for (int i = 0; i < LobbyMenuManager.currentPlayers.Count; i++)
+			{
+                PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+
+                player.SwitchCurrentControlScheme(LobbyMenuManager.currentPlayers[i]);
+                player.gameObject.GetComponent<PlayerController>().setPlayerGamepad(LobbyMenuManager.currentPlayers[i]);
+			}
+		}
 
         blankCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
     }
 
     public void OnPlayerJoined(PlayerInput input)
     {
+		print("OnPlayerJoined");
+		
         GameObject temp;
         blankCamera.enabled = false;
 
@@ -95,13 +113,17 @@ public class PlayerManager : MonoBehaviour
         }
 
         InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
-        Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
+		
+		if (debug_mode_on)
+		{
+			Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
 
-        input.SwitchCurrentControlScheme(playerGamepad);
+			input.SwitchCurrentControlScheme(playerGamepad);
 
-        input.GetComponent<CharacterController>().enabled = false;
+			input.gameObject.GetComponent<PlayerController>().setPlayerGamepad(playerGamepad);
+		}
 
-        input.gameObject.GetComponent<PlayerController>().setPlayerGamepad(playerGamepad);
+		input.GetComponent<CharacterController>().enabled = false;
 
         input.gameObject.transform.position = player_positions[input.playerIndex].position;
         input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;

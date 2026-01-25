@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using UnityEngine.InputSystem;
@@ -9,25 +10,53 @@ public class LobbyMenuManager : MonoBehaviour
 {
 	// Incase we ever want to adjust the maximum player count in the future
 	private static readonly int maxPlayerCount = 4;
+	// Game can't be started unless at least this many players have joined
+	private static readonly int minPlayerCount = 1;
 	
 	[Tooltip("References to the Game Object in the scene each gamepad image is on. Index 0 (the first one) will be player 1 and so on.")]
 	[SerializeField] private GameObject[] playerControllerImages; // Offset by 1 (0 = player 1)
+	[Tooltip("Reference to the Button in the scene that will start the game")]
+	[SerializeField] private Button startButton;
+	[Tooltip("Reference to the Game Object with the instructions text in the scene")]
+	[SerializeField] private GameObject instructionsText;
+	
+	[SerializeField] private UnityEvent onPlayerJoined = new UnityEvent();
 	
 	// The Gamepads that press the join button are added to this list in order.
 	// So Gamepad 0 will be player 1 and so on.
-	private List<Gamepad> currentPlayers = new List<Gamepad>();
+	public static List<Gamepad> currentPlayers { get; private set; } = new List<Gamepad>();
 	
 	#region Lobby
+	
+	private void Start()
+	{
+		// Reset list of players whether this is the first time or players quit to main menu then re-entered
+		currentPlayers = new List<Gamepad>();
+	}
 	
 	private void Update()
 	{
 		// Check every frame (as often as possible) if a player is trying to join
-		PlayerJoinedCheck();
+		if (currentPlayers.Count < maxPlayerCount)
+		{
+			PlayerJoinedCheck();
+		}
+		
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			print(currentPlayers.Count);
+			
+			foreach (var item in currentPlayers)
+			{
+				print(item);
+			}
+		}
 	}
 	
 	/// <summary>
-	/// Check if a player who hasn't already joined presses the join button (d-pad up).
+	/// Check if a player who hasn't already joined presses the join button (X).
 	/// If they have call PlayerJoined() passing through the Gamepad object reference
+	/// Then check if we have enough players to start the game
 	/// </summary>
 	private void PlayerJoinedCheck()
 	{
@@ -35,13 +64,25 @@ public class LobbyMenuManager : MonoBehaviour
 		// Source - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/api/UnityEngine.InputSystem.Gamepad.html
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
-			// Has this gamepad just pressed the dpad up button?
-			if (gamepad.dpad.up.wasPressedThisFrame)
+			// Has this gamepad just pressed the X button?
+			if (gamepad.buttonWest.wasPressedThisFrame)
 			{
 				// Prevent the same player joining twice
 				if (!currentPlayers.Contains(gamepad))
 					PlayerJoined(gamepad);
 			}
+		}
+		
+		// Do we have enough players to start the game?
+		if (currentPlayers.Count >= minPlayerCount)
+		{
+			startButton.interactable = true;
+		}
+		
+		// Have we reached the maximum players?
+		if (currentPlayers.Count >= maxPlayerCount)
+		{
+			instructionsText.SetActive(false);
 		}
 	}
 	
@@ -68,6 +109,9 @@ public class LobbyMenuManager : MonoBehaviour
 			
 			// Update amount of player gamepad images shown
 			UpdatePlayerGamepadUI();
+			
+			// Let other interested objects know
+			onPlayerJoined?.Invoke();
 		}
 		else
 		{
