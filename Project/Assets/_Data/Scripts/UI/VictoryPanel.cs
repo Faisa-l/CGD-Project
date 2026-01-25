@@ -18,11 +18,19 @@ public class VictoryPanel : MonoBehaviour
 
 	[Tooltip("Reference to main score object")]
 	[SerializeField] private ScoreObject scoreObject;
-	
-	private void Awake()
+
+	VictoryPanelLayout panelLayout;
+
+    private void Awake()
 	{
-		// Subscribe to events
-		VictoryState.onEntered += Show;
+		if (!panel.TryGetComponent(out panelLayout))
+		{
+			Debug.Log("Victory panel does not have layout script component.");
+		}
+
+        // Subscribe to events
+        VictoryState.onEntered += Show;
+		VictoryState.onExited += Hide;
 	}
 	
 	/// <summary>
@@ -31,10 +39,8 @@ public class VictoryPanel : MonoBehaviour
 	/// </summary>
 	private void Show()
 	{
-		var victoryLayout = panel.GetComponent<VictoryPanelLayout>();
-
         panel.SetActive(true);
-		victoryLayout.UpdateDisplayedScore(scoreObject);
+		panelLayout.UpdateStarIcons(scoreObject);
 		eventSystem.SetSelectedGameObject(firstButton);
 	}
 
@@ -44,6 +50,7 @@ public class VictoryPanel : MonoBehaviour
 	/// </summary>
 	private void Hide()
 	{
+		panelLayout.HideStarIcons();
 		panel.SetActive(false);
 	}
 
@@ -53,5 +60,6 @@ public class VictoryPanel : MonoBehaviour
 	{
 		// Unsubscribe to events
 		VictoryState.onEntered -= Show;
+		VictoryState.onExited -= Hide;
 	}
 }

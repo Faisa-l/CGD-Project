@@ -26,6 +26,13 @@ public class VictoryPanelLayout : MonoBehaviour
     public TextMeshProUGUI scoreText;
 
     readonly string scoreFormat = "Score: ";
+    Transform[] starIcons;
+
+    private void Awake()
+    {
+        // NOTE: the Skip().ToArray() is to ignore this object
+        starIcons = achievedStars.GetComponentsInChildren<Transform>(true).Skip(1).ToArray();
+    }
 
     private void OnValidate()
     {
@@ -47,12 +54,10 @@ public class VictoryPanelLayout : MonoBehaviour
     /// Updates the score displays with the provided score.
     /// </summary>
     /// <param name="scoreObject"> The object used to update the score with. </param>
-    public void UpdateDisplayedScore(ScoreObject scoreObject)
+    public void UpdateStarIcons(ScoreObject scoreObject)
     {
         if (scoreText == null || unachievedStars == null || achievedStars == null) return;
 
-        // Set the score text to the scoreObject's score and display as many stars as were obtained
-        Transform[] starIcons = achievedStars.GetComponentsInChildren<Transform>(true).Skip(1).ToArray();
         int stars = scoreObject.Stars - 1;
 
         scoreText.text = scoreFormat + scoreObject.currentScore;
@@ -64,6 +69,16 @@ public class VictoryPanelLayout : MonoBehaviour
             }
         }
 
-        // NOTE: the Skip().ToArray() is to ignore this object
+    }
+
+    /// <summary>
+    /// Hides all the icons.
+    /// </summary>
+    public void HideStarIcons()
+    {
+        foreach (var icon in starIcons)
+        {
+            icon.gameObject.SetActive(false);
+        }
     }
 }
