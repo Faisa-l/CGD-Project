@@ -108,7 +108,7 @@ public class DrivingController : MonoBehaviour
     private void updateRotate()
     {
         //don't do rotations if the forklift isn't moving
-        if (!is_moving) return;
+        if (speed == 0) return;
 
         //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotate_speed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
@@ -133,7 +133,7 @@ public class DrivingController : MonoBehaviour
         }
 
         //if the forklift isn't drifting, make sure it is looking forward
-        if(!drifting || movement.movingValue == -1)
+        if(!drifting || movement.movingValue == -1 || movement.turningValue == 0)
         {
             body.transform.localRotation = new();
             body.transform.localPosition = new();
@@ -155,7 +155,7 @@ public class DrivingController : MonoBehaviour
             body.transform.RotateAround(
                 body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                 Vector3.up,
-                sign * movement.turningValue * manualAnimationSpeed);
+                sign * movement.turningValue * manualAnimationSpeed * Time.deltaTime);
         }
         else
         {

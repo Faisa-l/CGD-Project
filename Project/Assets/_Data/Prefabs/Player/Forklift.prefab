@@ -2475,7 +2475,7 @@ MonoBehaviour:
   maxRotation: 30
   driftAnimation: {fileID: 0}
   manualDriftAnim: 1
-  manualAnimationSpeed: 1
+  manualAnimationSpeed: 50
   drifting: 0
   driftInput: {fileID: 6863291933066584566, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   driftMultiplier: 2
