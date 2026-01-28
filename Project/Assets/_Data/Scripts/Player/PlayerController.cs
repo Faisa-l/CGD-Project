@@ -315,6 +315,9 @@ public class PlayerController : MonoBehaviour
 
 	public void driftInput()
 	{
-
+		if(driving)
+		{
+			current_forklift.GetComponent<DrivingController>().drift();
+		}
 	}
 }

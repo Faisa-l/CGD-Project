@@ -55,8 +55,8 @@ public class DrivingController : MonoBehaviour
     {
         is_grounded = true;
 
-        driftInput.action.started += context => { drifting = true; };
-        driftInput.action.canceled += context => { drifting = false; };
+        //driftInput.action.started += context => { drifting = true; };
+        //driftInput.action.canceled += context => { drifting = false; };
     }
 
     // Update is called once per frame
@@ -207,6 +207,11 @@ public class DrivingController : MonoBehaviour
     public void Turn(InputValue value)
     {
         movement.turningValue = value.Get<Vector2>().x;
+    }
+
+    public void drift()
+    {
+        drifting = !drifting;
     }
 
     public void ApplyGravity()

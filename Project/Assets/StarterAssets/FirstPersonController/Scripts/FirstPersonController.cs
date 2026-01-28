@@ -312,7 +312,7 @@ namespace StarterAssets
 
 		public void OnDrift()
 		{
-
+			GetComponent<PlayerController>().driftInput();
 		}
 
 		private void OnDrawGizmosSelected()
