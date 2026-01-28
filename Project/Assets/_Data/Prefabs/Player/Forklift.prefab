@@ -2370,7 +2370,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 77093488e4b177e48b72c50fb933cefe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerNumber: 0
+  playerNumber: 1
   motorTorque: 200
   brakeForce: 50
   maxSteerAngle: 45
