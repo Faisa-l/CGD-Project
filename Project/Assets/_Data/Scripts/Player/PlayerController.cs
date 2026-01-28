@@ -6,6 +6,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Events;
 using TMPro;
+using Unity.VisualScripting;
 
 
 // This script is for our game's custom features
@@ -118,7 +119,6 @@ public class PlayerController : MonoBehaviour
 		}
     }
 
-
     public void OnInteract()
     {
 		if(!driving)
@@ -192,9 +192,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-	public void drive(StarterAssetsInputs input)
+	public void drive()
 	{
-		current_forklift.move(input);
+		current_forklift.move();
 	}
 	
 	public void cameraDrive(float rotation_velocity)
@@ -295,5 +295,29 @@ public class PlayerController : MonoBehaviour
 	public Gamepad GetPlayerGamepad()
 	{
 		return playerGamepad;
+	}
+
+	public void moveInput(InputValue input)
+	{
+		if(current_forklift != null)
+		{
+			current_forklift.GetComponent<DrivingController>().Move(input);
+		}
+	}
+
+	public void turnInput(InputValue input)
+	{
+		if(current_forklift != null)
+		{
+			current_forklift.GetComponent<DrivingController>().Turn(input);
+		}
+	}
+
+	public void driftInput()
+	{
+		if(driving)
+		{
+			current_forklift.GetComponent<DrivingController>().drift();
+		}
 	}
 }

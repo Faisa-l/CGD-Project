@@ -7,32 +7,11 @@ using UnityEngine.InputSystem;
 // making a game in one hour (forklift simulation) - Flutter With Gia
 public class ForkliftController : MonoBehaviour, IDriveable
 {
-    [Header("Settings")]
-    [SerializeField][Range(0, 4)] private int playerNumber = 1; // 0 means no player currently 
-    [SerializeField] private float motorTorque = 100.0f;
-    [SerializeField] private float brakeForce = 30.0f;
-    [SerializeField] private float maxSteerAngle = 45.0f;
-    [SerializeField] private float steeringWheelPower = 3.0f;
-    [SerializeField] private float downwardForce = 9.81f;
-	[SerializeField] private Vector3 centerOfMass = new Vector3 (0, -0.9f, 0);
-
     [Header("Lift")]
     [SerializeField] private Transform lift;
     [SerializeField] private float liftSpeed = 1.0f;
     [SerializeField] private float minimumLiftPosition = 2.4f;
     [SerializeField] private float maxLiftPosition = 9.5f;
-
-    [Header("Wheel Collider References")]
-    [SerializeField] private WheelCollider frontLeftWheelCollider;
-    [SerializeField] private WheelCollider frontRightWheelCollider;
-    [SerializeField] private WheelCollider rearLeftWheelCollider;
-    [SerializeField] private WheelCollider rearRightWheelCollider;
-
-    [Header("Wheel Transform References")]
-    [SerializeField] private Transform frontLeftWheelTransform;
-    [SerializeField] private Transform frontRightWheelTransform;
-    [SerializeField] private Transform rearLeftWheelTransform;
-    [SerializeField] private Transform rearRightWheelTransform;
 
 	[Header("UI")]
 	[SerializeField] private HudManager hudManager;
@@ -48,13 +27,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
     UnityEvent onVehichleEnter;
     [SerializeField]
     UnityEvent onVehichleExit;
-
-    private float horizontalInput = 0.0f;
-    private float verticalInput = 0.0f;
-    private bool isBraking = false;
-
-    private float brakeTorque = 0.0f;
-    private float steerAngle = 0.0f;
 
     private bool isLiftGoingUp = false;
     private bool isLiftGoingDown = false;
@@ -75,7 +47,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
     private AudioEnabler audio_enabler;
 
     private Gamepad playerGamepad;
-
 
     public Transform CameraForwardTransform => cameraForwardPos;
     public Transform CameraReverseTransform => cameraReversePos;
@@ -106,11 +77,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
     private void Start()
 	{
 		SetupPlayerModel();
-		
-		// Anti-tipping
-		// Source - https://discussions.unity.com/t/how-to-stop-my-car-tipping-over/34753
-		rb.centerOfMass = centerOfMass;
-
     }
 
     // Regular update
@@ -122,28 +88,16 @@ public class ForkliftController : MonoBehaviour, IDriveable
     // Physics update
     private void FixedUpdate()
     {
-        HandleTorque();
-        HandleSteering();
-        UpdateWheelPosition();
-        UpdateSteeringWheelPosition();
         HandleLift();
         RepositionCameraTransforms();
-		
-		// Anti-tipping
-        // Source - https://www.reddit.com/r/Unity3D/comments/e808la/how_to_make_my_car_not_tip_over/
-        rb.AddForce(Vector3.down * downwardForce, ForceMode.Force);
     }
 
-    public void move(StarterAssetsInputs input)
+    public void move()
     {
 		if (!IsVehicleOccupied())
 		{
             return; 
         }
-
-        // Get player input
-        verticalInput = playerGamepad.rightTrigger.ReadValue() - playerGamepad.leftTrigger.ReadValue();
-        horizontalInput = input.move.x;
 
         if (playerGamepad.leftTrigger.ReadValue() != 0)
         {
@@ -154,7 +108,7 @@ public class ForkliftController : MonoBehaviour, IDriveable
             audio_enabler.Disable("reverse");
         }
 
-        if (verticalInput != 0)
+        if (playerGamepad.rightTrigger.ReadValue() - playerGamepad.leftTrigger.ReadValue() != 0)
         {
             audio_enabler.Enable("driving");
         }
@@ -223,62 +177,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
         return look_at_transform.position;
     }
 
-    private void HandleTorque()
-    {
-		if (!IsVehicleOccupied())
-		{
-			// Automatically apply handbrake when no one is in forklift
-			Brake(brakeForce);
-			return;
-		}
-			
-		
-        // Apply movement torque to wheels
-        frontLeftWheelCollider.motorTorque = verticalInput * motorTorque;
-        frontRightWheelCollider.motorTorque = verticalInput * motorTorque;
-        rearLeftWheelCollider.motorTorque = verticalInput * motorTorque;
-        rearRightWheelCollider.motorTorque = verticalInput * motorTorque;
-
-        // Apply brake force
-        if (isBraking)
-            brakeTorque = brakeForce;
-        else
-            brakeTorque = 0.0f;
-
-        Brake(brakeTorque);
-    }
-
-    private void HandleSteering()
-    {
-		if (IsVehicleOccupied())
-			steerAngle = maxSteerAngle * horizontalInput;
-		else
-			steerAngle = 0.0f;
-
-        // Front wheel drive
-        frontLeftWheelCollider.steerAngle = steerAngle;
-        frontRightWheelCollider.steerAngle = steerAngle;
-    }
-
-    private void UpdateSteeringWheelPosition()
-    {
-		if (!IsVehicleOccupied())
-			return;
-		
-        if (horizontalInput > 0.1f)
-            steeringWheel.localRotation *= Quaternion.Euler(0, 0, -steeringWheelPower * horizontalInput);
-        else if (horizontalInput < -0.1f)
-            steeringWheel.localRotation *= Quaternion.Euler(0, 0, steeringWheelPower * -horizontalInput);
-    }
-
-    private void UpdateWheelPosition()
-    {
-        ChangeWheelPosition(frontLeftWheelCollider, frontLeftWheelTransform);
-        ChangeWheelPosition(frontRightWheelCollider, frontRightWheelTransform);
-        ChangeWheelPosition(rearLeftWheelCollider, rearLeftWheelTransform);
-        ChangeWheelPosition(rearRightWheelCollider, rearRightWheelTransform);
-    }
-
     private void ChangeWheelPosition(WheelCollider wheelCollider, Transform wheelTransform)
     {
         Vector3 pos;
@@ -319,14 +217,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
 		{
 			playerMesh.enabled = false;
 		}
-	}
-	
-	private void Brake(float brakePower)
-	{
-		frontLeftWheelCollider.brakeTorque = brakePower;
-        frontRightWheelCollider.brakeTorque = brakePower;
-        rearLeftWheelCollider.brakeTorque = brakePower;
-        rearRightWheelCollider.brakeTorque = brakePower;
 	}
 
     // Repositions the transforms of cameras based on if they would collide with eachother
@@ -393,12 +283,6 @@ public class ForkliftController : MonoBehaviour, IDriveable
         playerGamepad = null;
 		
 		playerMesh.enabled = false;
-		
-		// Come to a stop over time
-		frontLeftWheelCollider.motorTorque = 0.0f;
-		frontRightWheelCollider.motorTorque = 0.0f;
-		rearLeftWheelCollider.motorTorque = 0.0f;
-		rearRightWheelCollider.motorTorque = 0.0f;
 
         audio_enabler.Disable("driving");
 
