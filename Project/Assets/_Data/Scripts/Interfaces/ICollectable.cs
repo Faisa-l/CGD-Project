@@ -6,8 +6,9 @@ using UnityEngine;
 /// </summary>
 public interface ICollectable
 {
-    float Score { get; set; }
-    GameObject GameObject { get; }
-    CrateExtensions.CrateTag Tag { get; set; }
+    public float Score { get; set; }
+    public bool CanCollect { get; set; }
+    public GameObject GameObject { get; }
+    public CrateExtensions.CrateTag Tag { get; set; }
 
 }

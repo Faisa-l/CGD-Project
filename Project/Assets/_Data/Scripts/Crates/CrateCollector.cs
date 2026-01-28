@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using static CrateExtensions;
@@ -7,35 +5,25 @@ using static CrateExtensions;
 /// <summary>
 /// MonoBehaviour that uses the GameObject's collider to detect and collect crates.
 /// </summary>
+[RequireComponent(typeof(CollectorScheduler))]
 public class CrateCollector : MonoBehaviour
 {
     [SerializeField]
     GameObject marker;
 
+    [SerializeField]
+    ScoreObject scoreObject;
+
+    [SerializeField]
+    CollectorScheduler scheduler;
+
     [Space, Header("Settings")]
-    [SerializeField, Range(0f, 60f)]
-    float collectionInterval = 30f;
 
     [SerializeField]
     Color activeColor = Color.green;
 
     [SerializeField]
     Color inactiveColor = Color.red;
-
-    [SerializeField]
-    Vector2Int requirementRange;
-
-    [SerializeField]
-    ScoreObject scoreObject;
-    
-    [SerializeField]
-    bool randomiseRequirementOnCollection = false;
-
-    [SerializeField]
-    bool requireCorrectCrateTag = false;
-
-    [SerializeField]
-    bool randomiseRequiredCorrectCrateTag = true;
 
     [Space, Header("Event Bindings")]
 
@@ -49,109 +37,188 @@ public class CrateCollector : MonoBehaviour
     UnityEvent<float> onScoreUpdated;
 
     [SerializeField]
-    UnityEvent onCollectionPeriodStarted;
+    UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded, onQuotaMet;
 
     [SerializeField]
-    UnityEvent onCollectionPeriodEnded;
-    
-    [SerializeField]
-    UnityEvent onQuotaMet;
+    UnityEvent<bool> onEvaluatedRequirement;
 
-    [SerializeField]
-    StarScore StarScore;
-
-    float timer = 0f;
-    bool canCollect = false;
-    CrateRequirement collectionRequierment;
     float collectionScore = 0f;
     float currentCollectionScore = 0f;
-    List<ICollectable> toCollect;
+    bool canCollect = false;
+    bool wasStarted = false;
+    CrateRequirement collectionRequirement;
     Material markerMaterial;
 
-    public int Quota => collectionRequierment.requiredCount;
-    public CrateTag RequiredTag => collectionRequierment.requiredTag;
-    bool RequirementMet => (toCollect.Count >= collectionRequierment.requiredCount);
-
-    void UpdateRequirement()
-    {
-        var req = new CrateRequirement()
-        {
-            requiredCount = UnityEngine.Random.Range(requirementRange.x, requirementRange.y + 1),
-            requiredTag = randomiseRequiredCorrectCrateTag ? GetRandomCrateTag() : CrateTag.Red,
-        };
-
-        collectionRequierment = req;
-        onRequirementUpdate.Invoke(req);
-    }
+    public int Quota => collectionRequirement.requiredCount;
+    public CrateTag RequiredTag => collectionRequirement.requiredTag;
 
     void Initialise()
     {
-        if (!TryGetComponent<Collider>(out Collider collectorCollider))
+        if (!TryGetComponent(out Collider collectorCollider))
         {
             Debug.LogWarning("Collector is missing a collider.");
         }
 
-        if (marker.TryGetComponent<Renderer>(out Renderer renderer))
+        if (marker.TryGetComponent(out Renderer renderer))
         {
             markerMaterial = renderer.sharedMaterial;
             markerMaterial.SetColor("_BaseColor", activeColor);
         }
-        UpdateRequirement();
-    }
 
-    private void OnValidate()
-    {
-        if (requirementRange.x < 0) requirementRange.x = 1; 
-        if (requirementRange.y < 0) requirementRange.y = 1;
-        if (requirementRange.x > requirementRange.y)
-        {
-            requirementRange.x = requirementRange.y;
-        }
-        // Initialise();
+        scheduler.SchedulerStarted.AddListener(DoCollect);
+        scheduler.SchedulerUpdated.AddListener(UpdateFromSchedule);
+        scheduler.SchedulerEnded.AddListener(NoCollect);
+        scheduler.SchedulerEnded.AddListener(EvaluateRequirement);
     }
 
     private void Awake()
     {
         Initialise();
-        toCollect = new List<ICollectable>();
+        StartCollector();
         onScoreUpdated.Invoke(collectionScore);
+    }
+
+    private void OnDestroy()
+    {
+        scheduler.SchedulerStarted.RemoveListener(DoCollect);
+        scheduler.SchedulerUpdated.RemoveListener(UpdateFromSchedule);
+        scheduler.SchedulerEnded.RemoveListener(NoCollect);
+        scheduler.SchedulerEnded.RemoveListener(EvaluateRequirement);
     }
 
     // If other is a collectable add it to list
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
+        if (other.TryGetComponent(out ICollectable collectable))
         {
-            AddCollectableToList(collectable);
+            TryCollect(collectable);
         }
     }
 
-    // If other is a collectable remove it from list
-    private void OnTriggerExit(Collider other)
+    // Starts the collector for collecting
+    public void StartCollector()
     {
-        if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
-        {
-            RemoveCollectableFromList(collectable);
-        }
+        wasStarted = true;
+        scheduler.StartScheduler();
     }
 
-    private void Update()
+    // Set the current collection requirement to what is currently scheduled
+    void UpdateRequirement()
     {
-        UpdateTimer();
-        AdjustMaterial();
-        HandleCollection();
+        if (!scheduler.Running) return;
+
+        var req = new CrateRequirement()
+        {
+            requiredCount = scheduler.CurrentRequirement.requiredCount,
+            requiredTag = scheduler.CurrentRequirement.requiredTag,
+        };
+
+        collectionRequirement = req;
+        onRequirementUpdate.Invoke(req);
     }
 
     // Collects the crate (removes the object and adds some score)
     private void CollectCrate(ICollectable collectable)
     {
-        // Do something with its data
         collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
         scoreObject.currentScore = collectionScore;
         Destroy(collectable.GameObject);
     }
 
+
+    // Will attempt to collect the given collectable
+    void TryCollect(ICollectable collectable)
+    {
+        if (canCollect && collectable.CanCollect && collectable.Tag == collectionRequirement.requiredTag)
+        {
+            CollectCrate(collectable);
+        }
+    }
+
+    // Check if the current requirement was met
+    void EvaluateRequirement()
+    {
+        bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredCount);
+        onEvaluatedRequirement.Invoke(isSuccess);
+                                                            // These mainly invoke:
+        onCollection.Invoke(currentCollectionScore);        // Panel to show how much was collected for this scheduled requirement
+        onScoreUpdated.Invoke(collectionScore);             // Update panel which displays the total score
+        onQuotaMet.Invoke();                                // Audio
+        currentCollectionScore = 0f;
+    }
+
+    // For invocation whenever the schedule changes the current collection requirement
+    void UpdateFromSchedule()
+    {
+        // Call UpdateRequirement after evaluating the current requirement
+        // If this was called when the collector first started, don't evaluate (nothing to check)
+        if (!wasStarted)
+        {
+            EvaluateRequirement();
+        }
+        else
+        {
+            wasStarted = false;
+        }
+        UpdateRequirement();
+    }
+
+    // Make this collect or not
+    internal void SetCollection(bool can)
+    {
+        canCollect = can;
+        AdjustMaterial(can);
+
+        if (can)
+        {
+            onCollectionPeriodStarted.Invoke();
+        }
+        else
+        {
+            onCollectionPeriodEnded.Invoke();
+        }
+    }
+
+    // Variants of above but always true/false
+    void DoCollect() => SetCollection(true);
+    void NoCollect() => SetCollection(false);
+
+    // Change material on object based on canCollect state
+    private void AdjustMaterial(bool toActive)
+    {
+        if (toActive)
+        {
+            markerMaterial.SetColor("_BaseColor", activeColor);
+        }
+        else
+        {
+            markerMaterial.SetColor("_BaseColor", inactiveColor);
+        }
+    }
+
+    /*
+    // If other is a collectable remove it from list
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
+        {
+
+            RemoveCollectableFromList(collectable);
+        }
+    }
+    */
+
+    /*
+    private void Update()
+    {
+        UpdateTimer();
+        AdjustMaterial();
+        HandleCollection();  
+    }
+     */
+
+    /*
     // Handle timer
     private void UpdateTimer()
     {
@@ -186,33 +253,20 @@ public class CrateCollector : MonoBehaviour
         currentCollectionScore = 0f;
 
 
-        StarScore.CheckStarScore();
-
-
         // Hide text
         OnCollectionEnded();
     }
+     */
 
-    // Change material on object based on canCollect state
-    private void AdjustMaterial()
-    {
-        if (canCollect)
-        {
-            markerMaterial.SetColor("_BaseColor", activeColor);
-        }
-        else
-        {
-            markerMaterial.SetColor("_BaseColor", inactiveColor);
-        }
-    }
 
-    // These functions could eventually be bound to an action so they aren't directly invoked via code
+
+    /*
     void OnCollectionStarted()
     {
         // Show requirement text
         onCollectionPeriodStarted.Invoke();
 
-        if (randomiseRequirementOnCollection) UpdateRequirement();
+        // if (randomiseRequirementOnCollection) UpdateRequirement();
     }
 
     void OnCollectionEnded()
@@ -220,12 +274,14 @@ public class CrateCollector : MonoBehaviour
         // Hide requirement text
         onCollectionPeriodEnded.Invoke();
     }
+     */
 
+    /*
     // Add the collectable to the toCollect list
     void AddCollectableToList(ICollectable collectable)
     {
         if (toCollect.Contains(collectable)) return;
-        if (!requireCorrectCrateTag || collectable.Tag != collectionRequierment.requiredTag) return;
+        if (!requireCorrectCrateTag || collectable.Tag != collectionRequirement.requiredTag) return;
 
         toCollect.Add(collectable);
         collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed += RemoveCollectableFromList;
@@ -241,4 +297,8 @@ public class CrateCollector : MonoBehaviour
         collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed -= RemoveCollectableFromList;
         Debug.Log("Removing object");
     }
+     */
+
+
+
 }

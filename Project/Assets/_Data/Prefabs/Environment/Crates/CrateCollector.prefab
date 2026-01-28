@@ -95,10 +95,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5927151463584524728}
-  - component: {fileID: 4703953586703455807}
   - component: {fileID: -8470803039637684445}
-  - component: {fileID: 2653370262760568128}
   - component: {fileID: 1400098932431170260}
+  - component: {fileID: 2653370262760568128}
+  - component: {fileID: 4703953586703455807}
+  - component: {fileID: 3022961426910664996}
+  - component: {fileID: 6335249239934454193}
   m_Layer: 6
   m_Name: CrateCollector
   m_TagString: Untagged
@@ -122,57 +124,6 @@ Transform:
   - {fileID: 3778199760876918544}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4703953586703455807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3783382105403885408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6f2533b8bc2d93d43bcbf5f651c6f1a7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  marker: {fileID: 2610756185775498066}
-  collectionInterval: 30
-  activeColor: {r: 0, g: 1, b: 0, a: 0.47058824}
-  inactiveColor: {r: 1, g: 0, b: 0, a: 0.47058824}
-  requirementRange: {x: 1, y: 10}
-  scoreObject: {fileID: 11400000, guid: a81eb5c0ad339a34ebbcbe11b677fbaa, type: 2}
-  randomiseRequirementOnCollection: 0
-  requireCorrectCrateTag: 0
-  randomiseRequiredCorrectCrateTag: 1
-  onCollection:
-    m_PersistentCalls:
-      m_Calls: []
-  onRequirementUpdate:
-    m_PersistentCalls:
-      m_Calls: []
-  onScoreUpdated:
-    m_PersistentCalls:
-      m_Calls: []
-  onCollectionPeriodStarted:
-    m_PersistentCalls:
-      m_Calls: []
-  onCollectionPeriodEnded:
-    m_PersistentCalls:
-      m_Calls: []
-  onQuotaMet:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 2653370262760568128}
-        m_TargetAssemblyTypeName: AudioEnabler, Assembly-CSharp
-        m_MethodName: Enable
-        m_Mode: 5
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: QuotaMet
-          m_BoolArgument: 0
-        m_CallState: 2
 --- !u!136 &-8470803039637684445
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -196,22 +147,6 @@ CapsuleCollider:
   m_Height: 10
   m_Direction: 1
   m_Center: {x: 0, y: 2.5, z: 0}
---- !u!114 &2653370262760568128
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3783382105403885408}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 960f28106e982524eb33a3af701411e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audio_source:
-  - {fileID: 1400098932431170260}
-  names:
-  - QuotaMet
 --- !u!82 &1400098932431170260
 AudioSource:
   m_ObjectHideFlags: 0
@@ -309,3 +244,112 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &2653370262760568128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783382105403885408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 960f28106e982524eb33a3af701411e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audio_source:
+  - {fileID: 1400098932431170260}
+  names:
+  - QuotaMet
+--- !u!114 &4703953586703455807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783382105403885408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f2533b8bc2d93d43bcbf5f651c6f1a7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  marker: {fileID: 2610756185775498066}
+  scoreObject: {fileID: 11400000, guid: a81eb5c0ad339a34ebbcbe11b677fbaa, type: 2}
+  scheduler: {fileID: 3022961426910664996}
+  activeColor: {r: 0, g: 1, b: 0, a: 0.47058824}
+  inactiveColor: {r: 1, g: 0, b: 0, a: 0.47058824}
+  onCollection:
+    m_PersistentCalls:
+      m_Calls: []
+  onRequirementUpdate:
+    m_PersistentCalls:
+      m_Calls: []
+  onScoreUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+  onCollectionPeriodStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onCollectionPeriodEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  onQuotaMet:
+    m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2653370262760568128}
+        m_TargetAssemblyTypeName: AudioEnabler, Assembly-CSharp
+        m_MethodName: Enable
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: QuotaMet
+          m_BoolArgument: 0
+        m_CallState: 2
+  onEvaluatedRequirement:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &3022961426910664996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783382105403885408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79d89dd6a4fa2f94eb0e6bd72ccc598b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  timer: {fileID: 6335249239934454193}
+  collector: {fileID: 4703953586703455807}
+  scheduleObject: {fileID: 11400000, guid: a8e7bf757a2397044bad1eb27900b1c8, type: 2}
+  SchedulerStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  SchedulerEnded:
+    m_PersistentCalls:
+      m_Calls: []
+  SchedulerUpdated:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &6335249239934454193
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3783382105403885408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f92cff4f332bf54a88d1ac7e88b15b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 1
+  repeat: 0
+  autoStart: 0
+  timeout:
+    m_PersistentCalls:
+      m_Calls: []
+  paused: 0
