@@ -68,7 +68,7 @@ namespace StarterAssets
 		private float _speed;
 		private float _rotationVelocity;
 		private float _verticalVelocity;
-		private float _terminalVelocity = 53.0f;
+		private float _terminalVelocity = 30.0f;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
@@ -137,7 +137,7 @@ namespace StarterAssets
 
 		private void Update()
 		{
-			//JumpAndGravity();
+			doGravity();
 			GroundedCheck();
 			Move();
 		}
@@ -146,6 +146,11 @@ namespace StarterAssets
 		{
 			CameraRotation();
 		}
+
+		private void doGravity()
+		{
+			_controller.Move(!Grounded ? -gameObject.transform.up * _terminalVelocity * Time.deltaTime : new Vector3());
+        }
 
 		private void GroundedCheck()
 		{

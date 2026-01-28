@@ -2368,7 +2368,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 80
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!65 &2398115538353509990
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2460,7 +2460,7 @@ MonoBehaviour:
   break_multiplier: 2
   speed: 0
   max_speed: 9
-  rotate_speed: 100
+  rotate_speed: 65
   groundCheck: {fileID: 991374653987402780}
   is_grounded: 0
   groundMask:
