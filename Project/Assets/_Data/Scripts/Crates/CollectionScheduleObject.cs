@@ -11,4 +11,17 @@ public class CollectionScheduleObject : ScriptableObject
     TimedCrateRequirement[] collectionSchedule;
 
     public TimedCrateRequirement[] CollectionSchedule => collectionSchedule;
+
+    // This should use some special attribute so it's not editable in the inspector
+    [SerializeField]
+    float totalTime = 0f;
+
+    public float TotalTime => totalTime;
+
+    private void OnValidate()
+    {
+        float t = 0f;
+        foreach (var r in collectionSchedule) t += r.timeLimit;
+        totalTime = t;
+    }
 }
