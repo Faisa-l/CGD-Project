@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using static CrateExtensions;
@@ -46,6 +47,7 @@ public class CrateCollector : MonoBehaviour
     float currentCollectionScore = 0f;
     bool canCollect = false;
     bool wasStarted = false;
+    List<ICollectable> forCollection;
     CrateRequirement collectionRequirement;
     Material markerMaterial;
 
@@ -65,6 +67,7 @@ public class CrateCollector : MonoBehaviour
             markerMaterial.SetColor("_BaseColor", activeColor);
         }
 
+        forCollection = new List<ICollectable>();
         scheduler.SchedulerStarted.AddListener(DoCollect);
         scheduler.SchedulerUpdated.AddListener(UpdateFromSchedule);
         scheduler.SchedulerEnded.AddListener(NoCollect);
@@ -130,15 +133,19 @@ public class CrateCollector : MonoBehaviour
     // Will attempt to collect the given collectable
     void TryCollect(ICollectable collectable)
     {
-        if (canCollect && collectable.CanCollect && collectable.Tag == collectionRequirement.requiredTag)
+        if (canCollect && collectable.CanCollect && collectable.Tag == collectionRequirement.requiredTag && !forCollection.Contains(collectable))
         {
-            CollectCrate(collectable);
+            forCollection.Add(collectable);
+            // CollectCrate(collectable);
         }
     }
 
     // Check if the current requirement was met
     void EvaluateRequirement()
     {
+        // Collect everything that should be collected
+        foreach(var c in forCollection) CollectCrate(c);
+
         bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredCount);
         onEvaluatedRequirement.Invoke(isSuccess);
                                                             // These mainly invoke:
@@ -146,6 +153,8 @@ public class CrateCollector : MonoBehaviour
         onScoreUpdated.Invoke(collectionScore);             // Update panel which displays the total score
         onQuotaMet.Invoke();                                // Audio
         currentCollectionScore = 0f;
+
+        forCollection.Clear();
     }
 
     // For invocation whenever the schedule changes the current collection requirement
