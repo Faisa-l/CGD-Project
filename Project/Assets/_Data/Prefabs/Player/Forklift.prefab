@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: 3380377948262927094}
   - component: {fileID: 542801422323596620}
   - component: {fileID: 7762359229333161516}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: LeftCollider
   m_TagString: LeftSide
   m_Icon: {fileID: 0}
@@ -95,7 +95,7 @@ Transform:
   m_GameObject: {fileID: 245632516213508495}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -1.55, y: 3.94, z: -2.06}
+  m_LocalPosition: {x: -2.5, y: 3.94, z: -2.06}
   m_LocalScale: {x: 1.9009374, y: 6.193878, z: 6.425}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -218,7 +218,7 @@ GameObject:
   - component: {fileID: 8820644083078688222}
   - component: {fileID: 3597807902304968959}
   - component: {fileID: 1254768092755803008}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: BacksideCollider
   m_TagString: BackSide
   m_Icon: {fileID: 0}
@@ -234,7 +234,7 @@ Transform:
   m_GameObject: {fileID: 364160405198055572}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.16, y: 2.7, z: -4.75}
+  m_LocalPosition: {x: 0.16, y: 3.99, z: -5.93}
   m_LocalScale: {x: 1.625, y: 6.193878, z: 5.9817734}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -789,7 +789,7 @@ GameObject:
   - component: {fileID: 7426424104772039309}
   - component: {fileID: 7755964623885033293}
   - component: {fileID: 1231065985925498568}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: RightCollider
   m_TagString: RightSide
   m_Icon: {fileID: 0}
@@ -805,7 +805,7 @@ Transform:
   m_GameObject: {fileID: 2833143252477430518}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.55, y: 3.9400003, z: -2.06}
+  m_LocalPosition: {x: 2.5, y: 3.9400003, z: -2.06}
   m_LocalScale: {x: 1.9009374, y: 6.193878, z: 6.425}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2465,7 +2465,7 @@ MonoBehaviour:
   is_grounded: 0
   groundMask:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 0
   groundDistance: 0.4
   wheelRadius: 0.5
   gravity: -9.81
