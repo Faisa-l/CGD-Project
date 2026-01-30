@@ -32,10 +32,10 @@ public class CrateCollector : MonoBehaviour
     UnityEvent<float> onCollection;
 
     [SerializeField]
-    UnityEvent<CrateRequirement> onRequirementUpdate;
+    UnityEvent<TimedCrateRequirement> onRequirementUpdate;
 
     [SerializeField]
-    UnityEvent<float> onScoreUpdated;
+    UnityEvent<float> onScoreUpdated, onItemsForCollectionChanged;
 
     [SerializeField]
     UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded, onQuotaMet;
@@ -48,10 +48,10 @@ public class CrateCollector : MonoBehaviour
     bool canCollect = false;
     bool wasStarted = false;
     List<ICollectable> forCollection;
-    CrateRequirement collectionRequirement;
+    TimedCrateRequirement collectionRequirement;
     Material markerMaterial;
 
-    public int Quota => collectionRequirement.requiredCount;
+    public int Quota => collectionRequirement.requiredScore;
     public CrateTag RequiredTag => collectionRequirement.requiredTag;
 
     void Initialise()
@@ -98,6 +98,34 @@ public class CrateCollector : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent(out ICollectable collectable))
+        {
+            RemoveCollectable(collectable);
+        }
+    }
+
+    // Will attempt to collect the given collectable
+    void TryCollect(ICollectable collectable)
+    {
+        if (canCollect && collectable.CanCollect && collectable.Tag == collectionRequirement.requiredTag && !forCollection.Contains(collectable))
+        {
+            forCollection.Add(collectable);
+            onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
+        }
+    }
+
+    // Remove collectable from the list
+    void RemoveCollectable(ICollectable collectable)
+    {
+        if (canCollect && forCollection.Contains(collectable))
+        {
+            forCollection.Remove(collectable);
+            onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
+        }
+    }
+
     // Starts the collector for collecting
     public void StartCollector()
     {
@@ -110,14 +138,8 @@ public class CrateCollector : MonoBehaviour
     {
         if (!scheduler.Running) return;
 
-        var req = new CrateRequirement()
-        {
-            requiredCount = scheduler.CurrentRequirement.requiredCount,
-            requiredTag = scheduler.CurrentRequirement.requiredTag,
-        };
-
-        collectionRequirement = req;
-        onRequirementUpdate.Invoke(req);
+        collectionRequirement = scheduler.CurrentRequirement;
+        onRequirementUpdate.Invoke(collectionRequirement);
     }
 
     // Collects the crate (removes the object and adds some score)
@@ -129,24 +151,13 @@ public class CrateCollector : MonoBehaviour
         Destroy(collectable.GameObject);
     }
 
-
-    // Will attempt to collect the given collectable
-    void TryCollect(ICollectable collectable)
-    {
-        if (canCollect && collectable.CanCollect && collectable.Tag == collectionRequirement.requiredTag && !forCollection.Contains(collectable))
-        {
-            forCollection.Add(collectable);
-            // CollectCrate(collectable);
-        }
-    }
-
     // Check if the current requirement was met
     void EvaluateRequirement()
     {
         // Collect everything that should be collected
         foreach(var c in forCollection) CollectCrate(c);
 
-        bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredCount);
+        bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredScore);
         onEvaluatedRequirement.Invoke(isSuccess);
                                                             // These mainly invoke:
         onCollection.Invoke(currentCollectionScore);        // Panel to show how much was collected for this scheduled requirement
@@ -204,6 +215,17 @@ public class CrateCollector : MonoBehaviour
         {
             markerMaterial.SetColor("_BaseColor", inactiveColor);
         }
+    }
+
+    // Returns predicted score
+    float GetScoreWaitingInCollection()
+    {
+        float s = 0f;
+        foreach(var item in forCollection)
+        {
+            s += item.Score;
+        }
+        return s;
     }
 
     /*

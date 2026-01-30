@@ -21,7 +21,7 @@ public static class CrateExtensions
     public struct TimedCrateRequirement
     {
         public CrateTag requiredTag;
-        public int requiredCount;
+        public int requiredScore;
         [Min(0f)]
         public float timeLimit;
     }
