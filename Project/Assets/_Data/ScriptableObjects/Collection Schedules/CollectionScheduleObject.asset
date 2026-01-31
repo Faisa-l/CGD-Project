@@ -15,11 +15,11 @@ MonoBehaviour:
   collectionSchedule:
   - requiredTag: 0
     requiredScore: 300
-    timeLimit: 30
+    timeLimit: 2
   - requiredTag: 1
     requiredScore: 500
     timeLimit: 60
   - requiredTag: 2
     requiredScore: 500
     timeLimit: 60
-  totalTime: 150
+  totalTime: 122

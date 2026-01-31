@@ -158,9 +158,9 @@ public class CrateCollector : MonoBehaviour
         foreach(var c in forCollection) CollectCrate(c);
 
         bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredScore);
+        
         onEvaluatedRequirement.Invoke(isSuccess);
-                                                            // These mainly invoke:
-        onCollection.Invoke(currentCollectionScore);        // Panel to show how much was collected for this scheduled requirement
+        onCollection.Invoke(currentCollectionScore);
         onScoreUpdated.Invoke(collectionScore);             // Update panel which displays the total score
         onQuotaMet.Invoke();                                // Audio
         currentCollectionScore = 0f;
