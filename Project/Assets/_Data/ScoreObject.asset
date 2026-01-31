@@ -13,5 +13,7 @@ MonoBehaviour:
   m_Name: ScoreObject
   m_EditorClassIdentifier: 
   maxScore: 1000
-  currentScore: 300
+  onScoreChanged:
+    m_PersistentCalls:
+      m_Calls: []
   starRangePercentage: 0.2

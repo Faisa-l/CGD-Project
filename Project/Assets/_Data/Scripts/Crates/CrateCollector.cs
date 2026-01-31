@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 using static CrateExtensions;
@@ -147,7 +148,6 @@ public class CrateCollector : MonoBehaviour
     {
         collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
-        scoreObject.currentScore = collectionScore;
         Destroy(collectable.GameObject);
     }
 
@@ -156,12 +156,10 @@ public class CrateCollector : MonoBehaviour
     {
         // Collect everything that should be collected
         foreach(var c in forCollection) CollectCrate(c);
-
+        scoreObject.AddScore(currentCollectionScore);
         bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredScore);
         
-        onEvaluatedRequirement.Invoke(isSuccess);
-        onCollection.Invoke(currentCollectionScore);
-        onScoreUpdated.Invoke(collectionScore);             // Update panel which displays the total score
+        onEvaluatedRequirement.Invoke(isSuccess);    
         onQuotaMet.Invoke();                                // Audio
         currentCollectionScore = 0f;
 
@@ -204,6 +202,9 @@ public class CrateCollector : MonoBehaviour
     void DoCollect() => SetCollection(true);
     void NoCollect() => SetCollection(false);
 
+    // Returns predicted score
+    float GetScoreWaitingInCollection() => forCollection.Sum(item => item.Score);
+
     // Change material on object based on canCollect state
     private void AdjustMaterial(bool toActive)
     {
@@ -215,17 +216,6 @@ public class CrateCollector : MonoBehaviour
         {
             markerMaterial.SetColor("_BaseColor", inactiveColor);
         }
-    }
-
-    // Returns predicted score
-    float GetScoreWaitingInCollection()
-    {
-        float s = 0f;
-        foreach(var item in forCollection)
-        {
-            s += item.Score;
-        }
-        return s;
     }
 
     /*

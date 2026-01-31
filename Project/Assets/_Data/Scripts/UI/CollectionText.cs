@@ -12,7 +12,7 @@ public class CollectionText : MonoBehaviour
 
     WaitForSeconds interval;
 
-    readonly GameManager GM = GameManager.instance;
+    GameManager GM => GameManager.instance;
 
     private void Awake()
     {
