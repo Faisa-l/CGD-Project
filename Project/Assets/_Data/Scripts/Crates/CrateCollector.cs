@@ -33,16 +33,13 @@ public class CrateCollector : MonoBehaviour
     [Space, Header("Event Bindings")]
 
     [SerializeField]
-    UnityEvent<float> onCollection;
-
-    [SerializeField]
     UnityEvent<TimedCrateRequirement> onRequirementUpdate;
 
     [SerializeField]
     UnityEvent<float> onScoreUpdated, onItemsForCollectionChanged;
 
     [SerializeField]
-    UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded, onQuotaMet;
+    UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded;
 
     [SerializeField]
     UnityEvent<bool> onEvaluatedRequirement;
@@ -250,109 +247,4 @@ public class CrateCollector : MonoBehaviour
         }
         audioEnabler.Enable("Ended");
     }
-
-    /*
-    // If other is a collectable remove it from list
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
-        {
-
-            RemoveCollectableFromList(collectable);
-        }
-    }
-    */
-
-    /*
-    private void Update()
-    {
-        UpdateTimer();
-        AdjustMaterial();
-        HandleCollection();  
-    }
-     */
-
-    /*
-    // Handle timer
-    private void UpdateTimer()
-    {
-        if (canCollect == true) return;
-
-        timer += Time.deltaTime;
-        if (timer < collectionInterval) return;
-
-        canCollect = true;
-
-        OnCollectionStarted();
-        return;
-    }
-
-    // Collects items in toCollect if canCollect is true
-    private void HandleCollection()
-    {
-        if (!canCollect) return;
-        if (!RequirementMet) return;
-        
-        foreach (ICollectable item in toCollect)
-        {
-            CollectCrate(item);
-        }
-
-        toCollect.Clear();
-        timer = 0f;
-        canCollect = false;
-        onCollection.Invoke(currentCollectionScore);
-        onScoreUpdated.Invoke(collectionScore);
-        onQuotaMet.Invoke();
-        currentCollectionScore = 0f;
-
-
-        // Hide text
-        OnCollectionEnded();
-    }
-     */
-
-
-
-    /*
-    void OnCollectionStarted()
-    {
-        // Show requirement text
-        onCollectionPeriodStarted.Invoke();
-
-        // if (randomiseRequirementOnCollection) UpdateRequirement();
-    }
-
-    void OnCollectionEnded()
-    {
-        // Hide requirement text
-        onCollectionPeriodEnded.Invoke();
-    }
-     */
-
-    /*
-    // Add the collectable to the toCollect list
-    void AddCollectableToList(ICollectable collectable)
-    {
-        if (toCollect.Contains(collectable)) return;
-        if (!requireCorrectCrateTag || collectable.Tag != collectionRequirement.requiredTag) return;
-
-        toCollect.Add(collectable);
-        collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed += RemoveCollectableFromList;
-        Debug.Log("Added object");
-    }
-
-    // Removes the object in toCollect if it was picked up
-    void RemoveCollectableFromList(ICollectable collectable)
-    {
-        if (!toCollect.Contains(collectable)) return;
-
-        toCollect.Remove(collectable);
-        collectable.GameObject.GetComponent<PhysicsPickup>().OnGrabbed -= RemoveCollectableFromList;
-        Debug.Log("Removing object");
-    }
-     */
-
-
-
 }
