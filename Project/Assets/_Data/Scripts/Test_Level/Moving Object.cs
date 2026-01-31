@@ -4,23 +4,24 @@ public class MovingObject : MonoBehaviour
 {
 
     public int speed;
-    public float switchTime = 2f;
+    public float switchTime;
+    private float timer;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        timer += switchTime;
     }
 
     // Update is called once per frame
     void Update()
     {
         
-        switchTime -= Time.deltaTime;
-        if (switchTime <= 0f)
+        timer -= Time.deltaTime;
+        if (timer <= 0f)
         {
             speed = -speed;
-            switchTime = 2f;
+            timer += switchTime;
         }
         transform.Translate(Vector3.forward * speed * Time.deltaTime);
     }
