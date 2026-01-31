@@ -21,7 +21,7 @@ public static class CrateExtensions
     public struct ScheduleQuota
     {
         public CrateTag requiredTag;
-        public int requiredScore;
+        public float requiredScore;
         [Min(0f)]
         public float timeLimit;
     }

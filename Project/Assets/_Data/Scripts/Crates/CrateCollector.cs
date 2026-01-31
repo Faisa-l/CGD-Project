@@ -36,7 +36,7 @@ public class CrateCollector : MonoBehaviour
     UnityEvent<ScheduleQuota> onRequirementUpdate;
 
     [SerializeField]
-    UnityEvent<float> onScoreUpdated, onItemsForCollectionChanged;
+    UnityEvent<float> onItemsForCollectionChanged;
 
     [SerializeField]
     UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded;
@@ -44,7 +44,6 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     UnityEvent<bool> onEvaluatedRequirement;
 
-    float collectionScore = 0f;
     float currentCollectionScore = 0f;
     bool canCollect = false;
     bool wasStarted = false;
@@ -52,7 +51,7 @@ public class CrateCollector : MonoBehaviour
     ScheduleQuota collectionRequirement;
     Material markerMaterial;
 
-    public int Quota => collectionRequirement.requiredScore;
+    public float Quota => collectionRequirement.requiredScore;
     public CrateTag RequiredTag => collectionRequirement.requiredTag;
 
     private void OnValidate()
@@ -93,7 +92,7 @@ public class CrateCollector : MonoBehaviour
     {
         Initialise();
         StartCollector();
-        onScoreUpdated.Invoke(collectionScore);
+        scoreObject.SetScore(0f);
     }
 
     private void OnDestroy()
@@ -161,7 +160,6 @@ public class CrateCollector : MonoBehaviour
     // Collects the crate (removes the object and adds some score)
     private void CollectCrate(ICollectable collectable)
     {
-        collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
         Destroy(collectable.GameObject);
     }
