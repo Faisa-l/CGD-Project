@@ -12,7 +12,7 @@ public class CollectionText : MonoBehaviour
 
     WaitForSeconds interval;
 
-    GameManager GM => GameManager.instance;
+    bool isPlaying => GameManager.instance.currentState == GameManager.instance.playingState;
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class CollectionText : MonoBehaviour
     public void UpdateText(bool passed)
     {
         // The "Quota updated" text will only appear if the current game state is in the playing state
-        display.SetText($"{(passed ? "Passed" : "Missed")} quota\r\n{(GM.currentState == GM.playingState ? "Quota updated" : "")}");
+        display.SetText($"{(passed ? "Passed" : "Missed")} quota\r\n{(isPlaying ? "Quota updated" : "")}");
         gameObject.SetActive(true);
         StartCoroutine(TogglePanelVisibility());
     }

@@ -19,6 +19,9 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     CollectorScheduler scheduler;
 
+    [SerializeField]
+    AudioEnabler audioEnabler;
+
     [Space, Header("Settings")]
 
     [SerializeField]
@@ -55,6 +58,19 @@ public class CrateCollector : MonoBehaviour
     public int Quota => collectionRequirement.requiredScore;
     public CrateTag RequiredTag => collectionRequirement.requiredTag;
 
+    private void OnValidate()
+    {
+        // Should I even bother doing this?
+        try
+        {
+            audioEnabler = GetComponentInChildren<AudioEnabler>();
+        }
+        catch (System.Exception)
+        {
+            throw;
+        }
+    }
+
     void Initialise()
     {
         if (!TryGetComponent(out Collider collectorCollider))
@@ -69,6 +85,7 @@ public class CrateCollector : MonoBehaviour
         }
 
         forCollection = new List<ICollectable>();
+        onEvaluatedRequirement.AddListener(ProcessSuccessFailAudio);
         scheduler.SchedulerStarted.AddListener(DoCollect);
         scheduler.SchedulerUpdated.AddListener(UpdateFromSchedule);
         scheduler.SchedulerEnded.AddListener(NoCollect);
@@ -84,6 +101,7 @@ public class CrateCollector : MonoBehaviour
 
     private void OnDestroy()
     {
+        onEvaluatedRequirement.RemoveListener(ProcessSuccessFailAudio);
         scheduler.SchedulerStarted.RemoveListener(DoCollect);
         scheduler.SchedulerUpdated.RemoveListener(UpdateFromSchedule);
         scheduler.SchedulerEnded.RemoveListener(NoCollect);
@@ -158,9 +176,8 @@ public class CrateCollector : MonoBehaviour
         foreach(var c in forCollection) CollectCrate(c);
         scoreObject.AddScore(currentCollectionScore);
         bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredScore);
-        
-        onEvaluatedRequirement.Invoke(isSuccess);    
-        onQuotaMet.Invoke();                                // Audio
+
+        onEvaluatedRequirement.Invoke(isSuccess);
         currentCollectionScore = 0f;
 
         forCollection.Clear();
@@ -216,6 +233,22 @@ public class CrateCollector : MonoBehaviour
         {
             markerMaterial.SetColor("_BaseColor", inactiveColor);
         }
+    }
+
+    // Play successs or fail audio only if the state is in playing
+    void ProcessSuccessFailAudio(bool pass)
+    {
+        if (audioEnabler == null)
+        {
+            Debug.LogWarning("Crate collector does not have an AudioEnabler to play sounds from");
+        }
+
+        if (GameManager.instance.currentState == GameManager.instance.playingState)
+        {
+            audioEnabler.Enable(pass ? "Pass" : "Fail");
+            return;
+        }
+        audioEnabler.Enable("Ended");
     }
 
     /*
