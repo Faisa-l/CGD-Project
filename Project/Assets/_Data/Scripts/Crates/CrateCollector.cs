@@ -33,7 +33,7 @@ public class CrateCollector : MonoBehaviour
     [Space, Header("Event Bindings")]
 
     [SerializeField]
-    UnityEvent<TimedCrateRequirement> onRequirementUpdate;
+    UnityEvent<ScheduleQuota> onRequirementUpdate;
 
     [SerializeField]
     UnityEvent<float> onScoreUpdated, onItemsForCollectionChanged;
@@ -49,7 +49,7 @@ public class CrateCollector : MonoBehaviour
     bool canCollect = false;
     bool wasStarted = false;
     List<ICollectable> forCollection;
-    TimedCrateRequirement collectionRequirement;
+    ScheduleQuota collectionRequirement;
     Material markerMaterial;
 
     public int Quota => collectionRequirement.requiredScore;

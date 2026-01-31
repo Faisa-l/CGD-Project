@@ -8,9 +8,9 @@ using static CrateExtensions;
 public class CollectionScheduleObject : ScriptableObject
 {
     [SerializeField]
-    TimedCrateRequirement[] collectionSchedule;
+    ScheduleQuota[] collectionSchedule;
 
-    public TimedCrateRequirement[] CollectionSchedule => collectionSchedule;
+    public ScheduleQuota[] CollectionSchedule => collectionSchedule;
 
     // This should use some special attribute so it's not editable in the inspector
     [SerializeField]

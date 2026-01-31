@@ -18,7 +18,7 @@ public static class CrateExtensions
 
     // A CrateRequirement with a time limit
     [Serializable]
-    public struct TimedCrateRequirement
+    public struct ScheduleQuota
     {
         public CrateTag requiredTag;
         public int requiredScore;

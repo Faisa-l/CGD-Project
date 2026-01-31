@@ -10,7 +10,7 @@ public class RequirementsText : MonoBehaviour
     // [SerializeField, TextArea]
     // string displayText = "Crates Required\r\n";
 
-    CrateExtensions.TimedCrateRequirement requirement;
+    CrateExtensions.ScheduleQuota requirement;
     float trackedScore;
 
     string DisplayedText => $"Crate: {requirement.requiredTag}\r\nQuota: {trackedScore}/{requirement.requiredScore}";
@@ -22,7 +22,7 @@ public class RequirementsText : MonoBehaviour
     }
 
     // Assigned to event -> Update displated requirement and reset tracked score
-    public void OnRequirementUpdated(CrateExtensions.TimedCrateRequirement requirement)
+    public void OnRequirementUpdated(CrateExtensions.ScheduleQuota requirement)
     {
         this.requirement = requirement;
         trackedScore = 0f;
