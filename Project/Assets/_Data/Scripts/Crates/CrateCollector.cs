@@ -91,8 +91,12 @@ public class CrateCollector : MonoBehaviour
     private void Awake()
     {
         Initialise();
-        StartCollector();
         scoreObject.SetScore(0f);
+    }
+
+    private void Start()
+    {
+        StartCollector();
     }
 
     private void OnDestroy()

@@ -42,7 +42,7 @@ public class TimeManager : MonoBehaviour
 	private void Start()
 	{
 		// Set time to total schedule time
-		CurrentTimeRemaining = currentSchedule.TotalTime;
+		CurrentTimeRemaining = currentSchedule.TotalTime - 0.01f;
 		
 		// Subscribe to events
 		GameOverState.onEntered += StopTimer;

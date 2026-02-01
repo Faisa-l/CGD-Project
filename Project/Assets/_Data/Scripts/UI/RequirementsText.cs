@@ -17,7 +17,7 @@ public class RequirementsText : MonoBehaviour
 
     private void Awake()
     {
-        trackedScore = 0;
+        trackedScore = 0f;
         HideText();
     }
 
