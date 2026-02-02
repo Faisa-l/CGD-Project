@@ -58,10 +58,14 @@ public class CollectorScheduler : MonoBehaviour
         timer.repeat = false;
         timer.autoStart = false;
         BonusQuotaMultipler = 1f;
+    }
+
+    private void OnEnable()
+    {
         timer.timeout.AddListener(UpdateSchedule);
     }
 
-    private void OnDestroy()
+    private void OnDisable()
     {
         timer.timeout.RemoveListener(UpdateSchedule);
     }

@@ -81,11 +81,6 @@ public class CrateCollector : MonoBehaviour
         }
 
         forCollection = new List<ICollectable>();
-        onEvaluatedRequirement.AddListener(ProcessSuccessFailAudio);
-        scheduler.SchedulerStarted.AddListener(DoCollect);
-        scheduler.SchedulerUpdated.AddListener(UpdateFromSchedule);
-        scheduler.SchedulerEnded.AddListener(NoCollect);
-        scheduler.SchedulerEnded.AddListener(EvaluateRequirement);
     }
 
     private void Awake()
@@ -94,12 +89,15 @@ public class CrateCollector : MonoBehaviour
         scoreObject.SetScore(0f);
     }
 
-    private void Start()
+    private void OnEnable()
     {
-        StartCollector();
+        onEvaluatedRequirement.AddListener(ProcessSuccessFailAudio);
+        scheduler.SchedulerStarted.AddListener(DoCollect);
+        scheduler.SchedulerUpdated.AddListener(UpdateFromSchedule);
+        scheduler.SchedulerEnded.AddListener(NoCollect);
+        scheduler.SchedulerEnded.AddListener(EvaluateRequirement);
     }
-
-    private void OnDestroy()
+    private void OnDisable()
     {
         onEvaluatedRequirement.RemoveListener(ProcessSuccessFailAudio);
         scheduler.SchedulerStarted.RemoveListener(DoCollect);
@@ -107,6 +105,12 @@ public class CrateCollector : MonoBehaviour
         scheduler.SchedulerEnded.RemoveListener(NoCollect);
         scheduler.SchedulerEnded.RemoveListener(EvaluateRequirement);
     }
+
+    private void Start()
+    {
+        StartCollector();
+    }
+
 
     // If other is a collectable add it to list
     private void OnTriggerEnter(Collider other)

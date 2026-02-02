@@ -26,7 +26,15 @@ public class CrateObject : MonoBehaviour, ICollectable
         collect = true;
         
         // Bind grabbing event to pickup controller
-        if (TryGetComponent(out pickup))
+        if (!TryGetComponent(out pickup))
+        {
+            Debug.LogWarning("No PhysicsPickup on CrateObject");
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (pickup != null)
         {
             pickup.OnGrabbed += OnGrabbed;
             pickup.OnDropped += OnDropped;
