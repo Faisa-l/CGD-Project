@@ -1,18 +1,19 @@
-using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using static CrateExtensions;
 
 /// <summary>
 /// MonoBehaviour which handles spawning collectable crates.
 /// </summary>
+[RequireComponent(typeof(Timer))]
 public class CrateSpawner : MonoBehaviour
 {
     [SerializeField]
     GameObject cratePrefab;
 
-    [SerializeField, Range(0f, 30f)]
-    float spawnInterval = 10f;
+    [SerializeField, Tooltip("Timeout event is assigned at runtime.")]
+    Timer timer;
 
     [SerializeField, Tooltip("How many objects should be spawned for a given tag.")]
     List<SpawnRequirements> spawnRequirements;
@@ -20,7 +21,7 @@ public class CrateSpawner : MonoBehaviour
     // Maps a spawn point to its spawned object
     // This shouldn't be resizing in gameplay; its size should be predetermined in Initalise()
     Dictionary<SpawnNode, ICollectable> spawnedObjects;
-    float timer = 0f;
+    
 
     private void OnValidate()
     {
@@ -30,10 +31,10 @@ public class CrateSpawner : MonoBehaviour
             Debug.LogWarning("Spawner does not have correct crate prefab.");
         }
 
-        // Valid range
-        if (spawnInterval < 0f)
+        if (TryGetComponent(out timer))
         {
-            spawnInterval = 0f;
+            timer.repeat = true;
+            timer.autoStart = false;
         }
     }
 
@@ -60,30 +61,27 @@ public class CrateSpawner : MonoBehaviour
         Initalise();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        bool ready = UpdateTimer();
-
-        if (ready)
+        if (timer != null)
         {
-            // Spawn crates
-            TrySpawnCrates();
+            timer.timeout.AddListener(TrySpawnCrates);
         }
     }
 
-    bool UpdateTimer()
+    private void OnDisable()
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        if (timer != null)
         {
-            timer = 0f;
-            return true;
+            timer.timeout.RemoveListener(TrySpawnCrates);
         }
-        return false;
     }
+
+    public void StartSpawner() => timer.paused = false;
+    public void StopSpawner() => timer.paused = true;
 
     // Attempts to spawn a crate at each point if its mapped GameObject is null
-    void TrySpawnCrates()
+    protected void TrySpawnCrates()
     {
         List<SpawnNode> spawnPoints = new();
 
