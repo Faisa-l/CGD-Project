@@ -54,7 +54,7 @@ public class PlayerManager : MonoBehaviour
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
 
                 player.SwitchCurrentControlScheme(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count-1)]);
-                player.gameObject.GetComponent<PlayerController>().setPlayerGamepad(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
+                player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
             }
 
             // minimap.RepositionPanel(input_manager.maxPlayerCount);
@@ -70,70 +70,51 @@ public class PlayerManager : MonoBehaviour
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
 
                 player.SwitchCurrentControlScheme(LobbyMenuManager.currentPlayers[i]);
-                player.gameObject.GetComponent<PlayerController>().setPlayerGamepad(LobbyMenuManager.currentPlayers[i]);
+                player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(LobbyMenuManager.currentPlayers[i]);
 			}
 		}
 
         blankCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
     }
 
-    public void OnPlayerJoined(PlayerInput input)
-    {
-		print("OnPlayerJoined");
-		
-        GameObject temp;
+    public void OnPlayerJoined(PlayerInput player)
+    {		
         blankCamera.enabled = false;
 
-        inputs.Add(input.gameObject);
+        inputs.Add(player.gameObject);
         player_count++;
 
         if (debug_mode_on)
         {
-            input.GetComponent<CharacterController>().enabled = false;
+            player.gameObject.transform.position = player_positions[player.playerIndex].position;
+            player.gameObject.transform.rotation = player_positions[player.playerIndex].rotation;
 
-            input.gameObject.transform.position = player_positions[input.playerIndex].position;
-            input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
-
-            input.GetComponent<CharacterController>().enabled = true;
-
-            temp = Instantiate(forklift_prefab);
-
-            temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
-            playerJoined.Invoke(player_count, temp.transform);
+            playerJoined.Invoke(player_count, player.gameObject.transform);
 
             return;
         }
 
         players++;
-
         
         if (players == 3)
         {
             blankCamera.enabled = true;
         }
 
-        InputDevice playerDevice = input.devices[0]; // the only device used for player is controller at index 0
+        InputDevice playerDevice = player.devices[0]; // the only device used for player is controller at index 0
 		
 		if (debug_mode_on)
 		{
 			Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
 
-			input.SwitchCurrentControlScheme(playerGamepad);
+			player.SwitchCurrentControlScheme(playerGamepad);
 
-			input.gameObject.GetComponent<PlayerController>().setPlayerGamepad(playerGamepad);
+			player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(playerGamepad);
 		}
 
-		input.GetComponent<CharacterController>().enabled = false;
-
-        input.gameObject.transform.position = player_positions[input.playerIndex].position;
-        input.gameObject.transform.rotation = player_positions[input.playerIndex].rotation;
-
-        input.GetComponent<CharacterController>().enabled = true;
-
-        temp = Instantiate(forklift_prefab);
-
-        temp.transform.position = input.gameObject.transform.position + new Vector3(spawn_offest.x, 0, spawn_offest.y);
+        player.gameObject.transform.position = player_positions[player.playerIndex].position;
+        player.gameObject.transform.rotation = player_positions[player.playerIndex].rotation;
         
-        playerJoined.Invoke(player_count, temp.transform);
+        playerJoined.Invoke(player_count, player.gameObject.transform);
     }
 }

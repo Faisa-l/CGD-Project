@@ -15,7 +15,9 @@ namespace Interaction
 
         public string MessageInteract => isTimed;
 
-        FirstPersonController current_character;
+        DrivingController current_character = null;
+
+        //FirstPersonController current_character;
 		
 		[SerializeField]
 		private bool requiresForklift = false;
@@ -34,12 +36,6 @@ namespace Interaction
 
         public virtual void Interact(InteractableControl interactableControl)
         {
-            if(interactableControl.gameObject.GetComponent<PlayerController>().driving)
-            {
-                return;
-            }
-
-
             if (door.timed)
             {
                 door.opening = true;
@@ -47,8 +43,7 @@ namespace Interaction
             }
             if (!door.timed)
             {
-                Debug.Log("Openning");
-                current_character = interactableControl.gameObject.GetComponent<FirstPersonController>();
+                current_character = interactableControl.gameObject.GetComponent<DrivingController>();
                 current_character.enabled = false;
                 OnButtonPressed.Invoke();
                 door.opening = true;
@@ -57,9 +52,7 @@ namespace Interaction
         }
 
         public virtual void Release()
-        {
-            Debug.Log("AAAAAAAAAAAAA");
-			
+        {		
 			if (current_character)
 			{
 				current_character.enabled = true;
