@@ -115,9 +115,23 @@ public class FloatPickup : MonoBehaviour
             SetPositionInParent(hit.collider.gameObject.transform);
             held_object = hit.collider.gameObject;
             has_object = true;
+
+            // Invoke grab event if it exists
+            if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
+            {
+                Debug.Log("Invoking onpickup");
+                pickup.OnGrabbed.Invoke();
+            }
         }
         else if (object_selected == false && has_object == true)
         {
+            // Invoke drop event if it exists
+            if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
+            {
+                Debug.Log("Invoking ondrop");
+                pickup.OnDropped.Invoke();
+            }
+
             ray_dist = 1.5f;
             UnsetPositionInParent(held_object.transform);
             held_object = null;

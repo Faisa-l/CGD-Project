@@ -16,18 +16,46 @@ public class CrateObject : MonoBehaviour, ICollectable
     [SerializeField]
     bool useColouredTags = true;
 
+    bool collect;
     MaterialPropertyBlock block;
+    PhysicsPickup pickup;
 
     private void Awake()
     {
         block = new MaterialPropertyBlock();
+        collect = true;
+        
+        // Bind grabbing event to pickup controller
+        if (!TryGetComponent(out pickup))
+        {
+            Debug.LogWarning("No PhysicsPickup on CrateObject");
+        }
+    }
+
+    private void OnEnable()
+    {
+        if (pickup != null)
+        {
+            pickup.OnGrabbed += OnGrabbed;
+            pickup.OnDropped += OnDropped;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (pickup != null)
+        {
+            pickup.OnGrabbed -= OnGrabbed;
+            pickup.OnDropped -= OnDropped;
+        }
     }
 
     public float Score
     {
-        get { return score; }
-        set { score = value; }
+        get => score; 
+        set => score = value; 
     }
+
 
     public CrateTag Tag
     {
@@ -46,6 +74,14 @@ public class CrateObject : MonoBehaviour, ICollectable
     }
 
     public GameObject GameObject { get => gameObject; }
- 
-    
+
+    public bool CanCollect 
+    { 
+        get => collect; 
+        set => collect = value; 
+    }
+
+    // Make the object collect-able or not
+    void OnGrabbed() => CanCollect = false;
+    void OnDropped() => CanCollect = true;
 }

@@ -16,6 +16,16 @@ public static class CrateExtensions
         public int requiredCount;
     }
 
+    // A CrateRequirement with a time limit
+    [Serializable]
+    public struct ScheduleQuota
+    {
+        public CrateTag requiredTag;
+        public float requiredScore;
+        [Min(0f)]
+        public float timeLimit;
+    }
+
     // Struct defining a spawn node; a transform for where to spawn and a tag for its spawned object
     // This class also uses the transform's children as points
     [Serializable]
