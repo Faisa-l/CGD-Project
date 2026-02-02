@@ -10,7 +10,11 @@ public class CollectionScheduleObject : ScriptableObject
     [SerializeField]
     ScheduleQuota[] collectionSchedule;
 
+    [SerializeField, Min(1f)]
+    float quotaBonusMultiplier = 1f;
+
     public ScheduleQuota[] CollectionSchedule => collectionSchedule;
+    public float QuotaBonusMultiplier => quotaBonusMultiplier;
 
     // This should use some special attribute so it's not editable in the inspector
     [SerializeField]

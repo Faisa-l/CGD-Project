@@ -15,11 +15,9 @@ MonoBehaviour:
   collectionSchedule:
   - requiredTag: 0
     requiredScore: 300
-    timeLimit: 40
+    timeLimit: 10
   - requiredTag: 1
-    requiredScore: 500
-    timeLimit: 40
-  - requiredTag: 2
-    requiredScore: 500
-    timeLimit: 40
-  totalTime: 120
+    requiredScore: 300
+    timeLimit: 10
+  quotaBonusMultiplier: 1
+  totalTime: 20

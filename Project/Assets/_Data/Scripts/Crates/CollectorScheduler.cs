@@ -22,13 +22,14 @@ public class CollectorScheduler : MonoBehaviour
     /// <summary>
     /// Fired on update when this collector is processing through a schedule (i.e. Running = true).
     /// </summary>
-    public Action<float> OnCollectorUpdate;
+    public Action<float> OnRunningUpdate;
     // This is an action because it will be fired each frame
 
     bool isRunning;
 
     public Queue<ScheduleQuota> Schedule { get; private set; }
     public ScheduleQuota CurrentRequirement { get; private set; }
+    public float BonusQuotaMultipler { get; private set; }
     public bool Running => isRunning;
     public float RemainingQuotaTime => Mathf.Max(CurrentRequirement.timeLimit - timer.ElapsedTime, 0f);
 
@@ -56,6 +57,7 @@ public class CollectorScheduler : MonoBehaviour
         isRunning = false;
         timer.repeat = false;
         timer.autoStart = false;
+        BonusQuotaMultipler = 1f;
         timer.timeout.AddListener(UpdateSchedule);
     }
 
@@ -66,7 +68,7 @@ public class CollectorScheduler : MonoBehaviour
 
     private void Update()
     {
-        if (Running) OnCollectorUpdate?.Invoke(RemainingQuotaTime);
+        if (Running) OnRunningUpdate?.Invoke(RemainingQuotaTime);
     }
 
     /// <summary>
@@ -89,6 +91,7 @@ public class CollectorScheduler : MonoBehaviour
         {
             Schedule.Enqueue(req);
         }
+        BonusQuotaMultipler = scheduleObject.QuotaBonusMultiplier;
     }
 
     // Proceed through the schedule and handle what happens if the schedule is empty

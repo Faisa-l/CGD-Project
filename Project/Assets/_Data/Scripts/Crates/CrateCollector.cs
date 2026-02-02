@@ -173,9 +173,11 @@ public class CrateCollector : MonoBehaviour
     {
         // Collect everything that should be collected
         foreach(var c in forCollection) CollectCrate(c);
-        scoreObject.AddScore(currentCollectionScore);
         bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredScore);
+        currentCollectionScore *= isSuccess ? scheduler.BonusQuotaMultipler : 1f;
 
+        // Add score + invoke events
+        scoreObject.AddScore(currentCollectionScore);
         onEvaluatedRequirement.Invoke(isSuccess);
         currentCollectionScore = 0f;
 
