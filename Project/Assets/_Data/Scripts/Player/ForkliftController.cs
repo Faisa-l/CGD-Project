@@ -286,6 +286,8 @@ public class ForkliftController : MonoBehaviour, IDriveable
 
         audio_enabler.Disable("driving");
 
+        GetComponent<DrivingController>().reset();
+
         Debug.Log("Exited Vehichle");
         onVehichleExit.Invoke();
         return true;
