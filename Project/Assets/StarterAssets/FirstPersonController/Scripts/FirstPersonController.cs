@@ -137,6 +137,8 @@ namespace StarterAssets
 
 		private void FixedUpdate()
 		{
+			if (!_controller.enabled) return;
+
 			doGravity();
 			GroundedCheck();
 			Move();
