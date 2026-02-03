@@ -60,7 +60,7 @@ public class VictoryPanelLayout : MonoBehaviour
 
         int stars = scoreObject.Stars - 1;
 
-        scoreText.text = scoreFormat + scoreObject.currentScore;
+        scoreText.text = scoreFormat + scoreObject.CurrentScore;
         for (int i = 0; i < starIcons.Length; i++)
         {
             if (i <= stars)

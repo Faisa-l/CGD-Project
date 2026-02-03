@@ -52,8 +52,6 @@ public class Timer : MonoBehaviour
         // Is this timer expired
         if (currentTime > duration)
         {
-            timeout.Invoke();
-
             // Restart timer if it should repeat
             if (repeat)
             {
@@ -64,6 +62,7 @@ public class Timer : MonoBehaviour
             {
                 paused = true;
             }
+            timeout.Invoke();
         }
         
     }
@@ -94,6 +93,6 @@ public class Timer : MonoBehaviour
 
     private void OnDestroy()
     {
-        timeout = null;
+        timeout.RemoveAllListeners();
     }
 }

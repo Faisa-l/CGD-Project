@@ -7,7 +7,7 @@ public class StarScore : MonoBehaviour
 
     public void CheckStarScore() 
     {
-        float percentage = ScoreObject.maxScore / ScoreObject.currentScore;
+        float percentage = ScoreObject.maxScore / ScoreObject.CurrentScore;
 
         if (percentage < 2)
         {

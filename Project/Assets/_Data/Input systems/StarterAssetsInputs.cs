@@ -2,6 +2,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using static UnityEngine.Rendering.DebugUI;
 #endif
 
 namespace StarterAssets
@@ -22,13 +23,16 @@ namespace StarterAssets
 		public bool cursorLocked = true;
 		public bool cursorInputForLook = true;
 
+		public InputValue moveInputValue;
+
 #if ENABLE_INPUT_SYSTEM
 		public void OnMove(InputValue value)
 		{
 			MoveInput(value.Get<Vector2>());
-		}
+            moveInputValue = value;
+        }
 
-		public void OnLook(InputValue value)
+        public void OnLook(InputValue value)
 		{
 			if(cursorInputForLook)
 			{
@@ -50,7 +54,7 @@ namespace StarterAssets
 
         public void MoveInput(Vector2 newMoveDirection)
 		{
-			move = newMoveDirection;
+            move = newMoveDirection;
 		} 
 
 		public void LookInput(Vector2 newLookDirection)

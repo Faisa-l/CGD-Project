@@ -68,7 +68,7 @@ namespace StarterAssets
 		private float _speed;
 		private float _rotationVelocity;
 		private float _verticalVelocity;
-		private float _terminalVelocity = 53.0f;
+		private float _terminalVelocity = 30.0f;
 
 		// timeout deltatime
 		private float _jumpTimeoutDelta;
@@ -79,7 +79,6 @@ namespace StarterAssets
 		private PlayerInput _playerInput;
 #endif
 		private CharacterController _controller;
-		private StarterAssetsInputs _input;
 		private GameObject _mainCamera;
 
 		private const float _threshold = 0.01f;
@@ -87,6 +86,12 @@ namespace StarterAssets
 		private AudioEnabler _audioEnabler;
         private PlayerController playerController;
 
+		private InputValue lookInput = new();
+		private InputValue speedControlInput = new();
+		//private InputValue jumpInput = new();
+
+		private Vector2 lookValue = new();
+		private Vector2 speedControl = new();
 
         private bool IsCurrentDeviceMouse
 		{
@@ -115,7 +120,7 @@ namespace StarterAssets
         private void Start()
 		{
 			_controller = GetComponent<CharacterController>();
-			_input = GetComponent<StarterAssetsInputs>();
+
 #if ENABLE_INPUT_SYSTEM
 			_playerInput = GetComponent<PlayerInput>();
 #else
@@ -130,9 +135,11 @@ namespace StarterAssets
 			transform.localRotation = new Quaternion(0, 0, 0, 0);
         }
 
-		private void Update()
+		private void FixedUpdate()
 		{
-			JumpAndGravity();
+			if (!_controller.enabled) return;
+
+			doGravity();
 			GroundedCheck();
 			Move();
 		}
@@ -141,6 +148,11 @@ namespace StarterAssets
 		{
 			CameraRotation();
 		}
+
+		private void doGravity()
+		{
+			_controller.Move(!Grounded ? -gameObject.transform.up * _terminalVelocity * Time.deltaTime : new Vector3());
+        }
 
 		private void GroundedCheck()
 		{
@@ -151,20 +163,21 @@ namespace StarterAssets
 
 		private void CameraRotation()
 		{
+
             // if there is an input
-            if (_input.look.sqrMagnitude >= _threshold)
+            if (lookValue.sqrMagnitude >= _threshold)
 			{
 				//Don't multiply mouse input by Time.deltaTime
 				float deltaTimeMultiplier = IsCurrentDeviceMouse ? 1.0f : Time.deltaTime;
 
-                _rotationVelocity = _input.look.x * RotationSpeed * deltaTimeMultiplier;
-                _cinemachineTargetPitch += _input.look.y * RotationSpeed * deltaTimeMultiplier;
+                _rotationVelocity = lookValue.x * RotationSpeed * deltaTimeMultiplier;
+                _cinemachineTargetPitch += lookValue.y * RotationSpeed * deltaTimeMultiplier;
 
                 if (playerController.driving)
                 {
 					if (useFixedDrivingCamera)
 					{
-						bool isLookingBack = _input.look.y > -_threshold;
+						bool isLookingBack = lookValue.y > -_threshold;
 						playerController.SetCameraPosition(isLookingBack);
 					}
 					else
@@ -208,18 +221,17 @@ namespace StarterAssets
 			if(GetComponent<PlayerController>().driving)
 			{
 				_audioEnabler.Disable("player");
-				GetComponent<PlayerController>().drive(_input);
+				GetComponent<PlayerController>().drive();
 				return;
 			}
 
-            // set target speed based on move speed, sprint speed and if sprint is pressed
-            float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
+            float targetSpeed = MoveSpeed;
 
 			// a simplistic acceleration and deceleration designed to be easy to remove, replace, or iterate upon
 
 			// note: Vector2's == operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 			// if there is no input, set the target speed to 0
-			if (_input.move == Vector2.zero) targetSpeed = 0.0f;
+			if (speedControl == Vector2.zero) targetSpeed = 0.0f;
 
 			//If the player is moveing, play the walking sound
 			if(targetSpeed != 0.0f)
@@ -235,7 +247,7 @@ namespace StarterAssets
 			float currentHorizontalSpeed = new Vector3(_controller.velocity.x, 0.0f, _controller.velocity.z).magnitude;
 
 			float speedOffset = 0.1f;
-			float inputMagnitude = _input.analogMovement ? _input.move.magnitude : 1f;
+			float inputMagnitude = speedControl.magnitude;
 
 			// accelerate or decelerate to target speed
 			if (currentHorizontalSpeed < targetSpeed - speedOffset || currentHorizontalSpeed > targetSpeed + speedOffset)
@@ -253,14 +265,14 @@ namespace StarterAssets
 			}
 
 			// normalise input direction
-			Vector3 inputDirection = new Vector3(_input.move.x, 0.0f, _input.move.y).normalized;
+			Vector3 inputDirection = new Vector3(speedControl.x, 0.0f, speedControl.y).normalized;
 
 			// note: Vector2's != operator uses approximation so is not floating point error prone, and is cheaper than magnitude
 			// if there is a move input rotate player when the player is moving
-			if (_input.move != Vector2.zero)
+			if (speedControl != Vector2.zero)
 			{
 				// move
-				inputDirection = transform.right * _input.move.x + transform.forward * _input.move.y;
+				inputDirection = transform.right * speedControl.x + transform.forward * speedControl.y;
 				
 				// walk animation
 				if (anim)
@@ -274,55 +286,7 @@ namespace StarterAssets
 			}
 
 			// move the player
-			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime) + new Vector3(0.0f, _verticalVelocity, 0.0f) * Time.deltaTime);
-		}
-
-		private void JumpAndGravity()
-		{
-			if (Grounded)
-			{
-				// reset the fall timeout timer
-				_fallTimeoutDelta = FallTimeout;
-
-				// stop our velocity dropping infinitely when grounded
-				if (_verticalVelocity < 0.0f)
-				{
-					_verticalVelocity = -2f;
-				}
-
-				// Jump
-				if (_input.jump && _jumpTimeoutDelta <= 0.0f)
-				{
-					// the square root of H * -2 * G = how much velocity needed to reach desired height
-					_verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
-				}
-
-				// jump timeout
-				if (_jumpTimeoutDelta >= 0.0f)
-				{
-					_jumpTimeoutDelta -= Time.deltaTime;
-				}
-			}
-			else
-			{
-				// reset the jump timeout timer
-				_jumpTimeoutDelta = JumpTimeout;
-
-				// fall timeout
-				if (_fallTimeoutDelta >= 0.0f)
-				{
-					_fallTimeoutDelta -= Time.deltaTime;
-				}
-
-				// if we are not grounded, do not jump
-				_input.jump = false;
-			}
-
-			// apply gravity over time if under terminal (multiply by delta time twice to linearly speed up over time)
-			if (_verticalVelocity < _terminalVelocity)
-			{
-				_verticalVelocity += Gravity * Time.deltaTime;
-			}
+			_controller.Move(inputDirection.normalized * (_speed * Time.deltaTime));
 		}
 
 		private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
@@ -330,6 +294,32 @@ namespace StarterAssets
 			if (lfAngle < -360f) lfAngle += 360f;
 			if (lfAngle > 360f) lfAngle -= 360f;
 			return Mathf.Clamp(lfAngle, lfMin, lfMax);
+		}
+
+		public void OnMove(InputValue input)
+		{
+			speedControl = input.Get<Vector2>();
+        }
+
+		public void OnForkliftMove(InputValue input)
+		{
+			GetComponent<PlayerController>().moveInput(input);
+		}
+
+		public void OnTurn(InputValue input)
+		{
+            GetComponent<PlayerController>().turnInput(input);
+        }
+
+		public void OnLook(InputValue input)
+		{
+			//lookInput = input;
+			lookValue = input.Get<Vector2>();
+		}
+
+		public void OnDrift()
+		{
+			GetComponent<PlayerController>().driftInput();
 		}
 
 		private void OnDrawGizmosSelected()

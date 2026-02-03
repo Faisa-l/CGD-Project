@@ -13,6 +13,10 @@ public class TimeManager : MonoBehaviour
 	public UnityEvent onTimerNearlyRanOut = new UnityEvent();
 	// The level time has ran out and the level with end
 	public UnityEvent onTimerRanOut = new UnityEvent();
+
+	// Current schedule - used to get timer duration
+	[SerializeField]
+	private CollectionScheduleObject currentSchedule;
 	
 	public bool TimerActive { get; private set; } = true;
 	// Time until the level ends
@@ -37,8 +41,8 @@ public class TimeManager : MonoBehaviour
 	
 	private void Start()
 	{
-		// TODO get time from Level ScriptableObject (or other way) rather than hardcoding
-		CurrentTimeRemaining = 300.0f;
+		// Set time to total schedule time
+		CurrentTimeRemaining = currentSchedule.TotalTime - 0.01f;
 		
 		// Subscribe to events
 		GameOverState.onEntered += StopTimer;

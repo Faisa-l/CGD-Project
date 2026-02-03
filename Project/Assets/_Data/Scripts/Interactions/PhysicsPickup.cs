@@ -1,6 +1,5 @@
 using System;
 using Interaction;
-using System.Security.Cryptography;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -24,10 +23,19 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
     [SerializeField]
     UnityEvent onImpactThresholdMet;
 
-    // Invoked when object is dropped
-    public Action<ICollectable> OnGrabbed;
+    // Invoked when object is grabbed or released
+    // Anything which subscribes to these events should ideally be responsible for unsubscribing 
+    public Action OnGrabbed, OnDropped;
 
     public virtual string MessageInteract => "Press <sprite name=\"Xbox_X\"> to pick up";
+
+    private void OnDestroy()
+    {
+        // Make sure everything is unsubscribed in the events when destroying
+        if (OnGrabbed != null) foreach (var d in OnGrabbed.GetInvocationList()) OnGrabbed -= (Action)d;
+        if (OnDropped != null) foreach (var d in OnDropped.GetInvocationList()) OnDropped -= (Action)d;
+        // THIS COULD BREAK but it looks like it shouldn't...
+    }
 
     public void Interact(InteractableControl interactableControl)
     {
@@ -45,15 +53,14 @@ public class PhysicsPickup : MonoBehaviour, Pickupable
 
         pickupController.GrabPickUp(this);
         SetPhysicsValues(true);
-        OnGrabbed?.Invoke(GetComponent<ICollectable>());
-        OnGrabbed = null;
+        OnGrabbed?.Invoke();
     }
 
     public virtual void Drop(PickupController pickupController)
     {
         transform.parent = null;
-
         SetPhysicsValues(false);
+        OnDropped?.Invoke();
     }
 
     public virtual void Place(PickupController pickupController)

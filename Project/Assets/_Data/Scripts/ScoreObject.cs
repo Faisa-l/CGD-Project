@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ScoreObject", menuName = "Scriptable Objects/ScoreObject")]
@@ -9,9 +10,14 @@ public class ScoreObject : ScriptableObject
     public float maxScore = 1000f;
 
     /// <summary>
+    /// Fired when the score changes value.
+    /// </summary>
+    public Action<float> onScoreChanged;
+
+    /// <summary>
     /// Current score held.
     /// </summary>
-    public float currentScore = 0f;
+    public float CurrentScore { get; private set; }
 
     [SerializeField, Range(0f, 1f), Tooltip("Score ranges for each star to be rewarded, as a percentage.")]
     float starRangePercentage = 0.2f;
@@ -20,6 +26,16 @@ public class ScoreObject : ScriptableObject
     /// Number of stars based on the current score.
     /// </summary>
     public int Stars => GetStars();
+
+    /// <summary>
+    /// Set the current score to a new value.
+    /// </summary>
+    public void SetScore(float value) => Set(value);
+
+    /// <summary>
+    /// Add a value to the current score.
+    /// </summary>
+    public void AddScore(float value) => Set(CurrentScore + value);
 
     private void OnEnable()
     {
@@ -31,6 +47,13 @@ public class ScoreObject : ScriptableObject
         VictoryState.onExited -= Clear;
     }
 
+
+    private void Set(float v)
+    {
+        CurrentScore = v;
+        onScoreChanged?.Invoke(CurrentScore);
+    }
+
     /* DISCLAIMER READ THIS ABOUT HOW SCORE RANGES WILL WORK:
     * (x / range) is only valid if star ranges are for each 20%.
     * If this were to change than you need to alter this value.
@@ -40,7 +63,7 @@ public class ScoreObject : ScriptableObject
     // Returns how many stars there are based on the percentage of maximum score
     private int GetStars()
     {
-        float x = currentScore / maxScore;
+        float x = CurrentScore / maxScore;
 
         if (x < 0.2) 
         { 
@@ -61,9 +84,6 @@ public class ScoreObject : ScriptableObject
     /// <summary>
     /// Resets the score
     /// </summary>
-    public void Clear()
-    {
-        currentScore = 0f;
-    }
+    public void Clear() => Set(0);
 
 }
