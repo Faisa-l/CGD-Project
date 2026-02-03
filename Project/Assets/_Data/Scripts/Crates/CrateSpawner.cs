@@ -38,7 +38,7 @@ public class CrateSpawner : MonoBehaviour
         }
     }
 
-    void Initalise()
+    void Initialise()
     {
         // Populate spawnedObjects with nodes built from each spawn requirement
         spawnedObjects = new Dictionary<SpawnNode, ICollectable>();
@@ -58,7 +58,7 @@ public class CrateSpawner : MonoBehaviour
 
     private void Awake()
     {
-        Initalise();
+        Initialise();
     }
 
     private void OnEnable()
