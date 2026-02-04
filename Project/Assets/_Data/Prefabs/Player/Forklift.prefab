@@ -2465,7 +2465,7 @@ MonoBehaviour:
   is_grounded: 0
   groundMask:
     serializedVersion: 2
-    m_Bits: 12
+    m_Bits: 4
   groundDistance: 0.4
   wheelRadius: 0.5
   gravity: -9.81
