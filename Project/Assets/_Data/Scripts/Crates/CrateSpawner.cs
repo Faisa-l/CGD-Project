@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using static CrateExtensions;
@@ -6,89 +5,82 @@ using static CrateExtensions;
 /// <summary>
 /// MonoBehaviour which handles spawning collectable crates.
 /// </summary>
+[RequireComponent(typeof(Timer))]
 public class CrateSpawner : MonoBehaviour
 {
     [SerializeField]
     GameObject cratePrefab;
 
-    [SerializeField, Range(0f, 30f)]
-    float spawnInterval = 10f;
-
-    [SerializeField, Tooltip("Spawns one crate at each of the transform's children with the provided tag.")]
-    List<SpawnNode> spawnGroups;
+    [SerializeField, Tooltip("Timeout event is assigned at runtime.")]
+    Timer timer;
 
     [SerializeField, Tooltip("How many objects should be spawned for a given tag.")]
-    List<CrateRequirement> spawnRequirements;
+    List<SpawnRequirements> spawnRequirements;
 
     // Maps a spawn point to its spawned object
     // This shouldn't be resizing in gameplay; its size should be predetermined in Initalise()
     Dictionary<SpawnNode, ICollectable> spawnedObjects;
-    float timer = 0f;
+    
 
     private void OnValidate()
     {
         // Valid prefab
-        if (cratePrefab == null || !cratePrefab.TryGetComponent<ICollectable>(out ICollectable _))
+        if (cratePrefab == null || !cratePrefab.TryGetComponent(out ICollectable _))
         {
             Debug.LogWarning("Spawner does not have correct crate prefab.");
         }
 
-        // Valid range
-        if (spawnInterval < 0f)
+        if (TryGetComponent(out timer))
         {
-            spawnInterval = 0f;
+            timer.repeat = true;
+            timer.autoStart = false;
         }
     }
 
-    // Populates spawnedObjects
-    void Initalise()
+    void Initialise()
     {
+        // Populate spawnedObjects with nodes built from each spawn requirement
         spawnedObjects = new Dictionary<SpawnNode, ICollectable>();
-
-        // Get the individual transforms in the spawn groups 
-        foreach (var group in spawnGroups)
+        foreach (var req in spawnRequirements)
         {
-            foreach (Transform t in group.transform.GetComponentInChildren<Transform>())
+            foreach (var t in req.parentTransform.GetComponentsInChildren<Transform>())
             {
-                var n = new SpawnNode()
+                var node = new SpawnNode()
                 {
-                    tag = group.tag,
-                    transform = t
+                    tag = req.tag,
+                    transform = t,
                 };
-                spawnedObjects.Add(n, null);
+                spawnedObjects.Add(node, null);
             }
         }
     }
 
     private void Awake()
     {
-        Initalise();
+        Initialise();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        bool ready = UpdateTimer();
-
-        if (ready)
+        if (timer != null)
         {
-            // Spawn crates
-            TrySpawnCrates();
+            timer.timeout.AddListener(TrySpawnCrates);
         }
     }
 
-    bool UpdateTimer()
+    private void OnDisable()
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        if (timer != null)
         {
-            timer = 0f;
-            return true;
+            timer.timeout.RemoveListener(TrySpawnCrates);
         }
-        return false;
     }
+
+    public void StartSpawner() => timer.paused = false;
+    public void StopSpawner() => timer.paused = true;
 
     // Attempts to spawn a crate at each point if its mapped GameObject is null
-    void TrySpawnCrates()
+    protected void TrySpawnCrates()
     {
         List<SpawnNode> spawnPoints = new();
 
@@ -102,18 +94,14 @@ public class CrateSpawner : MonoBehaviour
         }
         ShuffleList(spawnPoints);
 
-        // Spawn a crate at each Spawn point.
+        // Spawn a crate at each spawn point
         // Will only spawn in crates to fulfil a spawn requirement - ignores node that already meets requirements
-        foreach (SpawnNode node in spawnPoints)
+        foreach (var node in spawnPoints)
         {
-            CrateTag tag = node.tag;
-            if (GetRequirementFromTag(tag, out CrateRequirement requirement))
+            if (TryGetRequirementFromTag(node.tag, out SpawnRequirements requirement))
             {
-                if (HasMatchedRequirement(requirement)) continue;
-
-                // Spawn crate and set its tag
-                spawnedObjects[node] = Instantiate(cratePrefab, node.transform).GetComponent<ICollectable>();
-                spawnedObjects[node].Tag = tag;
+                if (WasRequirementMet(requirement)) continue;
+                SpawnCrate(node, requirement);
             }
         }
         /* Keeping this code here incase we want to revert back to quota based spawning
@@ -133,6 +121,14 @@ public class CrateSpawner : MonoBehaviour
         */
     }
 
+    // Spawns a crate and set its data based on its requirement. Instantiate within spawnedObjects
+    void SpawnCrate(in SpawnNode node, in SpawnRequirements requirement)
+    {
+        spawnedObjects[node] = Instantiate(cratePrefab, node.transform).GetComponent<ICollectable>();
+        spawnedObjects[node].Tag = node.tag;
+        spawnedObjects[node].Score = requirement.crateScore;
+    }
+
     // Randomise spawnable transforms (Fisher-Yates shuffle I found on stack overflow)
     // Partition list from 0 to pointer to end -> Select random element -> swap with pointer element -> decrement pointer
     static void ShuffleList<T>(List<T> list)
@@ -148,29 +144,27 @@ public class CrateSpawner : MonoBehaviour
     }
 
     // Returns whether a given requirement is met
-    bool HasMatchedRequirement(CrateRequirement requirement)
+    bool WasRequirementMet(SpawnRequirements requirement)
     {
         int i = 0;
-        foreach (var pair in spawnedObjects)
+        foreach (ICollectable item in spawnedObjects.Values)
         {
-            ICollectable item = pair.Value;
-
             if (item == null) continue;
-            if (item.Tag == requirement.requiredTag) i++;
-            if (i == requirement.requiredCount) break;
+            if (item.Tag == requirement.tag) i++;
+            if (i == requirement.spawnCount) break;
         }
 
-        return (i == requirement.requiredCount);
+        return (i == requirement.spawnCount);
     }
 
     // Gets a requirement from a given tag and outputs whether this requirement exists or not
-    bool GetRequirementFromTag(CrateTag tag, out CrateRequirement requirement)
+    bool TryGetRequirementFromTag(CrateTag tag, out SpawnRequirements requirement)
     {
         requirement = new();
 
         foreach (var req in spawnRequirements)
         {
-            if (req.requiredTag == tag)
+            if (req.tag == tag)
             {
                 requirement = req;
                 return true;
@@ -178,6 +172,5 @@ public class CrateSpawner : MonoBehaviour
         }
         return false;
     }
-
 
 }
