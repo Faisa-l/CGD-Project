@@ -206,8 +206,8 @@ public class VictoryState : IGameState
 
     public void OnEnter(GameManager manager)
     {
-        if (onEntered != null)
-            onEntered();
+        onEntered?.Invoke();
+        Time.timeScale = 0;
     }
 
     public void UpdateState(GameManager manager)
@@ -217,8 +217,8 @@ public class VictoryState : IGameState
 
     public void OnExit(GameManager manager)
     {
-        if (onExited != null)
-            onExited();
+        onExited?.Invoke();
+        Time.timeScale = 1;
     }
 }
 

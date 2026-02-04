@@ -48,6 +48,7 @@ public class PlayerManager : MonoBehaviour
         if (debug_mode_on)
         {
             input_manager.joinBehavior = PlayerJoinBehavior.JoinPlayersWhenJoinActionIsTriggered;
+            input_manager.playerPrefab = player_prefab;
 
             for (int i = 0; i < debugPlayerCount; i++)
             {
