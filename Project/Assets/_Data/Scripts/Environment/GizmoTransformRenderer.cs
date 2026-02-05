@@ -10,7 +10,6 @@ public class GizmoTransformRenderer : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
 
-
         Gizmos.DrawMesh(
             gizmo_mesh,
             transform.position + offset,

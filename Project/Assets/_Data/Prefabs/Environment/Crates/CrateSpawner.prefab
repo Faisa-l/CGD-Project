@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3838056687444560140}
   - component: {fileID: 4649749589772436556}
+  - component: {fileID: 4322882342134811817}
   m_Layer: 0
   m_Name: CrateSpawner
   m_TagString: Untagged
@@ -45,7 +46,24 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cratePrefab: {fileID: 3767048393502162153, guid: 25706bb730b17b54e80fe11a22508e4b, type: 3}
-  spawnInterval: 10
-  spawnGroups: []
+  timer: {fileID: 4322882342134811817}
   spawnRequirements: []
-  collector: {fileID: 0}
+--- !u!114 &4322882342134811817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5813500355358272119}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0f92cff4f332bf54a88d1ac7e88b15b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 2
+  repeat: 1
+  autoStart: 0
+  timeout:
+    m_PersistentCalls:
+      m_Calls: []
+  paused: 0
