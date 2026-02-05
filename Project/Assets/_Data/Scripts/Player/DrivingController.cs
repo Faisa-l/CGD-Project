@@ -59,7 +59,7 @@ public class DrivingController : MonoBehaviour
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
     [SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
-    
+
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
@@ -101,6 +101,8 @@ public class DrivingController : MonoBehaviour
         rootReverse = cameraReversePos.localPosition;
         maxCameraReverseDist = Vector3.Magnitude(lookAtPosition - cameraReverseOrigin);
         maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
+
+        playerCamera.transform.parent = null;
     }
 
     private void Update()
@@ -111,16 +113,6 @@ public class DrivingController : MonoBehaviour
 
         HandleLift();
         RepositionCameraTransforms();
-
-        if (reverseCamera)
-        {
-            playerCamera.transform.position = cameraReversePos.position;
-        }
-        else
-        {
-            playerCamera.transform.position = cameraForwardPos.position;
-        }
-        playerCamera.transform.LookAt(lookAtPosition);
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
     }
@@ -337,7 +329,14 @@ public class DrivingController : MonoBehaviour
         Vector2 direction = value.Get<Vector2>();
         direction = new Vector2(Mathf.Round(direction.x), Mathf.Round(direction.y));
 
-        reverseCamera = direction.y == 1 ? true : false;
+        if(direction.y == 1)
+        {
+            playerCamera.GetComponent<CameraController>().setFollowing(cameraReversePos);
+        }
+        else
+        {
+            playerCamera.GetComponent<CameraController>().setFollowing(cameraForwardPos);
+        }
     }
 
     public void OnInteract()
