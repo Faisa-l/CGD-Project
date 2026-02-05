@@ -1195,7 +1195,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: debug_mode_on
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4023865128617483762, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: m_Name
@@ -31029,6 +31029,10 @@ PrefabInstance:
     - target: {fileID: 5237866299022031967, guid: 75d5c453a8d08264fa35694aad826c89, type: 3}
       propertyPath: m_Name
       value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 5237866299022031967, guid: 75d5c453a8d08264fa35694aad826c89, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5415782739946509642, guid: 75d5c453a8d08264fa35694aad826c89, type: 3}
       propertyPath: m_Mesh

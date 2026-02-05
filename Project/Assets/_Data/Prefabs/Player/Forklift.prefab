@@ -2408,7 +2408,7 @@ MonoBehaviour:
   maxLiftPosition: 9.5
   hudManager: {fileID: 0}
   steeringWheel: {fileID: 3358673181307754969}
-  playerMesh: {fileID: 2735361621119911603}
+  playerMesh: {fileID: 2736618683385788251}
   exitTransform: {fileID: 2148080391469445715}
   look_at_transform: {fileID: 3325905161990052438}
   onVehichleEnter:
@@ -2465,7 +2465,7 @@ MonoBehaviour:
   is_grounded: 0
   groundMask:
     serializedVersion: 2
-    m_Bits: 4
+    m_Bits: 8
   groundDistance: 0.4
   wheelRadius: 0.5
   gravity: -9.81
@@ -3267,7 +3267,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1957412144152276, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1970766640170394, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
       propertyPath: m_Layer
@@ -3567,9 +3567,9 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4111819248598986, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
   m_PrefabInstance: {fileID: 2599320747953206887}
   m_PrefabAsset: {fileID: 0}
---- !u!137 &2735361621119911603 stripped
+--- !u!137 &2736618683385788251 stripped
 SkinnedMeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 137166910513705172, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
+  m_CorrespondingSourceObject: {fileID: 137579981741326652, guid: f11fc98cf1e8d5547a9b2ec85cc9c664, type: 3}
   m_PrefabInstance: {fileID: 2599320747953206887}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3206120660688725181
