@@ -45,26 +45,146 @@ public class DrivingController : MonoBehaviour
 
     [Header("Drifting")]
     [SerializeField] bool drifting = false;
-    [SerializeField] InputActionReference driftInput;
     [SerializeField] float driftMultiplier = 2f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        is_grounded = true;
+    [Header("Lift")]
+    [SerializeField] private Transform lift;
+    [SerializeField] private float liftSpeed = 1.0f;
+    [SerializeField] private float minimumLiftPosition = 2.4f;
+    [SerializeField] private float maxLiftPosition = 9.5f;
 
-        //driftInput.action.started += context => { drifting = true; };
-        //driftInput.action.canceled += context => { drifting = false; };
+    [Header("UI")]
+    [SerializeField] private HudManager hudManager;
+
+    [Header("Other References")]
+    [SerializeField] private Transform steeringWheel;
+    [SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
+    
+    [SerializeField] private Transform lookAtTransform;
+    [SerializeField] private Transform cameraForwardPos;
+    [SerializeField] private Transform cameraReversePos;
+    Vector3 rootForward, rootReverse;
+    Vector3 lookAtPosition;
+    Vector3 cameraReverseOrigin;
+    Vector3 cameraForwardOrigin;
+    float maxCameraReverseDist;
+    float maxCameraForwardDist;
+
+    [SerializeField] GameObject playerCamera = null;
+
+    private Rigidbody rb;
+
+    private AudioEnabler audio_enabler;
+
+    private Gamepad playerGamepad;
+
+    public Transform CameraForwardTransform => cameraForwardPos;
+    public Transform CameraReverseTransform => cameraReversePos;
+
+    bool lifting = false;
+
+    bool reverseCamera = false;
+
+    public void setPlayerGamepad(Gamepad gamepad)
+    {
+        playerGamepad = gamepad;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+        audio_enabler = GetComponent<AudioEnabler>();
+
+        // Camera-transform variables initialisation 
+        UpdateCameraTransformPositions();
+        rootForward = cameraForwardPos.localPosition;
+        rootReverse = cameraReversePos.localPosition;
+        maxCameraReverseDist = Vector3.Magnitude(lookAtPosition - cameraReverseOrigin);
+        maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
+    }
+
+    private void Update()
     {
         GroundCheck();  
         updateMove();
         updateRotate();
 
+        HandleLift();
+        RepositionCameraTransforms();
+
+        if (reverseCamera)
+        {
+            playerCamera.transform.position = cameraReversePos.position;
+        }
+        else
+        {
+            playerCamera.transform.position = cameraForwardPos.position;
+        }
+        playerCamera.transform.LookAt(lookAtPosition);
+
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
+    }
+
+    private void HandleLift()
+    {
+        float y = lift.localPosition.y;
+
+        if (lifting)
+        {
+            y += liftSpeed * Time.deltaTime;
+            y = Mathf.Clamp(y, minimumLiftPosition, maxLiftPosition);
+
+            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
+        }
+        else
+        {
+            y -= liftSpeed * Time.deltaTime;
+            y = Mathf.Clamp(y, minimumLiftPosition, maxLiftPosition);
+
+            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
+        }
+    }
+
+    // Repositions the transforms of cameras based on if they would collide with eachother
+    void RepositionCameraTransforms()
+    {
+        UpdateCameraTransformPositions();
+        RaycastHit hit;
+        Vector3 direction;
+
+        // Get layer mask we need
+        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI", "Crates");
+
+        // Forward cam transform
+        direction = cameraForwardOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraForwardDist, mask))
+        {
+            cameraForwardPos.position = hit.point;
+        }
+        else
+        {
+            cameraForwardPos.localPosition = rootForward;
+        }
+
+        // Reverse cam transform
+        direction = cameraReverseOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraReverseDist, mask))
+        {
+            cameraReversePos.position = hit.point;
+        }
+        else
+        {
+            cameraReversePos.localPosition = rootReverse;
+        }
+    }
+
+    // Updates positions based on the camera transforms
+    // Mainly doing this to avoid duplicating this code
+    private void UpdateCameraTransformPositions()
+    {
+        lookAtPosition = lookAtTransform.position;
+        cameraReverseOrigin = cameraReversePos.position;
+        cameraForwardOrigin = cameraForwardPos.position;
     }
 
     private void updateMove()
@@ -101,6 +221,21 @@ public class DrivingController : MonoBehaviour
         }
 
         rigidBody.linearVelocity = (transform.forward * speed) + new Vector3(0,rigidBody.linearVelocity.y,0);
+
+        //audio handling
+        if (sign == -1 && is_moving)
+        {
+            audio_enabler.Enable("reverse");
+        }
+        else
+        {
+            audio_enabler.Disable("reverse");
+        }
+
+        if (sign == 1 && is_moving)
+        {
+            audio_enabler.Enable("driving");
+        }
     }
 
     private void updateRotate()
@@ -182,34 +317,34 @@ public class DrivingController : MonoBehaviour
         }
     }
 
-    public void Move(InputValue value)
-    {
-        if (!is_grounded)
-        {
-            return;
-        }
-
-        movement.movingValue = value.Get<Vector2>().y;
-
-        if (movement.movingValue != 0)
-        {
-            sign = Mathf.Sign(movement.movingValue);
-        }
-    }
-
     public void OnTurn(InputValue value)
     {      
         movement.turningValue = value.Get<Vector2>().x;
     }
 
-    public void Turn(InputValue value)
-    {
-        movement.turningValue = value.Get<Vector2>().x;
-    }
-
-    public void drift()
+    public void OnDrift()
     {
         drifting = !drifting;
+    }
+
+    public void OnLift()
+    {
+        lifting = !lifting;
+    }
+
+    public void OnLook(InputValue value)
+    {
+        Vector2 direction = value.Get<Vector2>();
+        direction = new Vector2(Mathf.Round(direction.x), Mathf.Round(direction.y));
+
+        reverseCamera = direction.y == 1 ? true : false;
+    }
+
+    public void OnInteract()
+    {
+        GetComponent<FloatPickup>().PickUpSelectedForklift();
+
+        GetComponent<FloatPickup>().PickUpSelected();
     }
 
     public void ApplyGravity()
@@ -217,7 +352,6 @@ public class DrivingController : MonoBehaviour
         if (!is_grounded)
         {
             downwardVelocity += gravity * vehicleMass * Time.deltaTime;
-            //rigidBody.Move(Vector3.up * downwardVelocity * Time.deltaTime);
         }
         else
         {
