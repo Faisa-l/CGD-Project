@@ -2550,7 +2550,7 @@ MonoBehaviour:
   drifting: 0
   driftMultiplier: 2
   lift: {fileID: 3846148368281736309}
-  liftSpeed: 1
+  liftSpeed: 3
   minimumLiftPosition: 2.4
   maxLiftPosition: 9.5
   hudManager: {fileID: 0}
