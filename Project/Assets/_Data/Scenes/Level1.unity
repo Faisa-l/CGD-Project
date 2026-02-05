@@ -1197,6 +1197,10 @@ PrefabInstance:
       propertyPath: debug_mode_on
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
+      propertyPath: player_prefab
+      value: 
+      objectReference: {fileID: 9127728803133528513, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
     - target: {fileID: 4023865128617483762, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: m_Name
       value: Player Manager
