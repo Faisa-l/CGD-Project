@@ -8,12 +8,15 @@ using UnityEngine;
 /// </summary>
 public static class CrateExtensions
 {
-    // Struct defining any type of spawn requirement
+    // Struct defining the requirements for spawning crates
     [Serializable]
-    public struct CrateRequirement
+    public struct SpawnRequirements
     {
-        public CrateTag requiredTag;
-        public int requiredCount;
+        [Tooltip("This must be the game object whose child transforms are used as spawn points.")]
+        public Transform parentTransform;
+        public CrateTag tag;
+        public int spawnCount;
+        public int crateScore;
     }
 
     // A CrateRequirement with a time limit

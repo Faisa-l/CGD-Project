@@ -382,4 +382,11 @@ public class DrivingController : MonoBehaviour
 
         Gizmos.DrawRay(groundCheck.position, -groundCheck.up * rayLength);
     }
+
+    public void reset()
+    {
+        movement.movingValue = 0;
+        movement.turningValue = 0;
+        drifting = false;
+    }
 }
