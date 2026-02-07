@@ -2422,20 +2422,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 1773022933685493602}
   acceleration: 3
-  break_multiplier: 5
+  breakMultiplier: 3
   speed: 0
-  max_speed: 9
-  rotate_speed: 65
-  groundCheck: {fileID: 991374653987402780}
-  is_grounded: 0
+  maxSpeed: 35
+  rotateSpeed: 65
+  groundCheckTransform: {fileID: 991374653987402780}
+  isGrounded: 0
   groundMask:
     serializedVersion: 2
     m_Bits: 8
   groundDistance: 0.4
   wheelRadius: 0.5
-  gravity: -9.81
-  vehicleMass: 500
-  downwardVelocity: 0
   body: {fileID: 3443842060001372276}
   maxRotation: 30
   driftAnimation: {fileID: 0}
@@ -2445,7 +2442,7 @@ MonoBehaviour:
   driftMultiplier: 2
   lift: {fileID: 3846148368281736309}
   liftSpeed: 3
-  minimumLiftPosition: 2.4
+  minLiftPosition: 2.4
   maxLiftPosition: 9.5
   hudManager: {fileID: 0}
   steeringWheel: {fileID: 3358673181307754969}

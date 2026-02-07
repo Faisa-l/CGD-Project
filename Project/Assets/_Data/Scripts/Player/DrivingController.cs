@@ -10,47 +10,40 @@ public class DrivingController : MonoBehaviour
         public float movingValue;
     }
 
-    [Header("MainComponents")]
+    [Header("Main Components")]
     [SerializeField] Rigidbody rigidBody;
 
-    [Header("Variables")]   
+    [Header("Movement variables")]   
     [SerializeField] float acceleration = 20f;
-    [SerializeField] float break_multiplier = 3.0f;
+    [SerializeField] float breakMultiplier = 3.0f;
     [SerializeField] float speed = 0f;
-    [SerializeField] float max_speed = 35f;
-    [SerializeField] float rotate_speed = 5.0f;
+    [SerializeField] float maxSpeed = 35f;
+    [SerializeField] float rotateSpeed = 5.0f;
     [SerializeField] Movement movement;
     [SerializeField] bool is_moving => (movement.movingValue != 0);
 
-    [Header("Gravity Variables")]
-    [SerializeField] Transform groundCheck;
-    [SerializeField] bool is_grounded;
+    [Header("Ground Checking Variables")]
+    [SerializeField] Transform groundCheckTransform;
+    [SerializeField] bool isGrounded;
     [SerializeField] LayerMask groundMask;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float wheelRadius = 0.5f;
-    [SerializeField] float gravity = -9.81f;
-    [SerializeField] float vehicleMass = 500f;
-    [SerializeField] float downwardVelocity = 0.0f;
 
     [Header("Drifting Variables")]
     [SerializeField] GameObject body;
     [SerializeField] float maxRotation = 30;
     [SerializeField] Animation driftAnimation;
-
-    float sign = 1f;
-
-    [Header("Manual drift variables")]
     [SerializeField] bool manualDriftAnim = true;
     [SerializeField] float manualAnimationSpeed = 1f;
-
-    [Header("Drifting")]
     [SerializeField] bool drifting = false;
     [SerializeField] float driftMultiplier = 2f;
 
-    [Header("Lift")]
+    float sign = 1f;
+
+    [Header("Lift Variables")]
     [SerializeField] private Transform lift;
     [SerializeField] private float liftSpeed = 1.0f;
-    [SerializeField] private float minimumLiftPosition = 2.4f;
+    [SerializeField] private float minLiftPosition = 2.4f;
     [SerializeField] private float maxLiftPosition = 9.5f;
 
     [Header("UI")]
@@ -83,8 +76,6 @@ public class DrivingController : MonoBehaviour
 
     bool lifting = false;
 
-    bool reverseCamera = false;
-
     public void setPlayerGamepad(Gamepad gamepad)
     {
         playerGamepad = gamepad;
@@ -107,100 +98,47 @@ public class DrivingController : MonoBehaviour
 
     private void Update()
     {
-        GroundCheck();  
+        groundCheck();  
         updateMove();
         updateRotate();
 
-        HandleLift();
-        RepositionCameraTransforms();
+        handleLift();
+        repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
     }
 
-    private void HandleLift()
+#region Updating functions
+    public void groundCheck()
     {
-        float y = lift.localPosition.y;
-
-        if (lifting)
-        {
-            y += liftSpeed * Time.deltaTime;
-            y = Mathf.Clamp(y, minimumLiftPosition, maxLiftPosition);
-
-            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
-        }
-        else
-        {
-            y -= liftSpeed * Time.deltaTime;
-            y = Mathf.Clamp(y, minimumLiftPosition, maxLiftPosition);
-
-            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
-        }
-    }
-
-    // Repositions the transforms of cameras based on if they would collide with eachother
-    void RepositionCameraTransforms()
-    {
-        UpdateCameraTransformPositions();
-        RaycastHit hit;
-        Vector3 direction;
-
-        // Get layer mask we need
-        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI", "Crates");
-
-        // Forward cam transform
-        direction = cameraForwardOrigin - lookAtPosition;
-        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraForwardDist, mask))
-        {
-            cameraForwardPos.position = hit.point;
-        }
-        else
-        {
-            cameraForwardPos.localPosition = rootForward;
-        }
-
-        // Reverse cam transform
-        direction = cameraReverseOrigin - lookAtPosition;
-        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraReverseDist, mask))
-        {
-            cameraReversePos.position = hit.point;
-        }
-        else
-        {
-            cameraReversePos.localPosition = rootReverse;
-        }
-    }
-
-    // Updates positions based on the camera transforms
-    // Mainly doing this to avoid duplicating this code
-    private void UpdateCameraTransformPositions()
-    {
-        lookAtPosition = lookAtTransform.position;
-        cameraReverseOrigin = cameraReversePos.position;
-        cameraForwardOrigin = cameraForwardPos.position;
+        RaycastHit hit; 
+        float rayLength = groundDistance + wheelRadius;
+        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask);
+        Debug.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength, isGrounded ? Color.green : Color.red);
     }
 
     private void updateMove()
     {
-        if (!is_grounded) return;
+        if (!isGrounded) return;
 
         //if triggers held
         if (is_moving)
         {
             //if current speed is maxxed out and the player is attempting to move in that direction
-            if (Mathf.Abs(speed) >= max_speed && sign == Mathf.Sign(speed))
+            if (Mathf.Abs(speed) >= maxSpeed && sign == Mathf.Sign(speed))
             {
-                speed = sign * max_speed;
+                speed = sign * maxSpeed;
             }
             else
             {
-                speed += acceleration * Time.deltaTime * sign * ((Mathf.Sign(speed) != sign) ? break_multiplier : 1);
+                speed += acceleration * Time.deltaTime * sign * ((Mathf.Sign(speed) != sign) ? breakMultiplier : 1);
             }
         }
         //if triggers not held
         else
         {
            //if speed is around 0 then stop
-           if (Mathf.Abs(speed) <= acceleration * Time.deltaTime * break_multiplier)
+           if (Mathf.Abs(speed) <= acceleration * Time.deltaTime * breakMultiplier)
            {
                speed = 0;    
                movement.movingValue = 0;
@@ -208,7 +146,7 @@ public class DrivingController : MonoBehaviour
            //otherwise decelerate
            else
            {
-               speed -= acceleration * Time.deltaTime * Mathf.Sign(speed) * break_multiplier;
+               speed -= acceleration * Time.deltaTime * Mathf.Sign(speed) * breakMultiplier;
            }
         }
 
@@ -229,14 +167,14 @@ public class DrivingController : MonoBehaviour
             audio_enabler.Enable("driving");
         }
     }
-
+    
     private void updateRotate()
     {
         //don't do rotations if the forklift isn't moving
         if (speed == 0) return;
 
         //do the actual forklift rotation so it turns
-        transform.Rotate(0, sign * movement.turningValue * rotate_speed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
+        transform.Rotate(0, sign * movement.turningValue * rotateSpeed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
 
         //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
         float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f))%360;
@@ -297,9 +235,80 @@ public class DrivingController : MonoBehaviour
         }
     }
 
+    private void handleLift()
+    {
+        float y = lift.localPosition.y;
+
+        if (lifting)
+        {
+            y += liftSpeed * Time.deltaTime;
+            y = Mathf.Clamp(y, minLiftPosition, maxLiftPosition);
+
+            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
+        }
+        else
+        {
+            y -= liftSpeed * Time.deltaTime;
+            y = Mathf.Clamp(y, minLiftPosition, maxLiftPosition);
+
+            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
+        }
+    }
+
+    // Repositions the transforms of cameras based on if they would collide with eachother
+    void repositionCameraTransforms()
+    {
+        UpdateCameraTransformPositions();
+        RaycastHit hit;
+        Vector3 direction;
+
+        // Get layer mask we need
+        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI", "Crates");
+
+        // Forward cam transform
+        direction = cameraForwardOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraForwardDist, mask))
+        {
+            cameraForwardPos.position = hit.point;
+        }
+        else
+        {
+            cameraForwardPos.localPosition = rootForward;
+        }
+
+        // Reverse cam transform
+        direction = cameraReverseOrigin - lookAtPosition;
+        if (Physics.Raycast(lookAtPosition, direction, out hit, maxCameraReverseDist, mask))
+        {
+            cameraReversePos.position = hit.point;
+        }
+        else
+        {
+            cameraReversePos.localPosition = rootReverse;
+        }
+    }
+
+    // Updates positions based on the camera transforms
+    // Mainly doing this to avoid duplicating this code
+    private void UpdateCameraTransformPositions()
+    {
+        lookAtPosition = lookAtTransform.position;
+        cameraReverseOrigin = cameraReversePos.position;
+        cameraForwardOrigin = cameraForwardPos.position;
+    }
+    public void reset()
+    {
+        movement.movingValue = 0;
+        movement.turningValue = 0;
+        drifting = false;
+    }
+
+#endregion
+
+#region Input Functions
     public void OnMove(InputValue value)
     {
-        if (!is_grounded) return;
+        if (!isGrounded) return;
 
         movement.movingValue = value.Get<Vector2>().y;
 
@@ -346,31 +355,13 @@ public class DrivingController : MonoBehaviour
         GetComponent<FloatPickup>().PickUpSelected();
     }
 
-    public void ApplyGravity()
-    {
-        if (!is_grounded)
-        {
-            downwardVelocity += gravity * vehicleMass * Time.deltaTime;
-        }
-        else
-        {
-            downwardVelocity = 0;
-        }
-    }
-
-    public void GroundCheck()
-    {
-        RaycastHit hit; 
-        float rayLength = groundDistance + wheelRadius;
-        is_grounded = Physics.Raycast(groundCheck.position, -groundCheck.up, out hit, rayLength, groundMask);
-        Debug.DrawRay(groundCheck.position, -groundCheck.up * rayLength, is_grounded ? Color.green : Color.red);
-    }
+#endregion
 
     public void OnDrawGizmos()
     {
         RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
-        if (Physics.Raycast(groundCheck.position, -groundCheck.up, out hit, rayLength, groundMask))
+        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask))
         {
             Gizmos.color = Color.green;
         }
@@ -379,13 +370,7 @@ public class DrivingController : MonoBehaviour
             Gizmos.color = Color.red;
         }
 
-        Gizmos.DrawRay(groundCheck.position, -groundCheck.up * rayLength);
+        Gizmos.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength);
     }
 
-    public void reset()
-    {
-        movement.movingValue = 0;
-        movement.turningValue = 0;
-        drifting = false;
-    }
 }
