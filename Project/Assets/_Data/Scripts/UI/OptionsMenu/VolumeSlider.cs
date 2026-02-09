@@ -48,7 +48,10 @@ public class VolumeSlider : MonoBehaviour
 				
 				// Persist for future playthroughs
 				if (SaveManager.instance)
+				{
 					SaveManager.instance.currentSaveData.audio.sfxVolume = slider.value;
+					SaveManager.instance.Save();
+				}
 				
 				break;
 			
@@ -58,7 +61,10 @@ public class VolumeSlider : MonoBehaviour
 				
 				// Persist for future playthroughs
 				if (SaveManager.instance)
+				{
 					SaveManager.instance.currentSaveData.audio.musicVolume = slider.value;
+					SaveManager.instance.Save();
+				}
 				
 				break;
 				
