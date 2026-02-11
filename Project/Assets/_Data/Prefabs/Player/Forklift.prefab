@@ -2439,7 +2439,7 @@ MonoBehaviour:
   manualDriftAnim: 1
   manualAnimationSpeed: 50
   drifting: 0
-  driftMultiplier: 2
+  driftMultiplier: 1.3
   driftBoostTimer: 0
   driftBoostDuration: 2
   DriftBoostReady: 0
