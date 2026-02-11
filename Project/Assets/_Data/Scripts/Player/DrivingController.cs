@@ -39,6 +39,9 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float manualAnimationSpeed = 1f;
     [SerializeField] bool drifting = false;
     [SerializeField] float driftMultiplier = 2f;
+    [SerializeField] float driftBoostTimer = 0f;
+    [SerializeField] float driftBoostDuration = 2f;
+    [SerializeField] bool DriftBoostReady = false;
 
     float sign = 1f;
 
@@ -85,6 +88,7 @@ public class DrivingController : MonoBehaviour
     public Transform CameraReverseTransform => cameraReversePos;
 
     bool lifting = false;
+    bool selfIsLifted = false;
 
     public void setPlayerGamepad(Gamepad gamepad)
     {
@@ -108,6 +112,7 @@ public class DrivingController : MonoBehaviour
 
     private void Update()
     {
+        DriftBoost();
         groundCheck();  
         updateMove();
         updateRotate();
@@ -129,7 +134,7 @@ public class DrivingController : MonoBehaviour
 
     private void updateMove()
     {
-        if (!isGrounded) return;
+        if (!isGrounded || selfIsLifted) return;
 
         //if triggers held
         if (is_moving)
@@ -193,6 +198,7 @@ public class DrivingController : MonoBehaviour
     {
         //don't do rotations if the forklift isn't moving
         if (speed == 0 && !bounced) return;
+        if (speed == 0 || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotateSpeed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
@@ -378,7 +384,46 @@ public class DrivingController : MonoBehaviour
         GetComponent<FloatPickup>().PickUpSelected();
     }
 
-#endregion
+    public void DriftBoost()
+    {
+        if (drifting)
+        {
+            driftBoostTimer += Time.deltaTime;
+            if (driftBoostTimer >= 1f)
+            {
+                DriftBoostReady = true;
+            }
+        }
+        else if (!drifting && DriftBoostReady)
+        {
+
+            maxSpeed = 18f;
+            speed = maxSpeed;
+            Debug.Log("Boosted with speed: " + speed);
+
+            driftBoostDuration -= Time.deltaTime;
+
+
+            if (driftBoostDuration <= 0f)
+            {
+                maxSpeed = 9f;
+                DriftBoostReady = false;
+                driftBoostDuration = 2f;
+                driftBoostTimer = 0f;
+            }
+        }
+        else if (!drifting && !DriftBoostReady)
+        {
+            driftBoostTimer = 0f;
+        }
+    }
+
+    public void togglePlayerLifted()
+    {
+        selfIsLifted = !selfIsLifted;
+    }
+
+    #endregion
 
     public void OnDrawGizmos()
     {
