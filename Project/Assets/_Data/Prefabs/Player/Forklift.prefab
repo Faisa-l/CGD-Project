@@ -12001,7 +12001,7 @@ GameObject:
   - component: {fileID: 5957374651335090734}
   m_Layer: 2
   m_Name: Forklift
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12089,10 +12089,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 1773022933685493602}
-  acceleration: 3
+  acceleration: 7
   breakMultiplier: 3
   speed: 0
-  maxSpeed: 35
+  maxSpeed: 12
   rotateSpeed: 65
   groundCheckTransform: {fileID: 991374653987402780}
   isGrounded: 0
@@ -12127,6 +12127,9 @@ MonoBehaviour:
   hudManager: {fileID: 0}
   steeringWheel: {fileID: 3358673181307754969}
   playerMesh: {fileID: 2736618683385788251}
+  bouncingForceMultiplier: 150
+  bouncingForceMode: 5
+  bounceDecay: 1.396
   lookAtTransform: {fileID: 3325905161990052438}
   cameraForwardPos: {fileID: 4984584100628000045}
   cameraReversePos: {fileID: 4772259750914084470}
