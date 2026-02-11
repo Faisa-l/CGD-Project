@@ -12115,9 +12115,9 @@ MonoBehaviour:
   maxBoostSpeed: 20
   DriftBoostTier: 0
   TiersEnabled: 1
-  Tier1Multiplier: 0
-  Tier2Multiplier: 0
-  Tier3Multiplier: 0
+  Tier1Multiplier: 1.5
+  Tier2Multiplier: 2
+  Tier3Multiplier: 3
   boostParticlesBL: {fileID: 6386098349135711289}
   boostParticlesBR: {fileID: 3550865656725663675}
   lift: {fileID: 3846148368281736309}

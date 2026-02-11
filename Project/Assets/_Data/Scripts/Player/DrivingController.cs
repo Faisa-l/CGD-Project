@@ -40,13 +40,13 @@ public class DrivingController : MonoBehaviour
     [SerializeField] bool drifting = false;
     [SerializeField] float driftMultiplier = 2f;
 
-    [Header("Drift Boost Variables")]
-    [SerializeField] float driftBoostMultiplier = 2f;
-    [SerializeField] float driftBoostTimer = 0f;
-    [SerializeField] float driftBoostDuration = 2f;
-    [SerializeField] bool DriftBoostReady = false;
+    [Header("Boost Variables")]
+    [SerializeField] float boostMultiplier = 2f;
+    [SerializeField] float boostTimer = 0f;
+    [SerializeField] float boostDuration = 2f;
+    [SerializeField] bool boostReady = false;
     [SerializeField] float maxBoostSpeed = 20f;
-    [SerializeField] int DriftBoostTier = 0;
+    [SerializeField] int boostTier = 0;
     [SerializeField] bool TiersEnabled;
     [SerializeField] float Tier1Multiplier;
     [SerializeField] float Tier2Multiplier;
@@ -124,8 +124,6 @@ public class DrivingController : MonoBehaviour
 
     private void FixedUpdate()
     {
-      
-
         groundCheck();  
         updateMove();
         updateRotate();
@@ -222,7 +220,7 @@ public class DrivingController : MonoBehaviour
     private void updateRotate()
     {
         //don't do rotations if the forklift isn't moving
-        if (speed == 0 && !bounced || selfIsLifted) return;
+        if ((speed == 0 && !bounced) || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotateSpeed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
@@ -378,7 +376,7 @@ public class DrivingController : MonoBehaviour
 
         if (movement.turningValue != prevTurnValue) 
         {
-            driftBoostTimer = 0; 
+            boostTimer = 0; 
         }
     }
 
@@ -418,115 +416,117 @@ public class DrivingController : MonoBehaviour
     {
         if (drifting)
         {
-           driftBoostTimer += Time.deltaTime;
+           boostTimer += Time.deltaTime;
 
-           if (driftBoostTimer >= 1f)
+           if (boostTimer >= 1f)
            {
-               DriftBoostReady = true;
+               boostReady = true;
            }
         }
-        else if (!drifting && DriftBoostReady)
+        else if (!drifting && boostReady)
         {
-            speed = speed * driftBoostMultiplier;
-            DriftBoostReady = false;
+            speed = speed * boostMultiplier;
+            boostReady = false;
 
             if(speed >= maxBoostSpeed)
             {
                 speed = maxBoostSpeed;
             }
         }
-        else if (!drifting && !DriftBoostReady)
+        else if (!drifting && !boostReady)
         {
-            driftBoostTimer = 0f;
+            boostTimer = 0f;
         }
     }
 
     public void TieredDriftBoost()
     {
+        ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma = ps.main;
+
+        ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma1 = ps1.main;
+
+        if(!drifting && boostParticlesBL.activeSelf)
+        {
+            boostParticlesBL.SetActive(false);
+            boostParticlesBR.SetActive(false);
+        }
 
         if (drifting)
         {
-            driftBoostTimer += Time.deltaTime;
-            if (driftBoostTimer <= 1)
+            boostTimer += Time.deltaTime;
+            if (boostTimer <= 1)
             {
-                DriftBoostTier = 0;
-                boostParticlesBL.SetActive(false);
-                boostParticlesBR.SetActive(false);
-                DriftBoostReady = false;
+                boostTier = 0;
+                boostReady = false;
             }
-            else if (driftBoostTimer <= 2)
+            else if (boostTimer <= 2)
             {
-                DriftBoostTier = 1;
+                boostTier = 1;
                 boostParticlesBL.SetActive(true);
                 boostParticlesBR.SetActive(true);
 
-                ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
-                ParticleSystem.MainModule ma = ps.main;
                 ma.startColor = Color.yellow;
-
-                ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
-                ParticleSystem.MainModule ma1 = ps1.main;
                 ma1.startColor = Color.yellow;
 
-                DriftBoostReady = true;
+                boostReady = true;
             }
-            else if (driftBoostTimer <= 3)
+            else if (boostTimer <= 3)
             {
-                DriftBoostTier = 2;
-                ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
-                ParticleSystem.MainModule ma = ps.main;
-                ma.startColor = Color.red;
+                boostTier = 2;
 
-                ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
-                ParticleSystem.MainModule ma1 = ps1.main;
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.red;
                 ma1.startColor = Color.red;
 
-                DriftBoostReady = true;
+                boostReady = true;
             }
-            else if (driftBoostTimer < 4)
+            else if (boostTimer < 4)
             {
-                DriftBoostTier = 3;
-                ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
-                ParticleSystem.MainModule ma = ps.main;
-                ma.startColor = Color.blue;
+                boostTier = 3;
 
-                ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
-                ParticleSystem.MainModule ma1 = ps1.main;
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.blue;
                 ma1.startColor = Color.blue;
 
-                DriftBoostReady = true;
+                boostReady = true;
             }
         }
-        else if (!drifting && DriftBoostReady)
+        else if (!drifting && boostReady)
         {
-            switch (DriftBoostTier)
+            switch (boostTier)
             {
                 case 0:
-                    driftBoostMultiplier = 0f;
+                    boostMultiplier = 0f;
                     break;
                 case 1:
-                    driftBoostMultiplier = Tier1Multiplier;
+                    boostMultiplier = Tier1Multiplier;
                     break;
                 case 2:
-                    driftBoostMultiplier = Tier2Multiplier;
+                    boostMultiplier = Tier2Multiplier;
                     break;
                 case 3:
-                    driftBoostMultiplier = Tier3Multiplier;
+                    boostMultiplier = Tier3Multiplier;
                     break;
             }
 
-            speed = speed * driftBoostMultiplier;
-            DriftBoostReady = false;
+            speed = speed * boostMultiplier;
+            boostReady = false;
 
             if (speed >= maxBoostSpeed)
             {
                 speed = maxBoostSpeed;
             }
         }
-        else if (!drifting && !DriftBoostReady)
+        else if (!drifting && !boostReady)
         {
-            driftBoostTimer = 0f;
-            DriftBoostTier = 0;
+            boostTimer = 0f;
+            boostTier = 0;
         }
         
     }
