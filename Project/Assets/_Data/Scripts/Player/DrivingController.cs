@@ -13,7 +13,7 @@ public class DrivingController : MonoBehaviour
     [Header("Main Components")]
     [SerializeField] Rigidbody rigidBody;
 
-    [Header("Movement variables")]   
+    [Header("Movement variables")]
     [SerializeField] float acceleration = 20f;
     [SerializeField] float breakMultiplier = 3.0f;
     [SerializeField] float speed = 0f;
@@ -39,9 +39,20 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float manualAnimationSpeed = 1f;
     [SerializeField] bool drifting = false;
     [SerializeField] float driftMultiplier = 2f;
-    [SerializeField] float driftBoostTimer = 0f;
-    [SerializeField] float driftBoostDuration = 2f;
-    [SerializeField] bool DriftBoostReady = false;
+
+    [Header("Boost Variables")]
+    [SerializeField] float boostMultiplier = 2f;
+    [SerializeField] float boostTimer = 0f;
+    [SerializeField] float boostDuration = 2f;
+    [SerializeField] bool boostReady = false;
+    [SerializeField] float maxBoostSpeed = 20f;
+    [SerializeField] int boostTier = 0;
+    [SerializeField] bool TiersEnabled;
+    [SerializeField] float Tier1Multiplier;
+    [SerializeField] float Tier2Multiplier;
+    [SerializeField] float Tier3Multiplier;
+    [SerializeField] GameObject boostParticlesBL;
+    [SerializeField] GameObject boostParticlesBR;
 
     float sign = 1f;
 
@@ -108,11 +119,11 @@ public class DrivingController : MonoBehaviour
         maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
 
         playerCamera.transform.parent = null;
+        maxSpeed = 9.0f;
     }
 
     private void FixedUpdate()
     {
-        DriftBoost();
         groundCheck();  
         updateMove();
         updateRotate();
@@ -121,6 +132,18 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
+
+        if (TiersEnabled)
+        {
+            maxBoostSpeed = 30f;
+            TieredDriftBoost();
+
+        }
+        else
+        {
+            maxBoostSpeed = 20f;
+            DriftBoost();
+        }
     }
 
 #region Updating functions
@@ -142,7 +165,7 @@ public class DrivingController : MonoBehaviour
             //if current speed is maxxed out and the player is attempting to move in that direction
             if (Mathf.Abs(speed) >= maxSpeed && sign == Mathf.Sign(speed))
             {
-                speed = sign * maxSpeed;
+                speed -= acceleration * Time.deltaTime * sign * ((Mathf.Sign(speed) != sign) ? breakMultiplier : 1);
             }
             else
             {
@@ -197,7 +220,7 @@ public class DrivingController : MonoBehaviour
     private void updateRotate()
     {
         //don't do rotations if the forklift isn't moving
-        if (speed == 0 && !bounced || selfIsLifted) return;
+        if ((speed == 0 && !bounced) || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotateSpeed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
@@ -347,8 +370,14 @@ public class DrivingController : MonoBehaviour
     }
 
     public void OnTurn(InputValue value)
-    {      
+    {   
+        float prevTurnValue = movement.turningValue;
         movement.turningValue = value.Get<Vector2>().x;
+
+        if (movement.turningValue != prevTurnValue) 
+        {
+            boostTimer = 0; 
+        }
     }
 
     public void OnDrift()
@@ -387,34 +416,119 @@ public class DrivingController : MonoBehaviour
     {
         if (drifting)
         {
-            driftBoostTimer += Time.deltaTime;
-            if (driftBoostTimer >= 1f)
+           boostTimer += Time.deltaTime;
+
+           if (boostTimer >= 1f)
+           {
+               boostReady = true;
+           }
+        }
+        else if (!drifting && boostReady)
+        {
+            speed = speed * boostMultiplier;
+            boostReady = false;
+
+            if(speed >= maxBoostSpeed)
             {
-                DriftBoostReady = true;
+                speed = maxBoostSpeed;
             }
         }
-        else if (!drifting && DriftBoostReady)
+        else if (!drifting && !boostReady)
         {
+            boostTimer = 0f;
+        }
+    }
 
-            maxSpeed = 18f;
-            speed = maxSpeed;
-            Debug.Log("Boosted with speed: " + speed);
+    public void TieredDriftBoost()
+    {
+        ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma = ps.main;
 
-            driftBoostDuration -= Time.deltaTime;
+        ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma1 = ps1.main;
 
+        if(!drifting && boostParticlesBL.activeSelf)
+        {
+            boostParticlesBL.SetActive(false);
+            boostParticlesBR.SetActive(false);
+        }
 
-            if (driftBoostDuration <= 0f)
+        if (drifting)
+        {
+            boostTimer += Time.deltaTime;
+            if (boostTimer <= 1)
             {
-                maxSpeed = 9f;
-                DriftBoostReady = false;
-                driftBoostDuration = 2f;
-                driftBoostTimer = 0f;
+                boostTier = 0;
+                boostReady = false;
+            }
+            else if (boostTimer <= 2)
+            {
+                boostTier = 1;
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.yellow;
+                ma1.startColor = Color.yellow;
+
+                boostReady = true;
+            }
+            else if (boostTimer <= 3)
+            {
+                boostTier = 2;
+
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.red;
+                ma1.startColor = Color.red;
+
+                boostReady = true;
+            }
+            else if (boostTimer < 4)
+            {
+                boostTier = 3;
+
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.blue;
+                ma1.startColor = Color.blue;
+
+                boostReady = true;
             }
         }
-        else if (!drifting && !DriftBoostReady)
+        else if (!drifting && boostReady)
         {
-            driftBoostTimer = 0f;
+            switch (boostTier)
+            {
+                case 0:
+                    boostMultiplier = 0f;
+                    break;
+                case 1:
+                    boostMultiplier = Tier1Multiplier;
+                    break;
+                case 2:
+                    boostMultiplier = Tier2Multiplier;
+                    break;
+                case 3:
+                    boostMultiplier = Tier3Multiplier;
+                    break;
+            }
+
+            speed = speed * boostMultiplier;
+            boostReady = false;
+
+            if (speed >= maxBoostSpeed)
+            {
+                speed = maxBoostSpeed;
+            }
         }
+        else if (!drifting && !boostReady)
+        {
+            boostTimer = 0f;
+            boostTier = 0;
+        }
+        
     }
 
     public void togglePlayerLifted()
