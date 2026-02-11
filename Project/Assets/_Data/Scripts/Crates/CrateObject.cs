@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using static CrateExtensions;
 
@@ -19,6 +20,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     bool collect;
     MaterialPropertyBlock block;
     PhysicsPickup pickup;
+    TextMeshPro[] textObjects;
 
     private void Awake()
     {
@@ -30,6 +32,9 @@ public class CrateObject : MonoBehaviour, ICollectable
         {
             Debug.LogWarning("No PhysicsPickup on CrateObject");
         }
+
+        // Get textObjects
+        textObjects = GetComponentsInChildren<TextMeshPro>();
     }
 
     private void OnEnable()
@@ -53,9 +58,21 @@ public class CrateObject : MonoBehaviour, ICollectable
     public float Score
     {
         get => score; 
-        set => score = value; 
+        set  
+        { 
+            score = value;
+            UpdateTextObjects();
+        } 
     }
 
+    // Displays the current score in the textObjects
+    void UpdateTextObjects()
+    {
+        foreach (var tmp in textObjects)
+        {
+            tmp.SetText(score.ToString());
+        }
+    }
 
     public CrateTag Tag
     {
