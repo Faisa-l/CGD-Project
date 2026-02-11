@@ -110,7 +110,7 @@ public class DrivingController : MonoBehaviour
         playerCamera.transform.parent = null;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         DriftBoost();
         groundCheck();  

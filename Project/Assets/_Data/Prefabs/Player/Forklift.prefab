@@ -2439,9 +2439,9 @@ MonoBehaviour:
   manualDriftAnim: 1
   manualAnimationSpeed: 50
   drifting: 0
-  driftMultiplier: 1.3
+  driftMultiplier: 2
   driftBoostTimer: 0
-  driftBoostDuration: 2
+  driftBoostDuration: 1
   DriftBoostReady: 0
   lift: {fileID: 3846148368281736309}
   liftSpeed: 3
@@ -2452,7 +2452,7 @@ MonoBehaviour:
   playerMesh: {fileID: 2736618683385788251}
   bouncingForceMultiplier: 150
   bouncingForceMode: 5
-  bounceDecay: 1.3
+  bounceDecay: 1.396
   lookAtTransform: {fileID: 3325905161990052438}
   cameraForwardPos: {fileID: 4984584100628000045}
   cameraReversePos: {fileID: 4772259750914084470}
