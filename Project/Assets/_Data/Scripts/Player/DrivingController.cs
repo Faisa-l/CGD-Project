@@ -13,7 +13,7 @@ public class DrivingController : MonoBehaviour
     [Header("Main Components")]
     [SerializeField] Rigidbody rigidBody;
 
-    [Header("Movement variables")]   
+    [Header("Movement variables")]
     [SerializeField] float acceleration = 20f;
     [SerializeField] float breakMultiplier = 3.0f;
     [SerializeField] float speed = 0f;
@@ -40,6 +40,9 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float driftBoostTimer = 0f;
     [SerializeField] float driftBoostDuration = 2f;
     [SerializeField] bool DriftBoostReady = false;
+    [SerializeField] float maxBoostSpeed = 20f;
+    [SerializeField] int DriftBoostTier = 0;
+    [SerializeField] bool TiersEnabled;
 
     float sign = 1f;
 
@@ -97,11 +100,13 @@ public class DrivingController : MonoBehaviour
         maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
 
         playerCamera.transform.parent = null;
+        maxSpeed = 9.0f;
     }
 
     private void Update()
     {
-        DriftBoost();
+      
+
         groundCheck();  
         updateMove();
         updateRotate();
@@ -110,6 +115,18 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
+
+        if (TiersEnabled)
+        {
+            maxBoostSpeed = 30f;
+            TieredDriftBoost();
+
+        }
+        else
+        {
+            maxBoostSpeed = 20f;
+            DriftBoost();
+        }
     }
 
 #region Updating functions
@@ -131,7 +148,7 @@ public class DrivingController : MonoBehaviour
             //if current speed is maxxed out and the player is attempting to move in that direction
             if (Mathf.Abs(speed) >= maxSpeed && sign == Mathf.Sign(speed))
             {
-                speed = sign * maxSpeed;
+                speed -= acceleration * Time.deltaTime * sign * ((Mathf.Sign(speed) != sign) ? breakMultiplier : 1);
             }
             else
             {
@@ -323,8 +340,14 @@ public class DrivingController : MonoBehaviour
     }
 
     public void OnTurn(InputValue value)
-    {      
+    {   
+        float prevTurnValue = movement.turningValue;
         movement.turningValue = value.Get<Vector2>().x;
+
+        if (movement.turningValue != prevTurnValue) 
+        {
+            driftBoostTimer = 0; 
+        }
     }
 
     public void OnDrift()
@@ -363,28 +386,21 @@ public class DrivingController : MonoBehaviour
     {
         if (drifting)
         {
-            driftBoostTimer += Time.deltaTime;
-            if (driftBoostTimer >= 1f)
-            {
-                DriftBoostReady = true;
-            }
+           driftBoostTimer += Time.deltaTime;
+
+           if (driftBoostTimer >= 1f)
+           {
+               DriftBoostReady = true;
+           }
         }
         else if (!drifting && DriftBoostReady)
         {
+            speed = speed * driftMultiplier;
+            DriftBoostReady = false;
 
-            maxSpeed = 18f;
-            speed = maxSpeed;
-            Debug.Log("Boosted with speed: " + speed);
-
-            driftBoostDuration -= Time.deltaTime;
-
-
-            if (driftBoostDuration <= 0f)
+            if(speed >= maxBoostSpeed)
             {
-                maxSpeed = 9f;
-                DriftBoostReady = false;
-                driftBoostDuration = 2f;
-                driftBoostTimer = 0f;
+                speed = maxBoostSpeed;
             }
         }
         else if (!drifting && !DriftBoostReady)
@@ -392,6 +408,68 @@ public class DrivingController : MonoBehaviour
             driftBoostTimer = 0f;
         }
     }
+
+    public void TieredDriftBoost()
+    {
+
+        if (drifting)
+        {
+            driftBoostTimer += Time.deltaTime;
+            if (driftBoostTimer <= 1)
+            {
+                DriftBoostTier = 0;
+                DriftBoostReady = false;
+            }
+            else if (driftBoostTimer <= 2)
+            {
+                DriftBoostTier = 1;
+                DriftBoostReady = true;
+            }
+            else if (driftBoostTimer <= 3)
+            {
+                DriftBoostTier = 2;
+                DriftBoostReady = true;
+            }
+            else if (driftBoostTimer < 4)
+            {
+                DriftBoostTier = 3;
+                DriftBoostReady = true;
+            }
+        }
+        else if (!drifting && DriftBoostReady)
+        {
+            switch (DriftBoostTier)
+            {
+                case 0:
+                    driftMultiplier = 0f;
+                    break;
+                case 1:
+                    driftMultiplier = 2f;
+                    break;
+                case 2:
+                    driftMultiplier = 2.5f;
+                    break;
+                case 3:
+                    driftMultiplier = 3f;
+                    break;
+            }
+
+            speed = speed * driftMultiplier;
+            DriftBoostReady = false;
+
+            if (speed >= maxBoostSpeed)
+            {
+                speed = maxBoostSpeed;
+            }
+        }
+        else if (!drifting && !DriftBoostReady)
+        {
+            driftBoostTimer = 0f;
+            DriftBoostTier = 0;
+        }
+        
+    }
+
 
     #endregion
 
