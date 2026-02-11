@@ -37,12 +37,20 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float manualAnimationSpeed = 1f;
     [SerializeField] bool drifting = false;
     [SerializeField] float driftMultiplier = 2f;
+
+    [Header("Drift Boost Variables")]
+    [SerializeField] float driftBoostMultiplier = 2f;
     [SerializeField] float driftBoostTimer = 0f;
     [SerializeField] float driftBoostDuration = 2f;
     [SerializeField] bool DriftBoostReady = false;
     [SerializeField] float maxBoostSpeed = 20f;
     [SerializeField] int DriftBoostTier = 0;
     [SerializeField] bool TiersEnabled;
+    [SerializeField] float Tier1Multiplier;
+    [SerializeField] float Tier2Multiplier;
+    [SerializeField] float Tier3Multiplier;
+    [SerializeField] GameObject boostParticlesBL;
+    [SerializeField] GameObject boostParticlesBR;
 
     float sign = 1f;
 
@@ -395,7 +403,7 @@ public class DrivingController : MonoBehaviour
         }
         else if (!drifting && DriftBoostReady)
         {
-            speed = speed * driftMultiplier;
+            speed = speed * driftBoostMultiplier;
             DriftBoostReady = false;
 
             if(speed >= maxBoostSpeed)
@@ -418,21 +426,50 @@ public class DrivingController : MonoBehaviour
             if (driftBoostTimer <= 1)
             {
                 DriftBoostTier = 0;
+                boostParticlesBL.SetActive(false);
+                boostParticlesBR.SetActive(false);
                 DriftBoostReady = false;
             }
             else if (driftBoostTimer <= 2)
             {
                 DriftBoostTier = 1;
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule ma = ps.main;
+                ma.startColor = Color.yellow;
+
+                ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule ma1 = ps1.main;
+                ma1.startColor = Color.yellow;
+
                 DriftBoostReady = true;
             }
             else if (driftBoostTimer <= 3)
             {
                 DriftBoostTier = 2;
+                ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule ma = ps.main;
+                ma.startColor = Color.red;
+
+                ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule ma1 = ps1.main;
+                ma1.startColor = Color.red;
+
                 DriftBoostReady = true;
             }
             else if (driftBoostTimer < 4)
             {
                 DriftBoostTier = 3;
+                ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule ma = ps.main;
+                ma.startColor = Color.blue;
+
+                ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
+                ParticleSystem.MainModule ma1 = ps1.main;
+                ma1.startColor = Color.blue;
+
                 DriftBoostReady = true;
             }
         }
@@ -441,20 +478,20 @@ public class DrivingController : MonoBehaviour
             switch (DriftBoostTier)
             {
                 case 0:
-                    driftMultiplier = 0f;
+                    driftBoostMultiplier = 0f;
                     break;
                 case 1:
-                    driftMultiplier = 2f;
+                    driftBoostMultiplier = Tier1Multiplier;
                     break;
                 case 2:
-                    driftMultiplier = 2.5f;
+                    driftBoostMultiplier = Tier2Multiplier;
                     break;
                 case 3:
-                    driftMultiplier = 3f;
+                    driftBoostMultiplier = Tier3Multiplier;
                     break;
             }
 
-            speed = speed * driftMultiplier;
+            speed = speed * driftBoostMultiplier;
             DriftBoostReady = false;
 
             if (speed >= maxBoostSpeed)
