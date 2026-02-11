@@ -20,6 +20,8 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float maxSpeed = 35f;
     [SerializeField] float rotateSpeed = 5.0f;
     [SerializeField] Movement movement;
+    private float previousMovementValue = 0;
+    private bool bounced = false;
     [SerializeField] bool is_moving => (movement.movingValue != 0);
 
     [Header("Ground Checking Variables")]
@@ -56,6 +58,14 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private Transform steeringWheel;
     [SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
 
+    [Space(10)]
+    [SerializeField] float bouncingForceMultiplier = 5f;
+    [SerializeField] ForceMode bouncingForceMode = ForceMode.Acceleration;
+    [Range(1,2)]
+    [SerializeField] float bounceDecay = 2f;
+    Vector3 addedForce = Vector3.zero;
+
+    [Space(10)]
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
@@ -155,7 +165,18 @@ public class DrivingController : MonoBehaviour
            }
         }
 
-        rigidBody.linearVelocity = (transform.forward * speed) + new Vector3(0,rigidBody.linearVelocity.y,0);
+        if (addedForce.magnitude < 0.1)
+        {
+            rigidBody.linearVelocity = (transform.forward * speed) + new Vector3(0, rigidBody.linearVelocity.y, 0);
+        }
+
+        if (addedForce.magnitude > 0.1) addedForce *= 1f / bounceDecay;
+        else if(bounced)
+        {
+            bounced = false;
+            addedForce = new Vector3();
+            movement.movingValue = previousMovementValue;
+        }
 
         //audio handling
         if (sign == -1 && is_moving)
@@ -176,7 +197,7 @@ public class DrivingController : MonoBehaviour
     private void updateRotate()
     {
         //don't do rotations if the forklift isn't moving
-        if (speed == 0 || selfIsLifted) return;
+        if (speed == 0 && !bounced || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotateSpeed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
@@ -321,6 +342,8 @@ public class DrivingController : MonoBehaviour
         {
             sign = Mathf.Sign(movement.movingValue);
         }
+
+        previousMovementValue = movement.movingValue;
     }
 
     public void OnTurn(InputValue value)
@@ -415,6 +438,28 @@ public class DrivingController : MonoBehaviour
         }
 
         Gizmos.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        bounced = true;
+
+        Vector3 forceDirection = Vector3.zero;
+
+        Vector3 forwardDir = -transform.forward * sign;
+        Vector3 normalDir = collision.impulse.normalized;
+
+        forceDirection = normalDir;
+
+        //reflect the direction around the impulse of the collision
+        //float k = 2 * (forwardDir.x * normalDir.z + forwardDir.z * normalDir.x);
+        //forceDirection = new Vector3(forwardDir.x-k*normalDir.z, 0,forwardDir.z-k*normalDir.x).normalized;
+
+        addedForce = forceDirection * bouncingForceMultiplier * rigidBody.mass;
+
+        movement.movingValue = 0;
+
+        rigidBody.AddForce(addedForce);
     }
 
 }
