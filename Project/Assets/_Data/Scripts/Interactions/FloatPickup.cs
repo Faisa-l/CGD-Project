@@ -171,12 +171,18 @@ public class FloatPickup : MonoBehaviour
                 held_object = lifting_forklift;
                 has_forklift = true;
             }
+
+            if(has_forklift)
+            {
+                held_object.GetComponent<DrivingController>().togglePlayerLifted();
+            }
         }
         else if (forklift_selected == false && held_object != null && has_forklift == true)
         {
             //Debug.Log("Dropping Forklift");
             ray_dist = 1.5f;
             UnsetPositionInParent(held_object.transform);
+            held_object.GetComponent<DrivingController>().togglePlayerLifted();
             has_forklift = false;
         }
     }
