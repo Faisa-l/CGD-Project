@@ -18,23 +18,26 @@ public class CrateObject : MonoBehaviour, ICollectable
     bool useColouredTags = true;
 
     bool collect;
+    string startingPromptText;
+    ContextualPromptSource promptSource;
     MaterialPropertyBlock block;
     PhysicsPickup pickup;
     TextMeshPro[] textObjects;
 
     private void Awake()
     {
+        textObjects = GetComponentsInChildren<TextMeshPro>();
+        promptSource = GetComponentInChildren<ContextualPromptSource>();
         block = new MaterialPropertyBlock();
         collect = true;
-        
+        startingPromptText = "<sprite name=\"Xbox_Y\">";
+
         // Bind grabbing event to pickup controller
         if (!TryGetComponent(out pickup))
         {
             Debug.LogWarning("No PhysicsPickup on CrateObject");
         }
 
-        // Get textObjects
-        textObjects = GetComponentsInChildren<TextMeshPro>();
     }
 
     private void OnEnable()
@@ -57,13 +60,49 @@ public class CrateObject : MonoBehaviour, ICollectable
 
     public float Score
     {
-        get => score; 
-        set  
-        { 
+        get => score;
+        set
+        {
             score = value;
             UpdateTextObjects();
-        } 
+        }
     }
+
+    public CrateTag Tag
+    {
+        get { return crateTag; }
+        set
+        {
+            crateTag = value;
+            if (!useColouredTags) return;
+
+            // Colour this object based on its tag
+            var renderer = GetComponent<Renderer>();
+            renderer.GetPropertyBlock(block);
+            block.SetColor("_BaseColor", value.GetColourFromTag());
+            renderer.SetPropertyBlock(block);
+        }
+    }
+
+    public GameObject GameObject { get => gameObject; }
+
+    public bool CanCollect
+    {
+        get => collect;
+        set => collect = value;
+    }
+
+    // Make the object collect-able or not
+    void OnGrabbed()
+    {
+        CanCollect = false;
+        UpdatePromptTextToDrop();
+    }
+    void OnDropped() 
+    { 
+        CanCollect = true;
+        UpdatePromptTextToGrab();
+    } 
 
     // Displays the current score in the textObjects
     void UpdateTextObjects()
@@ -74,31 +113,18 @@ public class CrateObject : MonoBehaviour, ICollectable
         }
     }
 
-    public CrateTag Tag
+    // Particularly ugly ways to change the prompt text
+    void UpdatePromptTextToGrab()
     {
-        get { return crateTag; }
-        set 
-        { 
-            crateTag = value;
-            if (!useColouredTags) return;
+        if (promptSource == null) return;
 
-            // Colour this object based on its tag
-            var renderer = GetComponent<Renderer>();
-            renderer.GetPropertyBlock(block);
-            block.SetColor("_BaseColor", value.GetColourFromTag());
-            renderer.SetPropertyBlock(block);
-        } 
+        promptSource.message = $"{startingPromptText} Grab";
     }
 
-    public GameObject GameObject { get => gameObject; }
+    void UpdatePromptTextToDrop()
+    {
+        if (promptSource == null) return;
 
-    public bool CanCollect 
-    { 
-        get => collect; 
-        set => collect = value; 
+        promptSource.message = $"{startingPromptText} Drop";
     }
-
-    // Make the object collect-able or not
-    void OnGrabbed() => CanCollect = false;
-    void OnDropped() => CanCollect = true;
 }
