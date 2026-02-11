@@ -12108,18 +12108,19 @@ MonoBehaviour:
   manualAnimationSpeed: 50
   drifting: 0
   driftMultiplier: 2
-  driftBoostMultiplier: 2
-  driftBoostTimer: 0
-  driftBoostDuration: 2
-  DriftBoostReady: 0
+  boostMultiplier: 2
+  boostTimer: 0
+  boostDuration: 2
+  boostReady: 0
   maxBoostSpeed: 20
-  DriftBoostTier: 0
+  boostTier: 0
   TiersEnabled: 1
   Tier1Multiplier: 1.5
   Tier2Multiplier: 2
-  Tier3Multiplier: 3
+  Tier3Multiplier: 2.5
   boostParticlesBL: {fileID: 6386098349135711289}
   boostParticlesBR: {fileID: 3550865656725663675}
+  boostTierTimeIncrement: 0.5
   lift: {fileID: 3846148368281736309}
   liftSpeed: 3
   minLiftPosition: 2.4
@@ -12130,6 +12131,9 @@ MonoBehaviour:
   bouncingForceMultiplier: 150
   bouncingForceMode: 5
   bounceDecay: 1.396
+  ignoreBounceMask:
+  - Player
+  - Float
   lookAtTransform: {fileID: 3325905161990052438}
   cameraForwardPos: {fileID: 4984584100628000045}
   cameraReversePos: {fileID: 4772259750914084470}

@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class DrivingController : MonoBehaviour
 {
@@ -53,6 +56,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float Tier3Multiplier;
     [SerializeField] GameObject boostParticlesBL;
     [SerializeField] GameObject boostParticlesBR;
+    [SerializeField] float boostTierTimeIncrement = 0.5f;
 
     float sign = 1f;
 
@@ -75,6 +79,7 @@ public class DrivingController : MonoBehaviour
     [Range(1,2)]
     [SerializeField] float bounceDecay = 2f;
     Vector3 addedForce = Vector3.zero;
+    [SerializeField] List<string> ignoreBounceMask;
 
     [Space(10)]
     [SerializeField] private Transform lookAtTransform;
@@ -100,6 +105,7 @@ public class DrivingController : MonoBehaviour
 
     bool lifting = false;
     bool selfIsLifted = false;
+
 
     public void setPlayerGamepad(Gamepad gamepad)
     {
@@ -456,12 +462,12 @@ public class DrivingController : MonoBehaviour
         if (drifting)
         {
             boostTimer += Time.deltaTime;
-            if (boostTimer <= 1)
+            if (boostTimer <= boostTierTimeIncrement)
             {
                 boostTier = 0;
                 boostReady = false;
             }
-            else if (boostTimer <= 2)
+            else if (boostTimer <= 2 * boostTierTimeIncrement)
             {
                 boostTier = 1;
                 boostParticlesBL.SetActive(true);
@@ -472,7 +478,7 @@ public class DrivingController : MonoBehaviour
 
                 boostReady = true;
             }
-            else if (boostTimer <= 3)
+            else if (boostTimer <= 3 * boostTierTimeIncrement)
             {
                 boostTier = 2;
 
@@ -484,7 +490,7 @@ public class DrivingController : MonoBehaviour
 
                 boostReady = true;
             }
-            else if (boostTimer < 4)
+            else if (boostTimer < 4 * boostTierTimeIncrement)
             {
                 boostTier = 3;
 
@@ -556,6 +562,8 @@ public class DrivingController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
+
         bounced = true;
 
         Vector3 forceDirection = Vector3.zero;
