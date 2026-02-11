@@ -2424,7 +2424,7 @@ MonoBehaviour:
   acceleration: 3
   breakMultiplier: 3
   speed: 0
-  maxSpeed: 35
+  maxSpeed: 12
   rotateSpeed: 65
   groundCheckTransform: {fileID: 991374653987402780}
   isGrounded: 0
@@ -2440,6 +2440,9 @@ MonoBehaviour:
   manualAnimationSpeed: 50
   drifting: 0
   driftMultiplier: 2
+  driftBoostTimer: 0
+  driftBoostDuration: 2
+  DriftBoostReady: 0
   lift: {fileID: 3846148368281736309}
   liftSpeed: 3
   minLiftPosition: 2.4
