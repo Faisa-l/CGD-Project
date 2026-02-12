@@ -930,11 +930,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5133357885489946857, guid: 184445b140bf4d24b9a31f0165c87971, type: 3}
       propertyPath: m_Name
-      value: Shelf_Spawner (5)
+      value: Shelf_Spawn_2Shelf
       objectReference: {fileID: 0}
     - target: {fileID: 6522741581729328388, guid: 184445b140bf4d24b9a31f0165c87971, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 13.64
+      value: 9.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8815427665576738880, guid: 184445b140bf4d24b9a31f0165c87971, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 22.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
