@@ -19,11 +19,14 @@ public static class CrateExtensions
         public int crateScore;
     }
 
+    public enum ColorTag { Red, Blue, Green, Null };
+
     // A CrateRequirement with a time limit
     [Serializable]
     public struct ScheduleQuota
     {
-        public CrateTag requiredTag;
+        public ColorTag requiredColor;
+        //public CrateTag requiredTag;
         public float requiredScore;
         [Min(0f)]
         public float timeLimit;
@@ -40,7 +43,7 @@ public static class CrateExtensions
 
     // Types of tags a crate can have. Add more to the enum if you want.
     // This can be referenced by calling CrateObject.CrateTag. 
-    public enum CrateTag { Red, Green, Blue }
+    public enum CrateTag { Red1, Green1, Blue1, Red2, Green2, Blue2 }
 
     // Gets a random crate tag
     public static CrateTag GetRandomCrateTag()
@@ -55,10 +58,27 @@ public static class CrateExtensions
     {
         return tag switch
         {
-            CrateTag.Red => Color.red,
-            CrateTag.Green => Color.green,
-            CrateTag.Blue => Color.blue,
+            CrateTag.Red1 => Color.red,
+            CrateTag.Green1 => Color.green,
+            CrateTag.Blue1 => Color.blue,
+            CrateTag.Red2 => Color.red,
+            CrateTag.Green2 => Color.green,
+            CrateTag.Blue2 => Color.blue,
             _ => Color.white,
+        };
+    }
+
+    public static ColorTag getColorTag(this CrateTag tag)
+    {
+        return tag switch
+        {
+            CrateTag.Red1 => ColorTag.Red,
+            CrateTag.Green1 => ColorTag.Green,
+            CrateTag.Blue1 => ColorTag.Blue,
+            CrateTag.Red2 => ColorTag.Red,
+            CrateTag.Green2 => ColorTag.Green,
+            CrateTag.Blue2 => ColorTag.Blue,
+            _ => ColorTag.Null
         };
     }
 
