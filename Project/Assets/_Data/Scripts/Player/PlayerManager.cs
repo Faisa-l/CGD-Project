@@ -22,7 +22,11 @@ public class PlayerManager : MonoBehaviour
     int player_count = 0;
     [Space(20)]
     [Header("Player Debug Mode")]
+#if UNITY_EDITOR
     [SerializeField] bool debug_mode_on = false;
+#else
+    bool debug_mode_on = false;
+#endif
     [SerializeField] GameObject player_prefab;
 	[SerializeField] [Range(1, 4)] int debugPlayerCount = 4;
 
