@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FloatPickup : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class FloatPickup : MonoBehaviour
     [SerializeField] RaycastHit hit;
     [SerializeField] private GameObject held_object;
     float timer = 0;
+
+	// Events
+	public UnityEvent onGrabbed = new UnityEvent();
+	public UnityEvent onDropped = new UnityEvent();
 
     public string MessageInteract => "Picks Up";
 
@@ -121,6 +126,9 @@ public class FloatPickup : MonoBehaviour
             {
                 Debug.Log("Invoking onpickup");
                 pickup.OnGrabbed.Invoke();
+				
+				// Let visual cue elements know the forklift has picked up a crate
+				onGrabbed?.Invoke();
             }
         }
         else if (object_selected == false && has_object == true)
@@ -130,6 +138,9 @@ public class FloatPickup : MonoBehaviour
             {
                 Debug.Log("Invoking ondrop");
                 pickup.OnDropped.Invoke();
+				
+				// Let visual cue elements know the forklift has dropped a crate
+				onDropped?.Invoke();
             }
 
             ray_dist = 1.5f;

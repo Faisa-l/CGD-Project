@@ -52,7 +52,7 @@ public class CrateCollector : MonoBehaviour
     Material markerMaterial;
 
     public float Quota => collectionRequirement.requiredScore;
-    public CrateTag RequiredTag => collectionRequirement.requiredTag;
+    //public CrateTag RequiredTag => collectionRequirement.requiredTag;
 
     private void OnValidate()
     {
@@ -132,7 +132,9 @@ public class CrateCollector : MonoBehaviour
     // Will attempt to collect the given collectable
     void TryCollect(ICollectable collectable)
     {
-        if (canCollect && collectable.CanCollect && collectable.Tag == collectionRequirement.requiredTag && !forCollection.Contains(collectable))
+        if (canCollect && collectable.CanCollect &&
+            CrateExtensions.getColorTag(collectable.Tag) == collectionRequirement.requiredColor && 
+            !forCollection.Contains(collectable))
         {
             forCollection.Add(collectable);
             onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());

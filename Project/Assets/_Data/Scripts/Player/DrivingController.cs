@@ -1,6 +1,9 @@
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class DrivingController : MonoBehaviour
 {
@@ -13,13 +16,15 @@ public class DrivingController : MonoBehaviour
     [Header("Main Components")]
     [SerializeField] Rigidbody rigidBody;
 
-    [Header("Movement variables")]   
+    [Header("Movement variables")]
     [SerializeField] float acceleration = 20f;
     [SerializeField] float breakMultiplier = 3.0f;
     [SerializeField] float speed = 0f;
     [SerializeField] float maxSpeed = 35f;
     [SerializeField] float rotateSpeed = 5.0f;
     [SerializeField] Movement movement;
+    private float previousMovementValue = 0;
+    private bool bounced = false;
     [SerializeField] bool is_moving => (movement.movingValue != 0);
 
     [Header("Ground Checking Variables")]
@@ -37,9 +42,21 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float manualAnimationSpeed = 1f;
     [SerializeField] bool drifting = false;
     [SerializeField] float driftMultiplier = 2f;
-    [SerializeField] float driftBoostTimer = 0f;
-    [SerializeField] float driftBoostDuration = 2f;
-    [SerializeField] bool DriftBoostReady = false;
+
+    [Header("Boost Variables")]
+    [SerializeField] float boostMultiplier = 2f;
+    [SerializeField] float boostTimer = 0f;
+    [SerializeField] float boostDuration = 2f;
+    [SerializeField] bool boostReady = false;
+    [SerializeField] float maxBoostSpeed = 20f;
+    [SerializeField] int boostTier = 0;
+    [SerializeField] bool TiersEnabled;
+    [SerializeField] float Tier1Multiplier;
+    [SerializeField] float Tier2Multiplier;
+    [SerializeField] float Tier3Multiplier;
+    [SerializeField] GameObject boostParticlesBL;
+    [SerializeField] GameObject boostParticlesBR;
+    [SerializeField] float boostTierTimeIncrement = 0.5f;
 
     float sign = 1f;
 
@@ -56,6 +73,15 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private Transform steeringWheel;
     [SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
 
+    [Space(10)]
+    [SerializeField] float bouncingForceMultiplier = 5f;
+    [SerializeField] ForceMode bouncingForceMode = ForceMode.Acceleration;
+    [Range(1,2)]
+    [SerializeField] float bounceDecay = 2f;
+    Vector3 addedForce = Vector3.zero;
+    [SerializeField] List<string> ignoreBounceMask;
+
+    [Space(10)]
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
@@ -80,6 +106,7 @@ public class DrivingController : MonoBehaviour
     bool lifting = false;
     bool selfIsLifted = false;
 
+
     public void setPlayerGamepad(Gamepad gamepad)
     {
         playerGamepad = gamepad;
@@ -98,11 +125,11 @@ public class DrivingController : MonoBehaviour
         maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
 
         playerCamera.transform.parent = null;
+        maxSpeed = 9.0f;
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
-        DriftBoost();
         groundCheck();  
         updateMove();
         updateRotate();
@@ -111,6 +138,18 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
+
+        if (TiersEnabled)
+        {
+            maxBoostSpeed = 30f;
+            TieredDriftBoost();
+
+        }
+        else
+        {
+            maxBoostSpeed = 20f;
+            DriftBoost();
+        }
     }
 
 #region Updating functions
@@ -132,7 +171,7 @@ public class DrivingController : MonoBehaviour
             //if current speed is maxxed out and the player is attempting to move in that direction
             if (Mathf.Abs(speed) >= maxSpeed && sign == Mathf.Sign(speed))
             {
-                speed = sign * maxSpeed;
+                speed -= acceleration * Time.deltaTime * sign * ((Mathf.Sign(speed) != sign) ? breakMultiplier : 1);
             }
             else
             {
@@ -155,7 +194,18 @@ public class DrivingController : MonoBehaviour
            }
         }
 
-        rigidBody.linearVelocity = (transform.forward * speed) + new Vector3(0,rigidBody.linearVelocity.y,0);
+        if (addedForce.magnitude < 0.1)
+        {
+            rigidBody.linearVelocity = (transform.forward * speed) + new Vector3(0, rigidBody.linearVelocity.y, 0);
+        }
+
+        if (addedForce.magnitude > 0.1) addedForce *= 1f / bounceDecay;
+        else if(bounced)
+        {
+            bounced = false;
+            addedForce = new Vector3();
+            movement.movingValue = previousMovementValue;
+        }
 
         //audio handling
         if (sign == -1 && is_moving)
@@ -176,7 +226,7 @@ public class DrivingController : MonoBehaviour
     private void updateRotate()
     {
         //don't do rotations if the forklift isn't moving
-        if (speed == 0 || selfIsLifted) return;
+        if ((speed == 0 && !bounced) || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
         transform.Rotate(0, sign * movement.turningValue * rotateSpeed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
@@ -321,11 +371,19 @@ public class DrivingController : MonoBehaviour
         {
             sign = Mathf.Sign(movement.movingValue);
         }
+
+        previousMovementValue = movement.movingValue;
     }
 
     public void OnTurn(InputValue value)
-    {      
+    {   
+        float prevTurnValue = movement.turningValue;
         movement.turningValue = value.Get<Vector2>().x;
+
+        if (movement.turningValue != prevTurnValue) 
+        {
+            boostTimer = 0; 
+        }
     }
 
     public void OnDrift()
@@ -364,34 +422,119 @@ public class DrivingController : MonoBehaviour
     {
         if (drifting)
         {
-            driftBoostTimer += Time.deltaTime;
-            if (driftBoostTimer >= 1f)
+           boostTimer += Time.deltaTime;
+
+           if (boostTimer >= 1f)
+           {
+               boostReady = true;
+           }
+        }
+        else if (!drifting && boostReady)
+        {
+            speed = speed * boostMultiplier;
+            boostReady = false;
+
+            if(speed >= maxBoostSpeed)
             {
-                DriftBoostReady = true;
+                speed = maxBoostSpeed;
             }
         }
-        else if (!drifting && DriftBoostReady)
+        else if (!drifting && !boostReady)
         {
+            boostTimer = 0f;
+        }
+    }
 
-            maxSpeed = 18f;
-            speed = maxSpeed;
-            Debug.Log("Boosted with speed: " + speed);
+    public void TieredDriftBoost()
+    {
+        ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma = ps.main;
 
-            driftBoostDuration -= Time.deltaTime;
+        ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
+        ParticleSystem.MainModule ma1 = ps1.main;
 
+        if(!drifting && boostParticlesBL.activeSelf)
+        {
+            boostParticlesBL.SetActive(false);
+            boostParticlesBR.SetActive(false);
+        }
 
-            if (driftBoostDuration <= 0f)
+        if (drifting)
+        {
+            boostTimer += Time.deltaTime;
+            if (boostTimer <= boostTierTimeIncrement)
             {
-                maxSpeed = 9f;
-                DriftBoostReady = false;
-                driftBoostDuration = 2f;
-                driftBoostTimer = 0f;
+                boostTier = 0;
+                boostReady = false;
+            }
+            else if (boostTimer <= 2 * boostTierTimeIncrement)
+            {
+                boostTier = 1;
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.yellow;
+                ma1.startColor = Color.yellow;
+
+                boostReady = true;
+            }
+            else if (boostTimer <= 3 * boostTierTimeIncrement)
+            {
+                boostTier = 2;
+
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.red;
+                ma1.startColor = Color.red;
+
+                boostReady = true;
+            }
+            else if (boostTimer < 4 * boostTierTimeIncrement)
+            {
+                boostTier = 3;
+
+                boostParticlesBL.SetActive(true);
+                boostParticlesBR.SetActive(true);
+
+                ma.startColor = Color.blue;
+                ma1.startColor = Color.blue;
+
+                boostReady = true;
             }
         }
-        else if (!drifting && !DriftBoostReady)
+        else if (!drifting && boostReady)
         {
-            driftBoostTimer = 0f;
+            switch (boostTier)
+            {
+                case 0:
+                    boostMultiplier = 0f;
+                    break;
+                case 1:
+                    boostMultiplier = Tier1Multiplier;
+                    break;
+                case 2:
+                    boostMultiplier = Tier2Multiplier;
+                    break;
+                case 3:
+                    boostMultiplier = Tier3Multiplier;
+                    break;
+            }
+
+            speed = speed * boostMultiplier;
+            boostReady = false;
+
+            if (speed >= maxBoostSpeed)
+            {
+                speed = maxBoostSpeed;
+            }
         }
+        else if (!drifting && !boostReady)
+        {
+            boostTimer = 0f;
+            boostTier = 0;
+        }
+        
     }
 
     public void togglePlayerLifted()
@@ -415,6 +558,30 @@ public class DrivingController : MonoBehaviour
         }
 
         Gizmos.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
+
+        bounced = true;
+
+        Vector3 forceDirection = Vector3.zero;
+
+        Vector3 forwardDir = -transform.forward * sign;
+        Vector3 normalDir = collision.impulse.normalized;
+
+        forceDirection = normalDir;
+
+        //reflect the direction around the impulse of the collision
+        //float k = 2 * (forwardDir.x * normalDir.z + forwardDir.z * normalDir.x);
+        //forceDirection = new Vector3(forwardDir.x-k*normalDir.z, 0,forwardDir.z-k*normalDir.x).normalized;
+
+        addedForce = forceDirection * bouncingForceMultiplier * rigidBody.mass;
+
+        movement.movingValue = 0;
+
+        rigidBody.AddForce(addedForce);
     }
 
 }
