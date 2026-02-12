@@ -12334,8 +12334,7 @@ Transform:
   m_LocalPosition: {x: 1.23, y: 7.7, z: -4}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4367835438434802008}
+  m_Children: []
   m_Father: {fileID: 3804133629908528625}
   m_LocalEulerAnglesHint: {x: 0, y: 93.77, z: 0}
 --- !u!114 &2980345092964779369
@@ -12776,8 +12775,8 @@ MonoBehaviour:
   bouncingForceMode: 5
   bounceDecay: 1.396
   ignoreBounceMask:
-  - Player
   - Float
+  - No Bounce
   lookAtTransform: {fileID: 3325905161990052438}
   cameraForwardPos: {fileID: 4984584100628000045}
   cameraReversePos: {fileID: 4772259750914084470}
