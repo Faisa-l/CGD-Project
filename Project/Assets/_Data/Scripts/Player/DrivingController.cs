@@ -94,6 +94,8 @@ public class DrivingController : MonoBehaviour
 
     [SerializeField] GameObject playerCamera = null;
 
+    [SerializeField] GameObject castRay;
+
     private Rigidbody rb;
 
     private AudioEnabler audio_enabler;
@@ -413,9 +415,9 @@ public class DrivingController : MonoBehaviour
 
     public void OnInteract()
     {
-        GetComponent<FloatPickup>().PickUpSelectedForklift();
+        //GetComponent<FloatPickup>().PickUpSelectedForklift();
 
-        GetComponent<FloatPickup>().PickUpSelected();
+        castRay.GetComponent<LiftPickUp>().PickUpSelected();
     }
 
     public void DriftBoost()
