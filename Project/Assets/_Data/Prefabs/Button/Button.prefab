@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 5865188035320978151}
   - component: {fileID: 9063363048484765346}
   m_Layer: 0
-  m_Name: Lit section
+  m_Name: Pressing section
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
