@@ -114,4 +114,17 @@ public class CrateSpawner : MonoBehaviour
             (list[n], list[k]) = (list[k], list[n]);
         }
     }
+
+    // Draws the spawner locations and what colour they are for. Size is also based on the score 
+    private void OnDrawGizmosSelected()
+    {
+        foreach (var req in spawnRequirements)
+        {
+            foreach (Transform t in req.parentTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray())
+            {
+                Gizmos.color = req.tag.GetColourFromTag();
+                Gizmos.DrawCube(t.position, new Vector3(1, 1, 1) * (req.crateScore / 75f));
+            }
+        }
+    }
 }
