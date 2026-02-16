@@ -124,7 +124,7 @@ public class DrivingController : MonoBehaviour
         maxCameraReverseDist = Vector3.Magnitude(lookAtPosition - cameraReverseOrigin);
         maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
 
-        playerCamera.transform.parent = null;
+        playerCamera.transform.parent.transform.parent = null; // Get camera shake root
         maxSpeed = 9.0f;
     }
 
