@@ -8,9 +8,16 @@ using UnityEngine;
 /// </summary>
 public class ForkliftCameraShake : MonoBehaviour
 {
+	[Header("Settings")]
+	[SerializeField] private float quotaMissedDuration = 0.5f;
+	[SerializeField] private float quotaMissedMagnitude = 0.1f;
+	
 	[Header("Cache")]
 	[Tooltip("Reference to the player camera holder (root) transform")]
-	[SerializeField] Transform cameraHolder;
+	[SerializeField] private Transform cameraHolder;
+	
+	//Event objects
+	private CrateCollector crateCollector;
 	
 	// Code needs to run after DrivingController Awake()
 	private void Start()
@@ -18,6 +25,21 @@ public class ForkliftCameraShake : MonoBehaviour
 		// Reset after being detached by DrivingController.cs
 		transform.localPosition = Vector3.zero;
 		transform.rotation = Quaternion.identity;
+		
+		// Get event objects
+		
+		// Forklift spawned dynamically so can't use inspector
+		crateCollector = GameObject.Find("CrateCollector").GetComponent<CrateCollector>();
+		
+		// Subscribe to events
+		if (crateCollector)
+		{
+			crateCollector.onEvaluatedRequirement.AddListener(OnQuotaEvaluation);
+		}
+		else
+		{
+			Debug.LogWarning("Forklift Camera Shake couldn't find Crate Collector");
+		}
 	}
 	
 	// Cause the camera to shake by specified amount
@@ -52,4 +74,17 @@ public class ForkliftCameraShake : MonoBehaviour
 		// Snap back to starting position
 		cameraHolder.localPosition = originalPosition;
 	}
+	
+	#region Events
+	
+	private void OnQuotaEvaluation(bool isSuccess)
+	{
+		// Shake if quota failed
+		if (!isSuccess)
+		{
+			Shake(quotaMissedDuration, quotaMissedMagnitude);
+		}
+	}
+	
+	#endregion Events
 }

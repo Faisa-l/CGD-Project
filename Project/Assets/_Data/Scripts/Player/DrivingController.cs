@@ -91,6 +91,11 @@ public class DrivingController : MonoBehaviour
     Vector3 cameraForwardOrigin;
     float maxCameraReverseDist;
     float maxCameraForwardDist;
+	
+	[Header("Camera Shake")]
+	[SerializeField] ForkliftCameraShake cameraShake;
+	[SerializeField] float shakeDuration = 0.2f;
+	[SerializeField] float shakeMagnitude = 0.05f;
 
     [SerializeField] GameObject playerCamera = null;
 
@@ -582,6 +587,9 @@ public class DrivingController : MonoBehaviour
         movement.movingValue = 0;
 
         rigidBody.AddForce(addedForce);
+		
+		// Camera shake
+		cameraShake.Shake(shakeDuration, shakeMagnitude);
     }
 
 }
