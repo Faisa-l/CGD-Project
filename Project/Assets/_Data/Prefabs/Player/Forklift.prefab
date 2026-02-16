@@ -12108,12 +12108,12 @@ MonoBehaviour:
   manualAnimationSpeed: 50
   drifting: 0
   driftMultiplier: 2
-  driftBoostMultiplier: 2
-  driftBoostTimer: 0
-  driftBoostDuration: 2
-  DriftBoostReady: 0
+  boostMultiplier: 2
+  boostTimer: 0
+  boostDuration: 2
+  boostReady: 0
   maxBoostSpeed: 20
-  DriftBoostTier: 0
+  boostTier: 0
   TiersEnabled: 1
   Tier1Multiplier: 1.5
   Tier2Multiplier: 2
