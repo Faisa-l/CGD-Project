@@ -42,7 +42,7 @@ public class CrateCollector : MonoBehaviour
     UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded;
 
     [SerializeField]
-    UnityEvent<bool> onEvaluatedRequirement;
+    public UnityEvent<bool> onEvaluatedRequirement;
 
     float currentCollectionScore = 0f;
     bool canCollect = false;
