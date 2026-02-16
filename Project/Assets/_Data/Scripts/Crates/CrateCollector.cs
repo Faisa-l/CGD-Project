@@ -132,8 +132,8 @@ public class CrateCollector : MonoBehaviour
     // Will attempt to collect the given collectable
     void TryCollect(ICollectable collectable)
     {
-        if (canCollect && collectable.CanCollect &&
-            CrateExtensions.getColorTag(collectable.Tag) == collectionRequirement.requiredColor && 
+        if (canCollect && collectable.CanCollect && 
+            collectable.Tag == collectionRequirement.requiredTag && 
             !forCollection.Contains(collectable))
         {
             forCollection.Add(collectable);
