@@ -34,6 +34,9 @@ public class CrateObject : MonoBehaviour, ICollectable
     PhysicsPickup pickup;
     TextMeshPro[] textObjects;
 
+    // As in the minimum score the crate can have
+    float MaximumScoreReduction => maxScore * (1 - maximumScoreLossPercentage) - maximumScoreLossValue;
+
     /// <summary>
     /// Instantiate and initialise a new crate.
     /// </summary>
@@ -90,8 +93,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         var relativeVelocity = collision.relativeVelocity;
         if (relativeVelocity.magnitude > velocityDamageThreshold)
         {
-            Debug.Log((maximumScoreLossPercentage));
-            Score = (int)Mathf.Max(maxScore * (1 - maximumScoreLossPercentage) - maximumScoreLossValue, (int)Score - GetScoreLoss(relativeVelocity));
+            Score = (int)Mathf.Max(MaximumScoreReduction, (int)Score - GetScoreLoss(relativeVelocity));
         }
     }
 
@@ -148,7 +150,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     }
 
     // Returns how much score would be lost based on the relative velocity of a collision
-    float GetScoreLoss(Vector3 relativeVelocity) => relativeVelocity.magnitude * damageCoefficient;
+    float GetScoreLoss(Vector3 relativeVelocity) => (relativeVelocity.magnitude - velocityDamageThreshold) * damageCoefficient;
 
     // Displays the current score in the textObjects
     void UpdateTextObjects()

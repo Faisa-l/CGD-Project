@@ -340,6 +340,8 @@ MonoBehaviour:
   useColouredTags: 1
   velocityDamageThreshold: 10
   damageCoefficient: 0.4
+  maximumScoreLossValue: 10
+  maximumScoreLossPercentage: 0
 --- !u!114 &6758174210526124029
 MonoBehaviour:
   m_ObjectHideFlags: 0
