@@ -113,41 +113,56 @@ public class FloatPickup : MonoBehaviour
         }        
     }
 
+    // Fired on the input for the selected controller through the DrivingComponent
     public void PickUpSelected()
     {
-        if (object_selected && !has_object)
-        {
-            SetPositionInParent(hit.collider.gameObject.transform);
-            held_object = hit.collider.gameObject;
-            has_object = true;
+        // Try to grab something, if not then try to drop what might be held
+        if (!TryGrabObject()) TryDropSelectedObject();
+    }
 
-            // Invoke grab event if it exists
-            if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
-            {
-                Debug.Log("Invoking onpickup");
-                pickup.OnGrabbed.Invoke();
-				
-				// Let visual cue elements know the forklift has picked up a crate
-				onGrabbed?.Invoke();
-            }
-        }
-        else if (object_selected == false && has_object == true)
-        {
-            // Invoke drop event if it exists
-            if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
-            {
-                Debug.Log("Invoking ondrop");
-                pickup.OnDropped.Invoke();
-				
-				// Let visual cue elements know the forklift has dropped a crate
-				onDropped?.Invoke();
-            }
+    // Will attempt to grab the object in the ray's hit
+    public bool TryGrabObject()
+    {
+        if (!object_selected || has_object) return false;
 
-            ray_dist = 1.5f;
-            UnsetPositionInParent(held_object.transform);
-            held_object = null;
-            has_object = false;
+        SetPositionInParent(hit.collider.gameObject.transform);
+        held_object = hit.collider.gameObject;
+        has_object = true;
+
+        // Invoke grab event if it exists
+        if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
+        {
+            Debug.Log("Invoking onpickup");
+            pickup.OnGrabbed.Invoke();
+
+            // Let visual cue elements know the forklift has picked up a crate
+            onGrabbed?.Invoke();
         }
+
+        return true;
+    }
+
+    // Drops the object in held_object
+    public bool TryDropSelectedObject()
+    {
+        if (object_selected || !has_object) return false;
+
+        // Invoke drop event if it exists
+        if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
+        {
+            Debug.Log("Invoking ondrop");
+            pickup.OnDropped?.Invoke();
+
+            // Let visual cue elements know the forklift has dropped a crate
+            onDropped?.Invoke();
+        }
+
+        ray_dist = 1.5f;
+        UnsetPositionInParent(held_object.transform);
+        held_object = null;
+        has_object = false;
+
+        return true;
     }
 
     public void PickUpSelectedForklift()

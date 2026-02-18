@@ -70,7 +70,6 @@ public class ContextualPromptListener : MonoBehaviour
             // Get the prompt source and assign to focus if we don't have one
             if (TryFindSourceInObject(hit.collider.gameObject, out var source))
             {
-                Debug.Log("Hit a prompt source");
                 if (source.ShowOnCast)
                 {
                     castSource = source;

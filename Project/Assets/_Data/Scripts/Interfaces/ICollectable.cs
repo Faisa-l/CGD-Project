@@ -6,6 +6,7 @@ using UnityEngine;
 /// </summary>
 public interface ICollectable
 {
+    public float MaxScore { get; set; }
     public float Score { get; set; }
     public bool CanCollect { get; set; }
     public GameObject GameObject { get; }
