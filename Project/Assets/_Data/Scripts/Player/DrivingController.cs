@@ -79,6 +79,7 @@ public class DrivingController : MonoBehaviour
     [Range(1,2)]
     [SerializeField] float bounceDecay = 2f;
     Vector3 addedForce = Vector3.zero;
+    [SerializeField, Min(0f)] float collisionVelocityForCrateDamage = 10f;
     [SerializeField] List<string> ignoreBounceMask;
 
     [Space(10)]
@@ -108,6 +109,7 @@ public class DrivingController : MonoBehaviour
     public Transform CameraForwardTransform => cameraForwardPos;
     public Transform CameraReverseTransform => cameraReversePos;
 
+    FloatPickup floatPickup;
     bool lifting = false;
     bool selfIsLifted = false;
 
@@ -121,6 +123,7 @@ public class DrivingController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         audio_enabler = GetComponent<AudioEnabler>();
+        floatPickup = GetComponent<FloatPickup>();
 
         // Camera-transform variables initialisation 
         UpdateCameraTransformPositions();
@@ -418,9 +421,9 @@ public class DrivingController : MonoBehaviour
 
     public void OnInteract()
     {
-        GetComponent<FloatPickup>().PickUpSelectedForklift();
+        floatPickup.PickUpSelectedForklift();
 
-        GetComponent<FloatPickup>().PickUpSelected();
+        floatPickup.PickUpSelected();
     }
 
     public void DriftBoost()
@@ -590,6 +593,17 @@ public class DrivingController : MonoBehaviour
 		
 		// Camera shake
 		cameraShake.Shake(shakeDuration, shakeMagnitude);
+
+        TryDropOnCollision(collision);
+    }
+
+    // Drops the forklift's held object based on a collision
+    private void TryDropOnCollision(Collision collision)
+    {
+        if (collision.relativeVelocity.magnitude >= collisionVelocityForCrateDamage)
+        {
+            floatPickup.TryDropSelectedObject();
+        }
     }
 
 }

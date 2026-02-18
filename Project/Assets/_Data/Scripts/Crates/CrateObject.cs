@@ -18,7 +18,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     bool useColouredTags = true;
 
     [SerializeField, Min(0f)]
-    float velocityDamageThreshold = 10f, damageCoefficient = 1f;
+    float collisionVelocityForCrateDamage = 10f, damageCoefficient = 1f;
 
     [SerializeField, Tooltip("Values are combined to define the maximum loss from damage.")]
     float maximumScoreLossValue = 10f;
@@ -91,7 +91,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     private void OnCollisionEnter(Collision collision)
     {
         var relativeVelocity = collision.relativeVelocity;
-        if (relativeVelocity.magnitude > velocityDamageThreshold)
+        if (relativeVelocity.magnitude > collisionVelocityForCrateDamage)
         {
             Score = (int)Mathf.Max(MaximumScoreReduction, (int)Score - GetScoreLoss(relativeVelocity));
         }
@@ -150,7 +150,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     }
 
     // Returns how much score would be lost based on the relative velocity of a collision
-    float GetScoreLoss(Vector3 relativeVelocity) => (relativeVelocity.magnitude - velocityDamageThreshold) * damageCoefficient;
+    float GetScoreLoss(Vector3 relativeVelocity) => (relativeVelocity.magnitude - collisionVelocityForCrateDamage) * damageCoefficient;
 
     // Displays the current score in the textObjects
     void UpdateTextObjects()
