@@ -8,6 +8,7 @@ using static CrateExtensions;
 /// </summary>
 public class CrateObject : MonoBehaviour, ICollectable
 {
+    [Header("ICollectable values")]
     [SerializeField]
     float score;
 
@@ -17,8 +18,12 @@ public class CrateObject : MonoBehaviour, ICollectable
     [SerializeField]
     bool useColouredTags = true;
 
+    [Header("Crate damage behaviour")]
     [SerializeField, Min(0f)]
-    float collisionVelocityForCrateDamage = 10f, damageCoefficient = 1f;
+    float collisionVelocityForCrateDamage = 10f;
+
+    [SerializeField, Min(0f)]
+    float damageCoefficient = 1f;
 
     [SerializeField, Tooltip("Values are combined to define the maximum loss from damage.")]
     float maximumScoreLossValue = 10f;
