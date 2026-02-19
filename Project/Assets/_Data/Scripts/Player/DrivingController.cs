@@ -98,6 +98,9 @@ public class DrivingController : MonoBehaviour
 	[SerializeField] float shakeDuration = 0.2f;
 	[SerializeField] float shakeMagnitude = 0.05f;
 
+    [Header("Camera Boost")]
+    [SerializeField] float fovChangeMultiplier = 1.2f;
+
     [SerializeField] GameObject playerCamera = null;
 
     private Rigidbody rb;
@@ -171,6 +174,8 @@ public class DrivingController : MonoBehaviour
 
     private void updateMove()
     {
+        if (Mathf.Abs(speed) <= maxSpeed) playerCamera.GetComponent<CameraController>().resetFOV();
+
         if (!isGrounded || selfIsLifted) return;
 
         //if triggers held
@@ -467,6 +472,8 @@ public class DrivingController : MonoBehaviour
             boostParticlesBR.SetActive(false);
         }
 
+        CameraController controller = playerCamera.GetComponent<CameraController>();
+
         if (drifting)
         {
             boostTimer += Time.deltaTime;
@@ -513,6 +520,8 @@ public class DrivingController : MonoBehaviour
         }
         else if (!drifting && boostReady)
         {
+            controller.fov = controller.fov * fovChangeMultiplier;
+
             switch (boostTier)
             {
                 case 0:

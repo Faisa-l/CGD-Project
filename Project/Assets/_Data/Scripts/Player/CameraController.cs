@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class CameraController : MonoBehaviour
 {
@@ -7,6 +8,29 @@ public class CameraController : MonoBehaviour
 
     [Range(0f, 1f)]
     [SerializeField] float lerpValue = 0.01f;
+
+    [SerializeField] Camera cameraObject;
+
+    private float startingFov;
+    public float fov
+    {
+        get { return cameraObject.fieldOfView; }
+        set 
+        {
+            Debug.Log(value);
+            cameraObject.fieldOfView = value; 
+        }  
+    }
+    public void resetFOV()
+    {
+        fov = startingFov;
+    }
+
+    private void Awake()
+    {
+        Debug.Log(fov);
+        startingFov = fov;
+    }
 
     // Update is called once per frame
     private void FixedUpdate()
