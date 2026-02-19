@@ -98,7 +98,24 @@ public class CrateObject : MonoBehaviour, ICollectable
         var relativeVelocity = collision.relativeVelocity;
         if (relativeVelocity.magnitude > collisionVelocityForCrateDamage)
         {
-            Score = (int)Mathf.Max(MaximumScoreReduction, (int)Score - GetScoreLoss(relativeVelocity));
+			float originalScore = Score;
+            Score = (int)Mathf.Max(MaximumScoreReduction, (int)Score - (int)GetScoreLoss(relativeVelocity));
+			// Take into account maximum score reduction
+			float scoreLoss = originalScore - Score;
+			
+			if (scoreLoss > 0)
+			{
+				// Calculate direction to collision object
+				// Ignore Y axis so text isn't 'laying flat'
+				Vector3 direction = collision.transform.position - transform.position;
+				direction.y = 0;
+				
+				// Quaternion that faces collision
+				Quaternion rotation = Quaternion.LookRotation(-direction);
+				
+				// Spawn floating text
+				FloatingTextManager.instance.Create($"-{scoreLoss}", transform.position, rotation, Color.red);
+			}
         }
     }
 

@@ -44,16 +44,6 @@ public class LobbyMenuManager : MonoBehaviour
 		{
 			PlayerJoinedCheck();
 		}
-		
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			print(currentPlayers.Count);
-			
-			foreach (var item in currentPlayers)
-			{
-				print(item);
-			}
-		}
 	}
 	
 	/// <summary>
