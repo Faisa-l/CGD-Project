@@ -12833,7 +12833,7 @@ MonoBehaviour:
   cameraReversePos: {fileID: 4772259750914084470}
   cameraShake: {fileID: 5916523926406786492}
   shakeDuration: 0.2
-  shakeMagnitude: 0.05
+  shakeMagnitude: 0.005
   playerCamera: {fileID: 6396458523878358053}
 --- !u!82 &-5220215563985875057
 AudioSource:

@@ -579,6 +579,12 @@ public class DrivingController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+		// Shake camera when colliding with crates
+		if (collision.transform.CompareTag("Float"))
+		{
+			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
+		}
+		
         if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
@@ -601,7 +607,7 @@ public class DrivingController : MonoBehaviour
         rigidBody.AddForce(addedForce);
 		
 		// Camera shake
-		cameraShake.Shake(shakeDuration, shakeMagnitude);
+		cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
 
         TryDropOnCollision(collision);
     }
