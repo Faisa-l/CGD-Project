@@ -12006,6 +12006,7 @@ MonoBehaviour:
   followingObject: {fileID: 4984584100628000045}
   lookingAtObject: {fileID: 3325905161990052438}
   lerpValue: 0.03
+  cameraObject: {fileID: 8822135357838566119}
 --- !u!1 &6437888378504438248
 GameObject:
   m_ObjectHideFlags: 0
@@ -12823,6 +12824,7 @@ MonoBehaviour:
   bouncingForceMultiplier: 150
   bouncingForceMode: 5
   bounceDecay: 1.396
+  collisionVelocityForCrateDamage: 10
   ignoreBounceMask:
   - Float
   - No Bounce
