@@ -17,7 +17,6 @@ public class CameraController : MonoBehaviour
         get { return cameraObject.fieldOfView; }
         set 
         {
-            Debug.Log(value);
             cameraObject.fieldOfView = value; 
         }  
     }
@@ -28,7 +27,6 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        Debug.Log(fov);
         startingFov = fov;
     }
 
