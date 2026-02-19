@@ -417,7 +417,7 @@ public class DrivingController : MonoBehaviour
     {
         //GetComponent<FloatPickup>().PickUpSelectedForklift();
 
-        castRay.GetComponent<LiftPickUp>().PickUpSelected();
+        castRay.GetComponent<CratePickUp>().PickUpSelected();
     }
 
     public void DriftBoost()
