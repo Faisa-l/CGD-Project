@@ -500,6 +500,22 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 1648300041274197986, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
+      propertyPath: quotaRequirementUI
+      value: 
+      objectReference: {fileID: 1581845600}
+    - target: {fileID: 1648300041274197986, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
+      propertyPath: totalTimeRectTransform
+      value: 
+      objectReference: {fileID: 8487213}
+    - target: {fileID: 1648300041274197986, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
+      propertyPath: totalScoreRectTransform
+      value: 
+      objectReference: {fileID: 1477316746}
+    - target: {fileID: 1648300041274197986, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
+      propertyPath: quotaRequirementRectTransform
+      value: 
+      objectReference: {fileID: 1581845600}
     - target: {fileID: 2119474677556717808, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -1802,7 +1818,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: debugPlayerCount
-      value: 1
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: playerJoined.m_PersistentCalls.m_Calls.Array.size
