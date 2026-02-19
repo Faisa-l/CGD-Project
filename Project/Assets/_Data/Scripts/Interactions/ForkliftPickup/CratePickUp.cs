@@ -11,16 +11,20 @@ public class CratePickUp : MonoBehaviour
 
 
     [SerializeField] List<GameObject> pickupList = new();
-    [SerializeField] int maxObjects;
+
     [SerializeField] List<GameObject> heldObjects = new();
 
+    [SerializeField] int maxObjects;
 
-    //[SerializeField] bool forkLiftSelected;
+    [SerializeField] bool forkLiftSelected;
+
+    [SerializeField] bool holdingForklift;
 
     [SerializeField] bool liftFull;
 
 
     public UnityEvent onGrabbed = new UnityEvent();
+
     public UnityEvent onDropped = new UnityEvent();
 
 
@@ -36,8 +40,23 @@ public class CratePickUp : MonoBehaviour
 
         liftFull = heldObjects.Count == maxObjects;
 
+
+
         if (pickupList.Count == 0)
+        {
+            forkLiftSelected = false;
             return;
+        }
+
+        if (pickupList[0].tag == "Player")
+        {
+            forkLiftSelected = true;
+        }
+        else
+        {
+            
+        }
+
 
         for (int i = 0; i < pickupList.Count; i++)
         {
@@ -58,6 +77,12 @@ public class CratePickUp : MonoBehaviour
             Debug.Log("Crate in Pickup Radius");
             pickupList.Add(other.gameObject);
         }
+
+        if(other.tag == "Player")
+        {
+            pickupList.Add(other.gameObject);
+            CalculateAngleOfPickup(other.gameObject);
+        }
     }
 
     private void OnTriggerExit(Collider other)
@@ -67,9 +92,11 @@ public class CratePickUp : MonoBehaviour
 
     public void PickUpSelected()
     { 
-        if(pickupList.Count == 0 && heldObjects.Count == 0)
+        if(forkLiftSelected)
             return;
 
+        if(pickupList.Count == 0 && heldObjects.Count == 0)
+            return;
 
         if (!liftFull && pickupList.Count > 0)
         {
@@ -123,6 +150,54 @@ public class CratePickUp : MonoBehaviour
         }
     }
 
+    public void PickUpSelectedForklift()
+    {
+       //if (forkLiftSelected == true && heldObjects.Count == 0 && holdingForklift == false)
+       //{
+       //    Debug.Log($"Forklift Interaction with {hit.collider.name}");
+       //
+       //    GameObject lifting_forklift = hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
+       //    lifting_forklift.GetComponent<Collider>().enabled = false;
+       //
+       //    if (hit.collider.tag == "LeftSide")
+       //    {
+       //        SetForkliftPositionInParent(lifting_forklift.transform, ForkliftLeftLocation.transform);
+       //        lifting_forklift.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
+       //        held_object = lifting_forklift;
+       //        has_forklift = true;
+       //    }
+       //
+       //    if (hit.collider.tag == "RightSide")
+       //    {
+       //        SetForkliftPositionInParent(lifting_forklift.transform, ForkliftRightLocation.transform);
+       //        lifting_forklift.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
+       //        held_object = lifting_forklift;
+       //        has_forklift = true;
+       //    }
+       //
+       //    if (hit.collider.tag == "BackSide")
+       //    {
+       //        lifting_forklift.transform.rotation = Forkcast.transform.rotation;
+       //        SetForkliftPositionInParent(lifting_forklift.transform, ForkliftBackLocation.transform);
+       //        held_object = lifting_forklift;
+       //        has_forklift = true;
+       //    }
+       //
+       //    if (has_forklift)
+       //    {
+       //        held_object.GetComponent<DrivingController>().togglePlayerLifted();
+       //    }
+       //}
+       //else if (forklift_selected == false && held_object != null && has_forklift == true)
+       //{
+       //    //Debug.Log("Dropping Forklift");
+       //    ray_dist = 1.5f;
+       //    UnsetPositionInParent(held_object.transform);
+       //    held_object.GetComponent<DrivingController>().togglePlayerLifted();
+       //    has_forklift = false;
+       //}
+    }
+
     public void SetPositionInParent(Transform newPosition, int heldcount)
     {
         
@@ -143,52 +218,22 @@ public class CratePickUp : MonoBehaviour
         newPosition.GetComponent<Collider>().enabled = true;
     }
 
-    //public void PickUpSelectedForklift()
-    //{
-    //    if (forklift_selected == true && !has_object && has_forklift == false)
-    //    {
-    //        Debug.Log($"Forklift Interaction with {hit.collider.name}");
-    //
-    //        GameObject lifting_forklift = hit.collider.gameObject.transform.parent.gameObject.transform.parent.gameObject.transform.parent.gameObject;
-    //        lifting_forklift.GetComponent<Collider>().enabled = false;
-    //
-    //        if (hit.collider.tag == "LeftSide")
-    //        {
-    //            SetForkliftPositionInParent(lifting_forklift.transform, ForkliftLeftLocation.transform);
-    //            lifting_forklift.transform.localRotation = Quaternion.Euler(0f, -90f, 0f);
-    //            held_object = lifting_forklift;
-    //            has_forklift = true;
-    //        }
-    //
-    //        if (hit.collider.tag == "RightSide")
-    //        {
-    //            SetForkliftPositionInParent(lifting_forklift.transform, ForkliftRightLocation.transform);
-    //            lifting_forklift.transform.localRotation = Quaternion.Euler(0f, 90f, 0f);
-    //            held_object = lifting_forklift;
-    //            has_forklift = true;
-    //        }
-    //
-    //        if (hit.collider.tag == "BackSide")
-    //        {
-    //            lifting_forklift.transform.rotation = Forkcast.transform.rotation;
-    //            SetForkliftPositionInParent(lifting_forklift.transform, ForkliftBackLocation.transform);
-    //            held_object = lifting_forklift;
-    //            has_forklift = true;
-    //        }
-    //
-    //        if (has_forklift)
-    //        {
-    //            held_object.GetComponent<DrivingController>().togglePlayerLifted();
-    //        }
-    //    }
-    //    else if (forklift_selected == false && held_object != null && has_forklift == true)
-    //    {
-    //        //Debug.Log("Dropping Forklift");
-    //        ray_dist = 1.5f;
-    //        UnsetPositionInParent(held_object.transform);
-    //        held_object.GetComponent<DrivingController>().togglePlayerLifted();
-    //        has_forklift = false;
-    //    }
-    //}
+    public void CalculateAngleOfPickup(GameObject gameObject)
+    {
+        Debug.Log("Calculating Angle");
+
+        Debug.Log(this.gameObject.transform.rotation);
+
+        Debug.Log(gameObject.transform.rotation);
+    }
+
+    public void SetForkliftPostitionInParent(Transform newPosition)
+    {
+
+    }
+
+    
+
+
 }
 
