@@ -114,25 +114,16 @@ public class CratePickUp : MonoBehaviour
                 pickupList.RemoveAt(0);
             }
         }
-        else if(pickupList.Count == 0)
-        {
-            if(heldObjects.Count == 0)
-                return ;
-            else if (heldObjects.Count > 0)
-            {
-                if(heldObjects[0].TryGetComponent<PhysicsPickup>(out var pickup))
-                {
-                    Debug.Log("Invoking Drop");
-                    pickup.OnDropped.Invoke();
+    }
 
-                    onDropped?.Invoke();
-                }
-                var heldCount = heldObjects.Count - 1;
-                UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
-                heldObjects.Remove(heldObjects[heldCount]);
-                heldCount--;
-            }
-        else if(liftFull)
+    public void DropHeld()
+    {
+        if (pickupList.Count == 0)
+        {
+            if (heldObjects.Count == 0)
+                return;
+
+            else if (heldObjects.Count > 0)
             {
                 if (heldObjects[0].TryGetComponent<PhysicsPickup>(out var pickup))
                 {
@@ -146,8 +137,43 @@ public class CratePickUp : MonoBehaviour
                 heldObjects.Remove(heldObjects[heldCount]);
                 heldCount--;
             }
+            else if (liftFull)
+            {
+                if (heldObjects[0].TryGetComponent<PhysicsPickup>(out var pickup))
+                {
+                    Debug.Log("Invoking Drop");
+                    pickup.OnDropped.Invoke();
 
+                    onDropped?.Invoke();
+                }
+                var heldCount = heldObjects.Count - 1;
+                UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
+                heldObjects.Remove(heldObjects[heldCount]);
+                heldCount--;
+            }
         }
+
+        //Swap Feature (if we have something in our pickup radius and we are holding something, drop what we are holding and pick up the new object) To be added if we feel its needed
+        //else if (pickupList.Count > 0)
+        //{
+        //    if (heldObjects.Count == 0)
+        //        return;
+        //    else if (heldObjects.Count > 0)
+        //    {
+        //        if (heldObjects[0].TryGetComponent<PhysicsPickup>(out var pickup))
+        //        {
+        //            Debug.Log("Invoking Drop");
+        //            pickup.OnDropped.Invoke();
+        //            onDropped?.Invoke();
+        //        }
+        //        var heldCount = heldObjects.Count - 1;
+        //        UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
+        //        heldObjects.Remove(heldObjects[heldCount]);
+        //        heldCount--;
+        //        PickUpSelected();
+        //    }
+        //}
+
     }
 
     public void PickUpSelectedForklift()

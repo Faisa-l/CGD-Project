@@ -420,6 +420,13 @@ public class DrivingController : MonoBehaviour
         castRay.GetComponent<CratePickUp>().PickUpSelected();
     }
 
+    public void OnDrop()
+    {
+        Debug.Log("Drop Invoked");
+        castRay.GetComponent<CratePickUp>().DropHeld();
+
+    }
+
     public void DriftBoost()
     {
         if (drifting)
