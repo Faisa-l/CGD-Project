@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using static CrateExtensions;
+using static UnityEngine.Rendering.DebugUI;
 
 /// <summary>
 ///  This class is mostly for demonstration.
@@ -48,7 +49,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     /// <param name="prefab">Prefab to use, must have a ICollectable.</param>
     /// <param name="transform">Transform to spawn and parent to.</param>
     /// <param name="crateTag">Tag for the crate.</param>
-    /// <param name="score">Starting score of the crate</param>
+    /// <param name="score">Starting score of the crate.</param>
     /// <returns></returns>
     public static ICollectable Instantiate(GameObject prefab, Transform transform, CrateTag crateTag, float score)
     {
@@ -98,24 +99,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         var relativeVelocity = collision.relativeVelocity;
         if (relativeVelocity.magnitude > collisionVelocityForCrateDamage)
         {
-			float originalScore = Score;
-            Score = (int)Mathf.Max(MaximumScoreReduction, (int)Score - (int)GetScoreLoss(relativeVelocity));
-			// Take into account maximum score reduction
-			float scoreLoss = originalScore - Score;
-			
-			if (scoreLoss > 0)
-			{
-				// Calculate direction to collision object
-				// Ignore Y axis so text isn't 'laying flat'
-				Vector3 direction = collision.transform.position - transform.position;
-				direction.y = 0;
-				
-				// Quaternion that faces collision
-				Quaternion rotation = Quaternion.LookRotation(-direction);
-				
-				// Spawn floating text
-				FloatingTextManager.instance.Create($"-{scoreLoss}", transform.position, rotation, Color.red);
-			}
+            DamageCrate(collision, relativeVelocity);
         }
     }
 
@@ -130,8 +114,10 @@ public class CrateObject : MonoBehaviour, ICollectable
         get => score;
         set
         {
+            // Object is destroyed if score reaches 0
             score = value;
-            UpdateTextObjects();
+            if (score <= 0) Destroy(GameObject);
+            else            UpdateTextObjects();
         }
     }
 
@@ -141,13 +127,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         set
         {
             crateTag = value;
-            if (!useColouredTags) return;
-
-            // Colour this object based on its tag
-            var renderer = GetComponent<Renderer>();
-            renderer.GetPropertyBlock(block);
-            block.SetColor("_BaseColor", value.GetColourFromTag());
-            renderer.SetPropertyBlock(block);
+            if (useColouredTags) RecolourCrate();
         }
     }
 
@@ -157,6 +137,15 @@ public class CrateObject : MonoBehaviour, ICollectable
     {
         get => collect;
         set => collect = value;
+    }
+
+    // Colour this object based on its tag
+    void RecolourCrate()
+    {
+        var renderer = GetComponent<Renderer>();
+        renderer.GetPropertyBlock(block);
+        block.SetColor("_BaseColor", crateTag.GetColourFromTag());
+        renderer.SetPropertyBlock(block);
     }
 
     // Make the object collect-able or not
@@ -169,6 +158,33 @@ public class CrateObject : MonoBehaviour, ICollectable
     { 
         CanCollect = true;
         UpdatePromptTextToGrab();
+    }
+
+    // Reduces the crate's score and displays the text for that
+    private void DamageCrate(Collision collision, Vector3 relativeVelocity)
+    {
+        // Handle literal scores as integers - cast as int
+        float damage = (int)GetScoreLoss(relativeVelocity);
+        Score = (int)Mathf.Max(MaximumScoreReduction, Score - damage);
+        InstanceDamageText(collision.transform.position, damage);
+    }
+
+    // Creates text representing damage that the crate will take
+    private void InstanceDamageText(Vector3 position, float damage)
+    {
+        if (damage > 0)
+        {
+            // Calculate direction to collision object
+            // Ignore Y axis so text isn't 'laying flat'
+            Vector3 direction = position - transform.position;
+            direction.y = 0;
+
+            // Quaternion that faces collision
+            Quaternion rotation = Quaternion.LookRotation(-direction);
+
+            // Spawn floating text
+            FloatingTextManager.instance.Create($"-{damage}", transform.position, rotation, Color.red);
+        }
     }
 
     // Returns how much score would be lost based on the relative velocity of a collision
