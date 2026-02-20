@@ -17,12 +17,12 @@ public class FloatingTextManager : MonoBehaviour
 		instance = this;
 	}
 	
-	public void Create(string newString, Vector3 position, Quaternion rotation, Color colour)
+	public void Create(string newString, Vector3 position, Transform target, Color colour)
 	{
 		// Setup game object
-		FloatingText floatingText = Instantiate(floatingTextPrefab, position, rotation);
+		FloatingText floatingText = Instantiate(floatingTextPrefab, position, Quaternion.identity, target);
 		
 		// Setup TMP_Text
-		floatingText.Setup(newString, colour);
+		floatingText.Setup(newString, colour, target);
 	}
 }

@@ -94,6 +94,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8155985789998794182}
   - component: {fileID: -4771164133827435995}
+  - component: {fileID: 5636881064985639158}
   - component: {fileID: 396557302660960100}
   m_Layer: 0
   m_Name: FloatingText
@@ -131,6 +132,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   text: {fileID: 7049290688963857908}
+--- !u!114 &5636881064985639158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2627429388194620315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74ca9906470b33043af7625cc787d2d5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  delay: 5
 --- !u!95 &396557302660960100
 Animator:
   serializedVersion: 7
