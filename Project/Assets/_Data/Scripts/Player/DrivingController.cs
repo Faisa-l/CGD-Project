@@ -42,6 +42,12 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float manualAnimationSpeed = 1f;
     [SerializeField] bool drifting = false;
     [SerializeField] float driftMultiplier = 2f;
+    [SerializeField] GameObject trailPrefab;
+    [SerializeField] GameObject leftTrailStart;
+    [SerializeField] GameObject rightTrailStart;
+    GameObject currentTrailLeft;
+    GameObject currentTrailRight;
+    [SerializeField]GameObject driftTrailsContainer;
 
     [Header("Boost Variables")]
     [SerializeField] float boostMultiplier = 2f;
@@ -136,7 +142,9 @@ public class DrivingController : MonoBehaviour
         maxCameraForwardDist = Vector3.Magnitude(lookAtPosition - cameraForwardOrigin);
 
         playerCamera.transform.parent.transform.parent = null; // Get camera shake root
-        maxSpeed = 9.0f;
+        maxSpeed = 9.0f; //why is maxSpeed being set here?
+
+        driftTrailsContainer.transform.parent = null;
     }
 
     private void FixedUpdate()
@@ -402,6 +410,22 @@ public class DrivingController : MonoBehaviour
     public void OnDrift()
     {
         drifting = !drifting;
+
+        if(drifting)
+        {
+            currentTrailLeft = Instantiate(trailPrefab);
+            currentTrailLeft.transform.parent = leftTrailStart.transform;
+            currentTrailLeft.transform.position = leftTrailStart.transform.position;
+
+            currentTrailRight = Instantiate(trailPrefab);
+            currentTrailRight.transform.parent = rightTrailStart.transform;
+            currentTrailRight.transform.position = rightTrailStart.transform.position;
+        }
+        else
+        {
+            currentTrailRight.transform.parent = driftTrailsContainer.transform;
+            currentTrailLeft.transform.parent =  driftTrailsContainer.transform;
+        }
     }
 
     public void OnLift()
@@ -579,6 +603,12 @@ public class DrivingController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+		// Shake camera when colliding with crates
+		if (collision.transform.CompareTag("Float"))
+		{
+			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
+		}
+		
         if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
@@ -601,7 +631,7 @@ public class DrivingController : MonoBehaviour
         rigidBody.AddForce(addedForce);
 		
 		// Camera shake
-		cameraShake.Shake(shakeDuration, shakeMagnitude);
+		cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
 
         TryDropOnCollision(collision);
     }

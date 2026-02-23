@@ -6539,7 +6539,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4477020908547930622}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &3824910192280806738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12267,6 +12267,10 @@ MonoBehaviour:
   manualAnimationSpeed: 50
   drifting: 0
   driftMultiplier: 2
+  trailPrefab: {fileID: 8995315915659653679, guid: 2dad2c5e065a3e749962bebb40438045, type: 3}
+  leftTrailStart: {fileID: 185550186509234028}
+  rightTrailStart: {fileID: 7138332696510323893}
+  driftTrailsContainer: {fileID: 5614174135109497532}
   boostMultiplier: 2
   boostTimer: 0
   boostDuration: 2

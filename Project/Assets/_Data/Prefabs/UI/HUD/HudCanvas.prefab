@@ -882,6 +882,14 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  quotaRequirementRectTransform: {fileID: 0}
+  quotaRequirementThreePlayerAnchor: {x: 0.5, y: 0.5}
+  totalScoreRectTransform: {fileID: 0}
+  totalScoreAnchor: {x: 0.5, y: 0}
+  totalScoreOffset: {x: 0, y: 50}
+  totalTimeRectTransform: {fileID: 0}
+  totalTimeAnchor: {x: 0.5, y: 1}
+  totalTimeOffset: {x: 0, y: -50}
 --- !u!114 &2386817670040686725
 MonoBehaviour:
   m_ObjectHideFlags: 0

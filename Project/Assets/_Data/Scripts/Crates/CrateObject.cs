@@ -18,19 +18,6 @@ public class CrateObject : MonoBehaviour, ICollectable
     [SerializeField]
     bool useColouredTags = true;
 
-    [Header("Crate damage behaviour")]
-    [SerializeField, Min(0f)]
-    float collisionVelocityForCrateDamage = 10f;
-
-    [SerializeField, Min(0f)]
-    float damageCoefficient = 1f;
-
-    [SerializeField, Tooltip("Values are combined to define the maximum loss from damage.")]
-    float maximumScoreLossValue = 10f;
-
-    [SerializeField, Tooltip("Values are combined to define the maximum loss from damage."), Range(0f, 1f)]
-    float maximumScoreLossPercentage = 0f;
-
     float maxScore;
     bool collect;
     string startingPromptText;
@@ -40,7 +27,9 @@ public class CrateObject : MonoBehaviour, ICollectable
     TextMeshPro[] textObjects;
 
     // As in the minimum score the crate can have
-    float MaximumScoreReduction => maxScore * (1 - maximumScoreLossPercentage) - maximumScoreLossValue;
+    float MaximumScoreReduction => maxScore * (1 - DamageBehaviour.maximumScoreLossPercentage) - DamageBehaviour.maximumScoreLossValue;
+
+	private static readonly float floatingTextPlayerDetectionRadius = 1f;
 
     /// <summary>
     /// Instantiate and initialise a new crate.
@@ -48,13 +37,14 @@ public class CrateObject : MonoBehaviour, ICollectable
     /// <param name="prefab">Prefab to use, must have a ICollectable.</param>
     /// <param name="transform">Transform to spawn and parent to.</param>
     /// <param name="crateTag">Tag for the crate.</param>
-    /// <param name="score">Starting score of the crate</param>
+    /// <param name="score">Starting score of the crate.</param>
     /// <returns></returns>
-    public static ICollectable Instantiate(GameObject prefab, Transform transform, CrateTag crateTag, float score)
+    public static ICollectable Instantiate(GameObject prefab, Transform transform, CrateTag crateTag, DamageBehaviour damageBehaviour, float score)
     {
         var collectable = Instantiate(prefab, transform).GetComponent<ICollectable>();
         collectable.Tag = crateTag;
         collectable.Score = collectable.MaxScore = score;
+        collectable.DamageBehaviour = damageBehaviour;
         return collectable;
     }
 
@@ -96,9 +86,9 @@ public class CrateObject : MonoBehaviour, ICollectable
     private void OnCollisionEnter(Collision collision)
     {
         var relativeVelocity = collision.relativeVelocity;
-        if (relativeVelocity.magnitude > collisionVelocityForCrateDamage)
+        if (relativeVelocity.magnitude > DamageBehaviour.collisionVelocityForCrateDamage)
         {
-            Score = (int)Mathf.Max(MaximumScoreReduction, (int)Score - GetScoreLoss(relativeVelocity));
+            DamageCrate(relativeVelocity);
         }
     }
 
@@ -113,8 +103,10 @@ public class CrateObject : MonoBehaviour, ICollectable
         get => score;
         set
         {
+            // Object is destroyed if score reaches 0
             score = value;
-            UpdateTextObjects();
+            if (score <= 0) Destroy(GameObject);
+            else            UpdateTextObjects();
         }
     }
 
@@ -124,15 +116,11 @@ public class CrateObject : MonoBehaviour, ICollectable
         set
         {
             crateTag = value;
-            if (!useColouredTags) return;
-
-            // Colour this object based on its tag
-            var renderer = GetComponent<Renderer>();
-            renderer.GetPropertyBlock(block);
-            block.SetColor("_BaseColor", value.GetColourFromTag());
-            renderer.SetPropertyBlock(block);
+            if (useColouredTags) RecolourCrate();
         }
     }
+
+    public DamageBehaviour DamageBehaviour { get; set; }
 
     public GameObject GameObject { get => gameObject; }
 
@@ -140,6 +128,15 @@ public class CrateObject : MonoBehaviour, ICollectable
     {
         get => collect;
         set => collect = value;
+    }
+
+    // Colour this object based on its tag
+    void RecolourCrate()
+    {
+        var renderer = GetComponent<Renderer>();
+        renderer.GetPropertyBlock(block);
+        block.SetColor("_BaseColor", crateTag.GetColourFromTag());
+        renderer.SetPropertyBlock(block);
     }
 
     // Make the object collect-able or not
@@ -154,8 +151,39 @@ public class CrateObject : MonoBehaviour, ICollectable
         UpdatePromptTextToGrab();
     }
 
+    // Reduces the crate's score and displays the text for that
+    private void DamageCrate(Vector3 relativeVelocity)
+    {
+        // Handle literal scores as integers - cast as int
+        float temp = Score;
+        float damage = (int)GetScoreLoss(relativeVelocity);
+        Score = (int)Mathf.Max(MaximumScoreReduction, Score - damage);
+        if (score != temp) InstanceDamageText(damage);
+    }
+
+    // Creates text representing damage that the crate will take
+    private void InstanceDamageText(float damage)
+    {
+        if (damage > 0)
+        {
+			// Get direction to nearest player (most likely the one that hit the crate)
+			Collider[] hitColliders = Physics.OverlapSphere(transform.position, floatingTextPlayerDetectionRadius);
+			foreach (var hitCollider in hitColliders)
+			{
+				// Check if the collider has the "Player" tag
+				if (hitCollider.CompareTag("Player"))
+				{
+					// Spawn floating text
+					FloatingTextManager.instance.Create($"-{damage}", transform.position, hitCollider.transform, Color.red);
+					
+					break; // Stop once we find the first player
+				}
+			}
+        }
+    }
+
     // Returns how much score would be lost based on the relative velocity of a collision
-    float GetScoreLoss(Vector3 relativeVelocity) => (relativeVelocity.magnitude - collisionVelocityForCrateDamage) * damageCoefficient;
+    float GetScoreLoss(Vector3 relativeVelocity) => (relativeVelocity.magnitude - DamageBehaviour.collisionVelocityForCrateDamage) * DamageBehaviour.damageCoefficient;
 
     // Displays the current score in the textObjects
     void UpdateTextObjects()
