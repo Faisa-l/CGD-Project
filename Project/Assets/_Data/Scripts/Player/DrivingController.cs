@@ -63,8 +63,8 @@ public class DrivingController : MonoBehaviour
     [Header("Lift Variables")]
     [SerializeField] private Transform lift;
     [SerializeField] private float liftSpeed = 1.0f;
-    [SerializeField] private float minLiftPosition = 2.4f;
-    [SerializeField] private float maxLiftPosition = 9.5f;
+    [SerializeField] private float minLiftPosition = 5f;
+    [SerializeField] private float maxLiftPosition = 10f;
 
     [Header("UI")]
     [SerializeField] private HudManager hudManager;
@@ -305,21 +305,21 @@ public class DrivingController : MonoBehaviour
 
     private void handleLift()
     {
-        float y = lift.localPosition.y;
+        float z = lift.localPosition.z;
 
         if (lifting)
         {
-            y += liftSpeed * Time.deltaTime;
-            y = Mathf.Clamp(y, minLiftPosition, maxLiftPosition);
+            z += liftSpeed * Time.deltaTime;
+            z = Mathf.Clamp(z, minLiftPosition, maxLiftPosition);
 
-            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
+            lift.localPosition = new Vector3(lift.localPosition.x, lift.localPosition.y, z);
         }
         else
         {
-            y -= liftSpeed * Time.deltaTime;
-            y = Mathf.Clamp(y, minLiftPosition, maxLiftPosition);
+            z -= liftSpeed * Time.deltaTime;
+            z = Mathf.Clamp(z, minLiftPosition, maxLiftPosition);
 
-            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
+            lift.localPosition = new Vector3(lift.localPosition.x, lift.localPosition.y, z);
         }
     }
 
