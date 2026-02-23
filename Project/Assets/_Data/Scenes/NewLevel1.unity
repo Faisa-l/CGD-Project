@@ -7761,7 +7761,7 @@ PrefabInstance:
       objectReference: {fileID: 830668616}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[0].crateScore
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[0].spawnCount
@@ -7769,7 +7769,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[1].crateScore
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[1].spawnCount
@@ -7777,7 +7777,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[2].crateScore
-      value: 50
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[2].spawnCount
@@ -7785,7 +7785,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[3].crateScore
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[3].spawnCount
@@ -7793,7 +7793,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[4].crateScore
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[4].spawnCount
@@ -7801,7 +7801,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[5].crateScore
-      value: 30
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: spawnRequirements.Array.data[5].spawnCount
@@ -7859,6 +7859,90 @@ PrefabInstance:
       propertyPath: spawnRequirements.Array.data[5].parentTransform
       value: 
       objectReference: {fileID: 148736678}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[0].damageBehaviour.damageCoefficient
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[1].damageBehaviour.damageCoefficient
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[2].damageBehaviour.damageCoefficient
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[3].damageBehaviour.damageCoefficient
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[4].damageBehaviour.damageCoefficient
+      value: 0.4
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[5].damageBehaviour.damageCoefficient
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[0].damageBehaviour.maximumScoreLossValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[1].damageBehaviour.maximumScoreLossValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[2].damageBehaviour.maximumScoreLossValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[3].damageBehaviour.maximumScoreLossValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[4].damageBehaviour.maximumScoreLossValue
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[5].damageBehaviour.maximumScoreLossValue
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[2].damageBehaviour.maximumScoreLossPercentage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[3].damageBehaviour.maximumScoreLossPercentage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[5].damageBehaviour.maximumScoreLossPercentage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[0].damageBehaviour.collisionVelocityForCrateDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[1].damageBehaviour.collisionVelocityForCrateDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[2].damageBehaviour.collisionVelocityForCrateDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[3].damageBehaviour.collisionVelocityForCrateDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[4].damageBehaviour.collisionVelocityForCrateDamage
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 4649749589772436556, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
+      propertyPath: spawnRequirements.Array.data[5].damageBehaviour.collisionVelocityForCrateDamage
+      value: 10
+      objectReference: {fileID: 0}
     - target: {fileID: 5813500355358272119, guid: afaec8739684c6744bf4ce5e2dd4b54b, type: 3}
       propertyPath: m_Name
       value: CrateSpawner

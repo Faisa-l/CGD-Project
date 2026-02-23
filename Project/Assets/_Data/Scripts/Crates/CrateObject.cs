@@ -88,7 +88,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         var relativeVelocity = collision.relativeVelocity;
         if (relativeVelocity.magnitude > DamageBehaviour.collisionVelocityForCrateDamage)
         {
-            DamageCrate(collision, relativeVelocity);
+            DamageCrate(relativeVelocity);
         }
     }
 
@@ -152,16 +152,17 @@ public class CrateObject : MonoBehaviour, ICollectable
     }
 
     // Reduces the crate's score and displays the text for that
-    private void DamageCrate(Collision collision, Vector3 relativeVelocity)
+    private void DamageCrate(Vector3 relativeVelocity)
     {
         // Handle literal scores as integers - cast as int
+        float temp = Score;
         float damage = (int)GetScoreLoss(relativeVelocity);
         Score = (int)Mathf.Max(MaximumScoreReduction, Score - damage);
-        InstanceDamageText(collision.transform.position, damage);
+        if (score != temp) InstanceDamageText(damage);
     }
 
     // Creates text representing damage that the crate will take
-    private void InstanceDamageText(Vector3 position, float damage)
+    private void InstanceDamageText(float damage)
     {
         if (damage > 0)
         {
