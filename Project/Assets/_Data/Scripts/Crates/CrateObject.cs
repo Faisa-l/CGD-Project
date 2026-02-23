@@ -29,6 +29,8 @@ public class CrateObject : MonoBehaviour, ICollectable
     // As in the minimum score the crate can have
     float MaximumScoreReduction => maxScore * (1 - DamageBehaviour.maximumScoreLossPercentage) - DamageBehaviour.maximumScoreLossValue;
 
+	private static readonly float floatingTextPlayerDetectionRadius = 1f;
+
     /// <summary>
     /// Instantiate and initialise a new crate.
     /// </summary>
@@ -163,16 +165,19 @@ public class CrateObject : MonoBehaviour, ICollectable
     {
         if (damage > 0)
         {
-            // Calculate direction to collision object
-            // Ignore Y axis so text isn't 'laying flat'
-            Vector3 direction = position - transform.position;
-            direction.y = 0;
-
-            // Quaternion that faces collision
-            Quaternion rotation = Quaternion.LookRotation(-direction);
-
-            // Spawn floating text
-            FloatingTextManager.instance.Create($"-{damage}", transform.position, rotation, Color.red);
+			// Get direction to nearest player (most likely the one that hit the crate)
+			Collider[] hitColliders = Physics.OverlapSphere(transform.position, floatingTextPlayerDetectionRadius);
+			foreach (var hitCollider in hitColliders)
+			{
+				// Check if the collider has the "Player" tag
+				if (hitCollider.CompareTag("Player"))
+				{
+					// Spawn floating text
+					FloatingTextManager.instance.Create($"-{damage}", transform.position, hitCollider.transform, Color.red);
+					
+					break; // Stop once we find the first player
+				}
+			}
         }
     }
 
