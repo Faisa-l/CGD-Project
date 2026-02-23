@@ -79,9 +79,8 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private Transform steeringWheel;
     [SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
 
-    [Space(10)]
+    [Header("Bouce variables")]
     [SerializeField] float bouncingForceMultiplier = 5f;
-    [SerializeField] ForceMode bouncingForceMode = ForceMode.Acceleration;
     [Range(1,2)]
     [SerializeField] float bounceDecay = 2f;
     Vector3 addedForce = Vector3.zero;

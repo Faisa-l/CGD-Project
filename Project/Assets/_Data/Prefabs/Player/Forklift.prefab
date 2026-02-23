@@ -12387,8 +12387,7 @@ MonoBehaviour:
   hudManager: {fileID: 0}
   steeringWheel: {fileID: 0}
   playerMesh: {fileID: 2736618683385788251}
-  bouncingForceMultiplier: 150
-  bouncingForceMode: 5
+  bouncingForceMultiplier: 350
   bounceDecay: 1.396
   collisionVelocityForCrateDamage: 10
   ignoreBounceMask:
