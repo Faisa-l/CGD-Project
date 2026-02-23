@@ -63,6 +63,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject boostParticlesBL;
     [SerializeField] GameObject boostParticlesBR;
     [SerializeField] float boostTierTimeIncrement = 0.5f;
+    [SerializeField] GameObject speedLinesImage;
 
     float sign = 1f;
 
@@ -144,6 +145,8 @@ public class DrivingController : MonoBehaviour
         maxSpeed = 9.0f; //why is maxSpeed being set here?
 
         driftTrailsContainer.transform.parent = null;
+
+        speedLinesImage.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -195,12 +198,15 @@ public class DrivingController : MonoBehaviour
             }
             else
             {
+                speedLinesImage.SetActive(false);
                 speed += acceleration * Time.deltaTime * sign * ((Mathf.Sign(speed) != sign) ? breakMultiplier : 1);
             }
         }
         //if triggers not held
         else
         {
+           speedLinesImage.SetActive(false);
+
            //if speed is around 0 then stop
            if (Mathf.Abs(speed) <= acceleration * Time.deltaTime * breakMultiplier)
            {
@@ -544,6 +550,8 @@ public class DrivingController : MonoBehaviour
         else if (!drifting && boostReady)
         {
             controller.fov = controller.fov * fovChangeMultiplier;
+
+            speedLinesImage.SetActive(true);
 
             switch (boostTier)
             {
