@@ -900,16 +900,16 @@ PrefabInstance:
     m_RemovedGameObjects: []
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 5074375602691218295, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
-      insertIndex: -1
+      insertIndex: 6
       addedObject: {fileID: 1581845600}
     - targetCorrespondingSourceObject: {fileID: 5074375602691218295, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
-      insertIndex: -1
+      insertIndex: 7
       addedObject: {fileID: 1477316746}
     - targetCorrespondingSourceObject: {fileID: 5074375602691218295, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
-      insertIndex: -1
+      insertIndex: 8
       addedObject: {fileID: 169267013}
     - targetCorrespondingSourceObject: {fileID: 5074375602691218295, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
-      insertIndex: -1
+      insertIndex: 9
       addedObject: {fileID: 8487213}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 611088961426573706, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
@@ -2647,6 +2647,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9022345039698991703, guid: 92dfb2ad4c7dc284ca9087f8177ffee0, type: 3}
   m_PrefabInstance: {fileID: 936021671}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &773088814 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3905821523427830702, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
+  m_PrefabInstance: {fileID: 78040122}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &774480181
 GameObject:
   m_ObjectHideFlags: 0
@@ -3734,6 +3739,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1519433872}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1125973045 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 748106401981163589, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
+  m_PrefabInstance: {fileID: 78040122}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1127615679
 GameObject:
   m_ObjectHideFlags: 0
@@ -4892,6 +4902,14 @@ PrefabInstance:
       propertyPath: currentSchedule
       value: 
       objectReference: {fileID: 11400000, guid: a8e7bf757a2397044bad1eb27900b1c8, type: 2}
+    - target: {fileID: -4791197900161960636, guid: 8123a2af9b3f42b4bb54115b468813bf, type: 3}
+      propertyPath: firstSelected
+      value: 
+      objectReference: {fileID: 773088814}
+    - target: {fileID: -4791197900161960636, guid: 8123a2af9b3f42b4bb54115b468813bf, type: 3}
+      propertyPath: tutorialPanel
+      value: 
+      objectReference: {fileID: 1125973045}
     - target: {fileID: -4791197900161960636, guid: 8123a2af9b3f42b4bb54115b468813bf, type: 3}
       propertyPath: pauseMenuPanel
       value: 
