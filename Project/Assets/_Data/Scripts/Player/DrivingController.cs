@@ -457,16 +457,12 @@ public class DrivingController : MonoBehaviour
 
     public void OnInteract()
     {
-        //GetComponent<FloatPickup>().PickUpSelectedForklift();
-
         castRay.GetComponent<CratePickUp>().PickUpSelected();
     }
 
     public void OnDrop()
     {
-        Debug.Log("Drop Invoked");
         castRay.GetComponent<CratePickUp>().DropHeld();
-
     }
 
     public void DriftBoost()

@@ -89,6 +89,9 @@ public class ContextualPromptListener : MonoBehaviour
     // Only assign a new trigger source if we do not already have one
     private void OnTriggerEnter(Collider other)
     {
+        if(other.gameObject.tag == "Float" || other.gameObject.tag == "Player")
+            messageUI.gameObject.SetActive(true);
+
         if (triggerSource != null) return;
 
         // Check for this and its children
@@ -105,6 +108,8 @@ public class ContextualPromptListener : MonoBehaviour
     // When exiting a trigger, always mark the trigger source as null
     private void OnTriggerExit(Collider other)
     {
+        messageUI.gameObject.SetActive(false);
+
         if (TryFindSourceInObject(other.gameObject, out _))
         {
             triggerSource = null;

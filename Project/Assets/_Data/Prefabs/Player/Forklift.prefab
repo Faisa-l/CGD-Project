@@ -7191,7 +7191,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89f78dc895fe4504fa418164808a43f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  forklift: {fileID: 85168752108625695}
+  forklift: {fileID: 3426515862185119093}
   pickupLights:
   - {fileID: 2207734147444893669}
   - {fileID: 672787902913752810}
@@ -12208,6 +12208,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8790941567827503619}
+  - component: {fileID: 3426515862185119093}
+  - component: {fileID: 6890998367224562299}
   m_Layer: 0
   m_Name: ForkCast
   m_TagString: Untagged
@@ -12225,11 +12227,59 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0.50000006, y: -0.49999997, z: -0.50000006, w: 0.49999997}
   m_LocalPosition: {x: -0.0615, y: -0.0002, z: 0.0154}
-  m_LocalScale: {x: 0.0074524274, y: 0.010000002, z: 0.017796375}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3505735524786941813}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3426515862185119093
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8074873379270817013}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a90c58015c638bd4c8d0f39652b81d1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  PickupLocation: {fileID: 6560490963314522202}
+  pickupPositionOffset: {x: 0, y: 0, z: 0}
+  pickupList: []
+  heldObjects: []
+  maxObjects: 3
+  forkLiftSelected: 0
+  holdingForklift: 0
+  liftFull: 0
+  interactionUIText: {fileID: 7355957186543924399}
+  onGrabbed:
+    m_PersistentCalls:
+      m_Calls: []
+  onDropped:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!65 &6890998367224562299
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8074873379270817013}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.15, y: 0.08, z: 0.15}
+  m_Center: {x: 0, y: 0.025, z: 0.07}
 --- !u!1 &8787852879880177809
 GameObject:
   m_ObjectHideFlags: 0
@@ -12343,8 +12393,6 @@ GameObject:
   - component: {fileID: 5281218984497139308}
   - component: {fileID: 660509750987994943}
   - component: {fileID: 6575178007448525318}
-  - component: {fileID: 85168752108625695}
-  - component: {fileID: 5157248722876349163}
   - component: {fileID: 5957374651335090734}
   m_Layer: 2
   m_Name: Forklift
@@ -12497,7 +12545,7 @@ MonoBehaviour:
   shakeMagnitude: 0.05
   fovChangeMultiplier: 1.2
   playerCamera: {fileID: 6396458523878358053}
-  castRay: {fileID: 608236076347334205}
+  castRay: {fileID: 8074873379270817013}
 --- !u!82 &-5220215563985875057
 AudioSource:
   m_ObjectHideFlags: 0
@@ -12921,57 +12969,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupHolder: {fileID: 5186217170744748968}
---- !u!114 &85168752108625695
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9127728803133528513}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdee875b68dc37e4a9d81c1cc3c86625, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Forkcast: {fileID: 8074873379270817013}
-  PickupLocation: {fileID: 6560490963314522202}
-  ForkliftLeftLocation: {fileID: 3330854360020334702}
-  ForkliftRightLocation: {fileID: 6489661091935311067}
-  ForkliftBackLocation: {fileID: 6554918970982615496}
-  pickupPositionOffset: {x: 0, y: 0, z: 0}
-  force_multiplier: 70
-  force_exponent: 2
-  added_force: -0.2
-  ray_dist: 1.5
-  object_selected: 0
-  forklift_selected: 0
-  has_object: 0
-  has_forklift: 0
-  held_object: {fileID: 0}
-  onGrabbed:
-    m_PersistentCalls:
-      m_Calls: []
-  onDropped:
-    m_PersistentCalls:
-      m_Calls: []
---- !u!114 &5157248722876349163
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9127728803133528513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 89f78dc895fe4504fa418164808a43f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  forklift: {fileID: 85168752108625695}
-  pickupLights:
-  - {fileID: 1110842591142999432}
-  - {fileID: 7474435599301995797}
-  - {fileID: 2207734147444893669}
-  - {fileID: 672787902913752810}
 --- !u!114 &5957374651335090734
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13871,6 +13868,10 @@ PrefabInstance:
     - target: {fileID: 1369848368880762661, guid: 7d9d7f1cdeff3d44f9db5a17483b7524, type: 3}
       propertyPath: m_Name
       value: ContextualPromptListener
+      objectReference: {fileID: 0}
+    - target: {fileID: 1369848368880762661, guid: 7d9d7f1cdeff3d44f9db5a17483b7524, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2736452311419991666, guid: 7d9d7f1cdeff3d44f9db5a17483b7524, type: 3}
       propertyPath: m_LocalPosition.x
