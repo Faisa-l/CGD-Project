@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using static CrateExtensions;
 
@@ -14,13 +15,8 @@ public class CrateSpawner : MonoBehaviour
     [SerializeField, Tooltip("Timeout event is assigned at runtime.")]
     Timer timer;
 
-    [SerializeField, Tooltip("How many objects should be spawned for a given tag.")]
+    [SerializeField, Tooltip("How many objects should be spawned for a given tag."), ContextMenuItem("Apply default damage behaviour", "ResetAllDamageBehaviours")]
     List<SpawnRequirements> spawnRequirements;
-
-    // Maps a spawn point to its spawned object
-    // This shouldn't be resizing in gameplay; its size should be predetermined in Initalise()
-    Dictionary<SpawnNode, ICollectable> spawnedObjects;
-    
 
     private void OnValidate()
     {
@@ -39,19 +35,16 @@ public class CrateSpawner : MonoBehaviour
 
     void Initialise()
     {
-        // Populate spawnedObjects with nodes built from each spawn requirement
-        spawnedObjects = new Dictionary<SpawnNode, ICollectable>();
-        foreach (var req in spawnRequirements)
+        // Initialise the instances map on each spawn requirement
+        for (int i = 0; i < spawnRequirements.Count; i++) 
         {
-            foreach (var t in req.parentTransform.GetComponentsInChildren<Transform>())
+            var dict = new Dictionary<Transform, ICollectable>();
+            foreach (var t in spawnRequirements[i].parentTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray())
             {
-                var node = new SpawnNode()
-                {
-                    tag = req.tag,
-                    transform = t,
-                };
-                spawnedObjects.Add(node, null);
+                dict.Add(t, null);
             }
+
+            spawnRequirements[i].instances = dict;
         }
     }
 
@@ -82,52 +75,27 @@ public class CrateSpawner : MonoBehaviour
     // Attempts to spawn a crate at each point if its mapped GameObject is null
     protected void TrySpawnCrates()
     {
-        List<SpawnNode> spawnPoints = new();
-
-        // Get nodes to spawn and randomise the order to spawn
-        foreach (var pair in spawnedObjects)
+        // Loop through each requirement and spawn in as many crates are needed
+        foreach (var req in spawnRequirements)
         {
-            if (pair.Value == null)
+            // Get a shuffled list of the spawn transforms which do not have any objects
+            List<Transform> allPoints = req.instances.Keys.ToList();
+            List<Transform> validPoints = allPoints.FindAll(item => (Object)req.instances[item] == null);
+            ShuffleList(validPoints);
+
+            // Spawn more crates until we've reached the max spawn count
+            int j = 0;
+            for (int i = req.Spawned; i < req.spawnCount;  i++)
             {
-                spawnPoints.Add(pair.Key);
+                SpawnCrate(validPoints[j], req);
+                j++;
             }
         }
-        ShuffleList(spawnPoints);
-
-        // Spawn a crate at each spawn point
-        // Will only spawn in crates to fulfil a spawn requirement - ignores node that already meets requirements
-        foreach (var node in spawnPoints)
-        {
-            if (TryGetRequirementFromTag(node.tag, out SpawnRequirements requirement))
-            {
-                if (WasRequirementMet(requirement)) continue;
-                SpawnCrate(node, requirement);
-            }
-        }
-        /* Keeping this code here incase we want to revert back to quota based spawning
-        // Only spawn enough crates to meet quota (truncate spawnPoints)
-        int diff = Quota - spawned + spawnExtra;
-        if (diff > 0)
-        {
-            diff = math.clamp(diff, 0, spawnPoints.Count);
-            spawnPoints = new List<SpawnNode>(spawnPoints).GetRange(0, diff);
-
-            // Actual spawning
-            foreach (SpawnNode t in spawnPoints)
-            {
-                spawnedObjects[t] = Instantiate(cratePrefab, t.transform);
-            }
-        }
-        */
     }
 
     // Spawns a crate and set its data based on its requirement. Instantiate within spawnedObjects
-    void SpawnCrate(in SpawnNode node, in SpawnRequirements requirement)
-    {
-        spawnedObjects[node] = Instantiate(cratePrefab, node.transform).GetComponent<ICollectable>();
-        spawnedObjects[node].Tag = node.tag;
-        spawnedObjects[node].Score = requirement.crateScore;
-    }
+    void SpawnCrate(in Transform point, in SpawnRequirements requirement) 
+        => requirement.instances[point] = CrateObject.Instantiate(cratePrefab, point, requirement.tag, requirement.damageBehaviour, requirement.crateScore);
 
     // Randomise spawnable transforms (Fisher-Yates shuffle I found on stack overflow)
     // Partition list from 0 to pointer to end -> Select random element -> swap with pointer element -> decrement pointer
@@ -143,34 +111,31 @@ public class CrateSpawner : MonoBehaviour
         }
     }
 
-    // Returns whether a given requirement is met
-    bool WasRequirementMet(SpawnRequirements requirement)
+    // Draws the spawner locations and what colour they are for. Size is also based on the score 
+    private void OnDrawGizmosSelected()
     {
-        int i = 0;
-        foreach (ICollectable item in spawnedObjects.Values)
-        {
-            if (item == null) continue;
-            if (item.Tag == requirement.tag) i++;
-            if (i == requirement.spawnCount) break;
-        }
-
-        return (i == requirement.spawnCount);
-    }
-
-    // Gets a requirement from a given tag and outputs whether this requirement exists or not
-    bool TryGetRequirementFromTag(CrateTag tag, out SpawnRequirements requirement)
-    {
-        requirement = new();
-
         foreach (var req in spawnRequirements)
         {
-            if (req.tag == tag)
+            foreach (Transform t in req.parentTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray())
             {
-                requirement = req;
-                return true;
+                Gizmos.color = req.tag.GetColourFromTag();
+                Gizmos.DrawCube(t.position, new Vector3(1, 1, 1) * (req.crateScore / 75f));
             }
         }
-        return false;
     }
 
+    // UTILITY FUNCTION
+    private void ResetAllDamageBehaviours()
+    {
+        foreach(var req in spawnRequirements)
+        {
+            req.damageBehaviour = new()
+            {
+                collisionVelocityForCrateDamage = 10f,
+                damageCoefficient = 0.4f,
+                maximumScoreLossValue = 10f,
+                maximumScoreLossPercentage = 0f
+            };
+        }
+    }
 }

@@ -11,6 +11,7 @@ TagManager:
   - Lift
   - CinemachineTarget
   - Float
+  - No Bounce
   layers:
   - Default
   - TransparentFX
