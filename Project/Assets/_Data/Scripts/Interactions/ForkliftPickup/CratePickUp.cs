@@ -137,21 +137,20 @@ public class CratePickUp : MonoBehaviour
 
     public void DropHeld()
     {
-        if (pickupList.Count == 0)
+
+        if (heldObjects.Count == 0) return;
+
+        if (heldObjects[0].TryGetComponent<PhysicsPickup>(out var pickup))
         {
-            if (heldObjects.Count == 0) return;
+            pickup.OnDropped.Invoke();
 
-            if (heldObjects[0].TryGetComponent<PhysicsPickup>(out var pickup))
-            {
-                pickup.OnDropped.Invoke();
-
-                onDropped?.Invoke();
-            }
-            var heldCount = heldObjects.Count - 1;
-            UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
-            heldObjects.Remove(heldObjects[heldCount]);
-            heldCount--;
+            onDropped?.Invoke();
         }
+        var heldCount = heldObjects.Count - 1;
+        UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
+        heldObjects.Remove(heldObjects[heldCount]);
+        heldCount--;
+        
 
         //Swap Feature (if we have something in our pickup radius and we are holding something, drop what we are holding and pick up the new object) To be added if we feel its needed
         //else if (pickupList.Count > 0)

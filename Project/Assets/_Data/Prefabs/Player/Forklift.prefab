@@ -12249,7 +12249,7 @@ MonoBehaviour:
   pickupList: []
   heldObjects: []
   maxObjects: 3
-  forkLiftSelected: 0
+  forkLiftSelected: 1
   holdingForklift: 0
   liftFull: 0
   interactionUIText: {fileID: 7355957186543924399}
@@ -12542,7 +12542,7 @@ MonoBehaviour:
   cameraReversePos: {fileID: 4772259750914084470}
   cameraShake: {fileID: 5916523926406786492}
   shakeDuration: 0.2
-  shakeMagnitude: 0.05
+  shakeMagnitude: 0.02
   fovChangeMultiplier: 1.2
   playerCamera: {fileID: 6396458523878358053}
   castRay: {fileID: 8074873379270817013}
