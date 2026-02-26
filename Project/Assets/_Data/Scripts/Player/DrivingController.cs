@@ -458,6 +458,7 @@ public class DrivingController : MonoBehaviour
     public void OnInteract()
     {
         castRay.GetComponent<CratePickUp>().PickUpSelected();
+        castRay.GetComponent<CratePickUp>().PickUpSelectedForklift();
     }
 
     public void OnDrop()
@@ -653,7 +654,7 @@ public class DrivingController : MonoBehaviour
     {
         if (collision.relativeVelocity.magnitude >= collisionVelocityForCrateDamage)
         {
-            floatPickup.TryDropSelectedObject();
+            castRay.GetComponent<CratePickUp>().DropHeld();
         }
     }
 
