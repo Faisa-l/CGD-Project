@@ -4662,6 +4662,10 @@ PrefabInstance:
       value: Button
       objectReference: {fileID: 0}
     - target: {fileID: 82386327137125239, guid: c865f46f791d11748bbd681168648d45, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 82386327137125239, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: m_TagString
       value: No Bounce
       objectReference: {fileID: 0}
@@ -8237,6 +8241,10 @@ PrefabInstance:
     - target: {fileID: 5364056826485163856, guid: a9135d40756a62a4c9192549d49611da, type: 3}
       propertyPath: m_Name
       value: Elevator
+      objectReference: {fileID: 0}
+    - target: {fileID: 5364056826485163856, guid: a9135d40756a62a4c9192549d49611da, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
