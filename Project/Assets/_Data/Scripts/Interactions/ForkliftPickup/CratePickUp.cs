@@ -49,6 +49,11 @@ public class CratePickUp : MonoBehaviour
 
     }
 
+    void Awake()
+    {
+        forwardPickUpOffset.GetComponent<BoxCollider>().enabled = false;
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -150,16 +155,16 @@ public class CratePickUp : MonoBehaviour
 
     public void PickUpSelectedForklift()
     {
-        if(!forkLiftSelected)
+        if(!forkLiftSelected || heldObjects.Count > 0)
             return;
 
         var Angle = CalculateAngleOfPickup(pickupList[0]);
 
-        SetForkliftPostitionInParent(Angle);
         pickupList[0].GetComponent<Rigidbody>().useGravity = false;
-
         heldObjects.Add(pickupList[0]);
         pickupList.Remove(pickupList[0]);
+        SetForkliftPostitionInParent(Angle);
+
     }
 
     public void DropHeld()
@@ -172,6 +177,9 @@ public class CratePickUp : MonoBehaviour
 
             onDropped?.Invoke();
         }
+
+        heldObjects[0].GetComponent<Rigidbody>().isKinematic = false;
+        forwardPickUpOffset.GetComponent<BoxCollider>().enabled = false;
 
         var heldCount = heldObjects.Count - 1;
         UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
@@ -250,8 +258,9 @@ public class CratePickUp : MonoBehaviour
 
     public void SetForkliftPostitionInParent(PickUpDirection direction)
     {
-        GameObject otherPlayer = pickupList[0].gameObject;
+        GameObject otherPlayer = heldObjects[0].gameObject;
         otherPlayer.GetComponent<DrivingController>().togglePlayerLifted();
+        otherPlayer.GetComponent<Rigidbody>().isKinematic = true;
 
         if(direction == PickUpDirection.Left)
         {
@@ -261,9 +270,11 @@ public class CratePickUp : MonoBehaviour
         }
         else if(direction == PickUpDirection.Forward)
         {
-            otherPlayer.transform.rotation = forwardPickUpOffset.rotation;
-            otherPlayer.transform.position = forwardPickUpOffset.position;
             otherPlayer.transform.parent =   forwardPickUpOffset;
+            otherPlayer.transform.position = forwardPickUpOffset.position;
+            otherPlayer.transform.rotation = forwardPickUpOffset.rotation;
+
+            forwardPickUpOffset.GetComponent<BoxCollider>().enabled = true;
         }
 
     }
