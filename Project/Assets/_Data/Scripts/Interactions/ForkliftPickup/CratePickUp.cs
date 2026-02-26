@@ -52,7 +52,6 @@ public class CratePickUp : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         liftFull = heldObjects.Count == maxObjects;
 
         if (pickupList.Count == 0)
@@ -67,23 +66,11 @@ public class CratePickUp : MonoBehaviour
 
         }
 
-        for (int i = 0; i < pickupList.Count; i++)
-        {
-            for (int j = 0; j < heldObjects.Count; j++)
-            {
-                if(heldObjects[j] == pickupList[i])
-                {
-                    pickupList.RemoveAt(i);
-                }
-            }
-        }
-
         if(heldObjects.Count == 0)
             return;
 
         if (heldObjects[0].gameObject.tag == "Player")
         {
-            Debug.Log("Holding Fork");
             holdingForklift = true;
         }
         else
@@ -133,13 +120,12 @@ public class CratePickUp : MonoBehaviour
 
     public void PickUpSelected()
     { 
-        if(forkLiftSelected)
+        if(forkLiftSelected || holdingForklift)
             return;
 
         if(pickupList.Count == 0 && heldObjects.Count == 0)
             return;
-        if(holdingForklift)
-            return;
+
         if (!liftFull && pickupList.Count > 0)
         {
             heldObjects.Add(pickupList[0]);          
@@ -168,34 +154,12 @@ public class CratePickUp : MonoBehaviour
             return;
 
         var Angle = CalculateAngleOfPickup(pickupList[0]);
-        if (Angle == PickUpDirection.Left)
-        {
-            Debug.Log("Left");
-            SetForkliftPostitionInParent(Angle);
-            pickupList[0].GetComponent<Rigidbody>().useGravity = false;
-            //pickupList[0].GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-            heldObjects.Add((pickupList[0]).gameObject);
 
+        SetForkliftPostitionInParent(Angle);
+        pickupList[0].GetComponent<Rigidbody>().useGravity = false;
 
-        }
-        else if (Angle == PickUpDirection.Right)
-        {
-            Debug.Log("Right");
-
-        }
-        else if (Angle == PickUpDirection.Forward)
-        {
-            Debug.Log("Forward");
-        }
-        else
-        {
-            Debug.Log("Invalid");
-            return;
-        }
-
-
-        
-
+        heldObjects.Add(pickupList[0]);
+        pickupList.Remove(pickupList[0]);
     }
 
     public void DropHeld()
@@ -208,6 +172,7 @@ public class CratePickUp : MonoBehaviour
 
             onDropped?.Invoke();
         }
+
         var heldCount = heldObjects.Count - 1;
         UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
         heldObjects.Remove(heldObjects[heldCount]);
@@ -234,19 +199,16 @@ public class CratePickUp : MonoBehaviour
         //        PickUpSelected();
         //    }
         //}
-
     }
 
     public void SetPositionInParent(Transform newPosition, int heldcount)
     {
-        
             pickupPositionOffset = new Vector3(0, heldObjects[0].transform.lossyScale.y * heldcount, 0);
 
             newPosition.parent = PickupLocation.transform;
             newPosition.transform.position = PickupLocation.transform.position + pickupPositionOffset;
             newPosition.transform.rotation = PickupLocation.transform.rotation;
             newPosition.GetComponent<Rigidbody>().isKinematic = true;
-
     }
 
     public void UnsetPositionInParent(Transform newPosition, int heldcount)
@@ -254,7 +216,6 @@ public class CratePickUp : MonoBehaviour
         if (heldObjects[0].gameObject.tag == "Player")
         {
             heldObjects[0].GetComponent<Rigidbody>().useGravity = true;
-            heldObjects[0].GetComponent <Rigidbody>().constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
             heldObjects[0].GetComponent<DrivingController>().togglePlayerLifted();
         }
         newPosition.parent = null;
@@ -263,33 +224,23 @@ public class CratePickUp : MonoBehaviour
         newPosition.GetComponent<Collider>().enabled = true;
     }
 
-    public PickUpDirection CalculateAngleOfPickup(GameObject gameObject)
+    public PickUpDirection CalculateAngleOfPickup(GameObject otherGameObject)
     {
-        //Debug.Log("Calculating Angle");
-
-        float sign = Mathf.Sign(Vector3.Dot(transform.forward, gameObject.transform.right));
-        float angle = Mathf.Acos(Vector3.Dot(transform.forward, gameObject.transform.forward)) * 180f/Mathf.PI * sign;
-
-       // Debug.Log($"Dot Angle: {angle} Sign: {sign}");
+        float sign = Mathf.Sign(Vector3.Dot(transform.forward, otherGameObject.transform.right));
+        float angle = Mathf.Acos(Vector3.Dot(transform.forward, otherGameObject.transform.forward)) * 180f/Mathf.PI * sign;
 
         if((-45 < angle && angle < 45))
         {
-            //face front
-           // Debug.Log("Forward");
             return PickUpDirection.Forward;
         }
 
         if(45 < angle && angle < 135)
         {
-            //face left
-            //Debug.Log("Left");
             return PickUpDirection.Left;
         }
 
         if(-135 < angle && angle < -45)
         {
-            //face right
-            //Debug.Log("Right");
             return PickUpDirection.Right;
         }
     
@@ -299,13 +250,20 @@ public class CratePickUp : MonoBehaviour
 
     public void SetForkliftPostitionInParent(PickUpDirection direction)
     {
-        var otherPlayer = pickupList[0].gameObject;
+        GameObject otherPlayer = pickupList[0].gameObject;
         otherPlayer.GetComponent<DrivingController>().togglePlayerLifted();
+
         if(direction == PickUpDirection.Left)
         {
-            otherPlayer.transform.parent = leftPickUpOffset;
+            otherPlayer.transform.parent =   leftPickUpOffset;
             otherPlayer.transform.position = leftPickUpOffset.position;
             otherPlayer.transform.rotation = leftPickUpOffset.rotation;
+        }
+        else if(direction == PickUpDirection.Forward)
+        {
+            otherPlayer.transform.rotation = forwardPickUpOffset.rotation;
+            otherPlayer.transform.position = forwardPickUpOffset.position;
+            otherPlayer.transform.parent =   forwardPickUpOffset;
         }
 
     }
