@@ -22,13 +22,17 @@ public class TimeManager : MonoBehaviour
 	// Time until the level ends
     public float CurrentTimeRemaining { get; private set; }
 	// Encourage players to hurry up with red text
-	public readonly static float timerNearlyRanOutThreshhold = 15.0f;
+	public readonly static float timerNearlyRanOutThreshhold = 30.0f;
+	
+	[Header("Object References")]
+	[SerializeField] private Light sceneLight;
 	
 	// Make sure event is only called once
 	private bool timerNearlyRunOutTriggered = false;
 	
     // Singleton
     public static TimeManager instance { get; private set; }
+	public CollectionScheduleObject CurrentScheduleObject => currentSchedule;
 	
 	/// <summary>
 	/// Setup a Singeton so there is only one TimeManager that can be acccessed in any other script
@@ -41,8 +45,9 @@ public class TimeManager : MonoBehaviour
 	
 	private void Start()
 	{
-		// Set time to total schedule time
-		CurrentTimeRemaining = currentSchedule.TotalTime - 0.01f;
+        // Set time to total schedule time
+        // (adding +0.01 so the timer events here are PROBABLY gonna fire after the collector's timer events fire; this definitely doesn't work if the fps is low but oh well Lole)
+        CurrentTimeRemaining = currentSchedule.TotalTime + 0.01f;
 		
 		// Subscribe to events
 		GameOverState.onEntered += StopTimer;
@@ -68,6 +73,9 @@ public class TimeManager : MonoBehaviour
 					{
 						// Prevent triggering event twice
 						timerNearlyRunOutTriggered = true;
+						
+						// Make level red
+						sceneLight.color = Color.red;
 						
 						// Let other scripts know
 						onTimerNearlyRanOut?.Invoke();
