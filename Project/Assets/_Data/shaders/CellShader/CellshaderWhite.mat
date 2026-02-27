@@ -7,9 +7,9 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Sign Round
+  m_Name: CellshaderWhite
   m_Shader: {fileID: -6465566751694194690, guid: 4831501151f67a64b8040c3b7ec04235, type: 3}
-  m_Parent: {fileID: 2100000, guid: 6ecbf8dea07641b4993226e6ebcfbd7c, type: 2}
+  m_Parent: {fileID: 2100000, guid: 25d91941b76836c40a080938955f55ff, type: 2}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
@@ -23,17 +23,14 @@ Material:
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
-    m_TexEnvs:
-    - _Texture2D:
-        m_Texture: {fileID: 2800000, guid: d77306bc529965544a6868b4a0fbeebe, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
+    m_TexEnvs: []
     m_Ints: []
     m_Floats: []
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &1381321799439936757
+--- !u!114 &6462242885337090627
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
