@@ -30,6 +30,10 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     Color inactiveColor = Color.red;
 
+    [SerializeField, Range(0f, 100f)]
+    float ejectionLaunchForce = 10f,
+        intakeLaunchForce = 5f;
+
     [Space, Header("Event Bindings")]
 
     [SerializeField]
@@ -51,8 +55,8 @@ public class CrateCollector : MonoBehaviour
     ScheduleQuota collectionRequirement;
     Material markerMaterial;
 
-    public float Quota => collectionRequirement.requiredScore;
-    //public CrateTag RequiredTag => collectionRequirement.requiredTag;
+    // Get vector for launching a crate
+    Vector3 GetLaunchForce(float magnitude) => transform.forward * magnitude + new Vector3(0f, 5f, 0f);
 
     private void OnValidate()
     {
@@ -69,7 +73,7 @@ public class CrateCollector : MonoBehaviour
 
     void Initialise()
     {
-        if (!TryGetComponent(out Collider collectorCollider))
+        if (!TryGetComponent(out Collider _))
         {
             Debug.LogWarning("Collector is missing a collider.");
         }
@@ -82,6 +86,7 @@ public class CrateCollector : MonoBehaviour
 
         forCollection = new List<ICollectable>();
     }
+
 
     private void Awake()
     {
@@ -132,13 +137,22 @@ public class CrateCollector : MonoBehaviour
     // Will attempt to collect the given collectable
     void TryCollect(ICollectable collectable)
     {
-        if (canCollect && collectable.CanCollect && 
-            collectable.Tag == collectionRequirement.requiredTag && 
-            !forCollection.Contains(collectable))
+        // Nothing is collectable
+        if (!canCollect || collectable.CanCollect == false) return;
+
+        if (collectable.Tag == collectionRequirement.requiredTag && !forCollection.Contains(collectable))
         {
             forCollection.Add(collectable);
             onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
+            // Uncomment this since doing this would break the collector's functionality
+            // May also need to make the collectable immune to damage while this is happening (unset in RemoveCollectable)
+            // collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(intakeLaunchForce), ForceMode.Impulse);
         }
+        else if (collectable.Tag != collectionRequirement.requiredTag)
+        {
+            collectable.GameObject.GetComponent<Rigidbody>().AddForce(GetLaunchForce(ejectionLaunchForce), ForceMode.Impulse);
+        }
+
     }
 
     // Remove collectable from the list
@@ -248,6 +262,7 @@ public class CrateCollector : MonoBehaviour
         if (audioEnabler == null)
         {
             Debug.LogWarning("Crate collector does not have an AudioEnabler to play sounds from");
+            return;
         }
 
         if (GameManager.instance.currentState == GameManager.instance.playingState)
