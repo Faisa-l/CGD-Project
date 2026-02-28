@@ -238,17 +238,17 @@ public class CratePickUp : MonoBehaviour
         float sign = Mathf.Sign(Vector3.Dot(transform.forward, otherGameObject.transform.right));
         float angle = Mathf.Acos(Vector3.Dot(transform.forward, otherGameObject.transform.forward)) * 180f/Mathf.PI * sign;
 
-        if((-45 < angle && angle < 45))
+        if((-45 <= angle && angle <= 45))
         {
             return PickUpDirection.Forward;
         }
 
-        if(45 < angle && angle < 135)
+        if(45 < angle && angle <= 135)
         {
             return PickUpDirection.Left;
         }
 
-        if(-135 < angle && angle < -45)
+        if(-135 <= angle && angle < -45)
         {
             return PickUpDirection.Right;
         }
@@ -279,6 +279,14 @@ public class CratePickUp : MonoBehaviour
             otherPlayer.transform.rotation = forwardPickUpOffset.rotation;
 
             forwardPickUpOffset.GetComponent<BoxCollider>().enabled = true;
+        }
+        else if (direction == PickUpDirection.Right)
+        {
+            otherPlayer.transform.parent =   rightPickUpOffset;
+            otherPlayer.transform.position = rightPickUpOffset.position;
+            otherPlayer.transform.rotation = rightPickUpOffset.rotation;
+
+            rightPickUpOffset.GetComponent<BoxCollider>().enabled = true;
         }
 
     }
