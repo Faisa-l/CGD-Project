@@ -49,7 +49,7 @@ public class CrateObject : MonoBehaviour, ICollectable
 
     private void Awake()
     {
-        CanCollect = true;
+        CanCollect = CanDamage = true;
 
         textObjects = GetComponentsInChildren<TextMeshPro>();
         promptSource = GetComponentInChildren<ContextualPromptSource>();
@@ -88,7 +88,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         var relativeVelocity = collision.relativeVelocity;
         if (relativeVelocity.magnitude > DamageBehaviour.collisionVelocityForCrateDamage)
         {
-            DamageCrate(relativeVelocity);
+            if (CanDamage) DamageCrate(relativeVelocity);
         }
     }
 
@@ -124,6 +124,7 @@ public class CrateObject : MonoBehaviour, ICollectable
 
     public GameObject GameObject { get => gameObject; }
     public bool CanCollect { get; set; }
+    public bool CanDamage { get; set; }
 
     // Colour this object based on its tag
     void RecolourCrate()

@@ -31,8 +31,8 @@ public class CrateCollector : MonoBehaviour
     Color inactiveColor = Color.red;
 
     [SerializeField, Range(0f, 100f)]
-    float ejectionLaunchForce = 10f,
-        intakeLaunchForce = 5f;
+    float rejectionLaunchForce = 10f,
+        acceptLaunchForce = 5f;
 
     [Space, Header("Event Bindings")]
 
@@ -130,7 +130,7 @@ public class CrateCollector : MonoBehaviour
     {
         if (other.TryGetComponent(out ICollectable collectable))
         {
-            RemoveCollectable(collectable);
+            // RemoveCollectable(collectable);
         }
     }
 
@@ -144,13 +144,12 @@ public class CrateCollector : MonoBehaviour
         {
             forCollection.Add(collectable);
             onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
-            // Uncomment this since doing this would break the collector's functionality
-            // May also need to make the collectable immune to damage while this is happening (unset in RemoveCollectable)
-            // collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(intakeLaunchForce), ForceMode.Impulse);
+            collectable.CanDamage = false;
+            collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(acceptLaunchForce), ForceMode.Impulse);
         }
         else if (collectable.Tag != collectionRequirement.requiredTag)
         {
-            collectable.GameObject.GetComponent<Rigidbody>().AddForce(GetLaunchForce(ejectionLaunchForce), ForceMode.Impulse);
+            collectable.GameObject.GetComponent<Rigidbody>().AddForce(GetLaunchForce(rejectionLaunchForce) + new Vector3(0f, 0f, 0f), ForceMode.Impulse);
         }
 
     }
@@ -161,6 +160,7 @@ public class CrateCollector : MonoBehaviour
         if (canCollect && forCollection.Contains(collectable))
         {
             forCollection.Remove(collectable);
+            collectable.CanDamage = true;
             onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
         }
     }
