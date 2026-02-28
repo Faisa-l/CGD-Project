@@ -52,6 +52,8 @@ public class CratePickUp : MonoBehaviour
     void Awake()
     {
         forwardPickUpOffset.GetComponent<BoxCollider>().enabled = false;
+        leftPickUpOffset.GetComponent<BoxCollider>().enabled = false;
+        rightPickUpOffset.GetComponent<BoxCollider>().enabled = false;
     }
 
     // Update is called once per frame
@@ -69,18 +71,6 @@ public class CratePickUp : MonoBehaviour
         {
             forkLiftSelected = true;
 
-        }
-
-        if(heldObjects.Count == 0)
-            return;
-
-        if (heldObjects[0].gameObject.tag == "Player")
-        {
-            holdingForklift = true;
-        }
-        else
-        {
-            holdingForklift = false;
         }
     }
 
@@ -102,7 +92,7 @@ public class CratePickUp : MonoBehaviour
         if(other.tag == "Player" && heldObjects.Count == 0)
         {
             interactionUIText.gameObject.SetActive(true);
-            interactionUIText.text = "Press <sprite name=\"Xbox_X\"> to pick up player";
+            interactionUIText.text = "Press <sprite name=\"Xbox_Y\"> to pick up player";
 
             pickupList.Add(other.gameObject);
         }
@@ -165,6 +155,8 @@ public class CratePickUp : MonoBehaviour
         pickupList.Remove(pickupList[0]);
         SetForkliftPostitionInParent(Angle);
 
+        holdingForklift = true;
+
     }
 
     public void DropHeld()
@@ -178,8 +170,17 @@ public class CratePickUp : MonoBehaviour
             onDropped?.Invoke();
         }
 
+        if (heldObjects[0].tag == "Player")
+        {
+            holdingForklift = false;
+            heldObjects[0].GetComponent<BoxCollider>().enabled = true;
+        }
+
         heldObjects[0].GetComponent<Rigidbody>().isKinematic = false;
+
         forwardPickUpOffset.GetComponent<BoxCollider>().enabled = false;
+        leftPickUpOffset.GetComponent<BoxCollider>().enabled = false;
+        rightPickUpOffset.GetComponent<BoxCollider>().enabled = false;
 
         var heldCount = heldObjects.Count - 1;
         UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
@@ -261,12 +262,15 @@ public class CratePickUp : MonoBehaviour
         GameObject otherPlayer = heldObjects[0].gameObject;
         otherPlayer.GetComponent<DrivingController>().togglePlayerLifted();
         otherPlayer.GetComponent<Rigidbody>().isKinematic = true;
+        otherPlayer.GetComponent<BoxCollider>().enabled = false;
 
         if(direction == PickUpDirection.Left)
         {
             otherPlayer.transform.parent =   leftPickUpOffset;
             otherPlayer.transform.position = leftPickUpOffset.position;
             otherPlayer.transform.rotation = leftPickUpOffset.rotation;
+
+            leftPickUpOffset.GetComponent<BoxCollider>().enabled = true;
         }
         else if(direction == PickUpDirection.Forward)
         {
