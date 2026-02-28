@@ -19,7 +19,6 @@ public class CrateObject : MonoBehaviour, ICollectable
     bool useColouredTags = true;
 
     float maxScore;
-    bool collect;
     string startingPromptText;
     ContextualPromptSource promptSource;
     MaterialPropertyBlock block;
@@ -50,10 +49,11 @@ public class CrateObject : MonoBehaviour, ICollectable
 
     private void Awake()
     {
+        CanCollect = CanDamage = true;
+
         textObjects = GetComponentsInChildren<TextMeshPro>();
         promptSource = GetComponentInChildren<ContextualPromptSource>();
         block = new MaterialPropertyBlock();
-        collect = true;
         startingPromptText = "<sprite name=\"Xbox_Y\">";
 
         // Bind grabbing event to pickup controller
@@ -88,7 +88,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         var relativeVelocity = collision.relativeVelocity;
         if (relativeVelocity.magnitude > DamageBehaviour.collisionVelocityForCrateDamage)
         {
-            DamageCrate(relativeVelocity);
+            if (CanDamage) DamageCrate(relativeVelocity);
         }
     }
 
@@ -123,12 +123,8 @@ public class CrateObject : MonoBehaviour, ICollectable
     public DamageBehaviour DamageBehaviour { get; set; }
 
     public GameObject GameObject { get => gameObject; }
-
-    public bool CanCollect
-    {
-        get => collect;
-        set => collect = value;
-    }
+    public bool CanCollect { get; set; }
+    public bool CanDamage { get; set; }
 
     // Colour this object based on its tag
     void RecolourCrate()
@@ -142,12 +138,10 @@ public class CrateObject : MonoBehaviour, ICollectable
     // Make the object collect-able or not
     void OnGrabbed()
     {
-        CanCollect = false;
         UpdatePromptTextToDrop();
     }
     void OnDropped() 
     { 
-        CanCollect = true;
         UpdatePromptTextToGrab();
     }
 
