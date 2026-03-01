@@ -1175,7 +1175,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   quotaMissedDuration: 0.5
-  quotaMissedMagnitude: 0.1
+  quotaMissedMagnitude: 0.025
   cameraHolder: {fileID: 5773619470122067631}
 --- !u!1 &2833143252477430518
 GameObject:
@@ -12494,7 +12494,7 @@ MonoBehaviour:
   cameraReversePos: {fileID: 4772259750914084470}
   cameraShake: {fileID: 5916523926406786492}
   shakeDuration: 0.2
-  shakeMagnitude: 0.05
+  shakeMagnitude: 0.01
   fovChangeMultiplier: 1.2
   playerCamera: {fileID: 6396458523878358053}
 --- !u!82 &-5220215563985875057
