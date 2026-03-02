@@ -6311,7 +6311,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4477020908547930622}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &3824910192280806738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6626,6 +6626,7 @@ MonoBehaviour:
   lookingAtObject: {fileID: 3325905161990052438}
   lerpValue: 0.03
   cameraObject: {fileID: 8822135357838566119}
+  fovLerpValue: 0.1
 --- !u!1 &6489661091935311067
 GameObject:
   m_ObjectHideFlags: 0
@@ -12691,7 +12692,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: 0}
+  m_Actions: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
