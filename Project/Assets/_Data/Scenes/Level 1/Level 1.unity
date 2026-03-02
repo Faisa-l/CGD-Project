@@ -2860,7 +2860,7 @@ MonoBehaviour:
   speed: 1
   distance: -2
   waitTime: 10
-  threshold: 0.1
+  threshold: 0.01
   easingCurve:
     serializedVersion: 2
     m_Curve:
@@ -2885,6 +2885,8 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  moveBackOnCollide: 0
+  playersUnderneath: 0
 --- !u!1 &639009406
 GameObject:
   m_ObjectHideFlags: 0
@@ -5950,6 +5952,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 310367124}
     m_Modifications:
+    - target: {fileID: 1332815553042197307, guid: a9135d40756a62a4c9192549d49611da, type: 3}
+      propertyPath: m_Size.y
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1332815553042197307, guid: a9135d40756a62a4c9192549d49611da, type: 3}
+      propertyPath: m_Center.y
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 2761569653920321844, guid: a9135d40756a62a4c9192549d49611da, type: 3}
       propertyPath: m_LocalPosition.x
       value: -36.63
@@ -5989,6 +5999,14 @@ PrefabInstance:
     - target: {fileID: 2761569653920321844, guid: a9135d40756a62a4c9192549d49611da, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3328729579797769585, guid: a9135d40756a62a4c9192549d49611da, type: 3}
+      propertyPath: threshold
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3328729579797769585, guid: a9135d40756a62a4c9192549d49611da, type: 3}
+      propertyPath: moveBackOnCollide
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4619889582652426087, guid: a9135d40756a62a4c9192549d49611da, type: 3}
       propertyPath: m_ExcludeLayers.m_Bits
@@ -7325,7 +7343,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: debugPlayerCount
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3278701883763776178, guid: 8dc9ed0b39b496941a65dfb493fa3664, type: 3}
       propertyPath: playerJoined.m_PersistentCalls.m_Calls.Array.size
