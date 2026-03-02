@@ -3,6 +3,28 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.UIElements;
+
+//Used to sort a list of gameObjects based on their distance to a transform
+public class DistanceCompare : IComparer<GameObject>
+{
+    private Transform positionTransform;
+
+    public DistanceCompare(Transform transform)
+    {
+        positionTransform = transform;
+
+    }
+
+    // Compares by Height, Length, and Width.
+    public int Compare(GameObject x, GameObject y)
+    {
+        Vector3 posA = x.transform.position;
+        Vector3 posB = y.transform.position;
+
+        return Vector3.Distance(posA, positionTransform.position).CompareTo(Vector3.Distance(posB, positionTransform.position));
+    }
+}
 
 
 public class CratePickUp : MonoBehaviour
@@ -42,6 +64,13 @@ public class CratePickUp : MonoBehaviour
     public UnityEvent onGrabbed = new UnityEvent();
     public UnityEvent onDropped = new UnityEvent();
 
+    private DistanceCompare distanceCompare;
+
+    public int heldObjectsCount
+    {
+        get { return heldObjects.Count; }
+    }
+
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -54,6 +83,8 @@ public class CratePickUp : MonoBehaviour
         forwardPickUpOffset.GetComponent<BoxCollider>().enabled = false;
         leftPickUpOffset.GetComponent<BoxCollider>().enabled = false;
         rightPickUpOffset.GetComponent<BoxCollider>().enabled = false;
+
+        distanceCompare = new DistanceCompare(gameObject.transform);
     }
 
     // Update is called once per frame
@@ -73,6 +104,8 @@ public class CratePickUp : MonoBehaviour
 
         }
     }
+
+
 
     private void OnTriggerEnter(Collider other)
     {
@@ -96,6 +129,9 @@ public class CratePickUp : MonoBehaviour
 
             pickupList.Add(other.gameObject);
         }
+
+        //sort the objects in the pickupList by their distance to the lift (close to far)
+        pickupList.Sort(distanceCompare);
     }
 
     private void OnTriggerExit(Collider other)
@@ -115,10 +151,10 @@ public class CratePickUp : MonoBehaviour
 
     public void PickUpSelected()
     { 
-        if(forkLiftSelected || holdingForklift || !pickupList[0].GetComponent<ICollectable>().CanCollect)
+        if(pickupList.Count == 0)
             return;
 
-        if(pickupList.Count == 0 && heldObjects.Count == 0)
+        if(forkLiftSelected || holdingForklift || !pickupList[0].GetComponent<ICollectable>().CanCollect)
             return;
 
         if (!liftFull && pickupList.Count > 0)
@@ -162,7 +198,9 @@ public class CratePickUp : MonoBehaviour
     {
         if (heldObjects.Count == 0) return;
 
-        if (heldObjects[0].TryGetComponent<PhysicsPickup>(out var pickup))
+        var heldCount = heldObjects.Count - 1;
+
+        if (heldObjects[heldCount].TryGetComponent<PhysicsPickup>(out var pickup))
         {
             pickup.OnDropped.Invoke();
 
@@ -175,18 +213,16 @@ public class CratePickUp : MonoBehaviour
             heldObjects[0].GetComponent<BoxCollider>().enabled = true;
         }
 
-        heldObjects[0].GetComponent<Rigidbody>().isKinematic = false;
+
+        heldObjects[heldCount].GetComponent<Rigidbody>().isKinematic = false;
 
         forwardPickUpOffset.GetComponent<BoxCollider>().enabled = false;
         leftPickUpOffset.GetComponent<BoxCollider>().enabled = false;
         rightPickUpOffset.GetComponent<BoxCollider>().enabled = false;
 
-        var heldCount = heldObjects.Count - 1;
         UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
         heldObjects.Remove(heldObjects[heldCount]);
-        heldCount--;
         
-
         //Swap Feature (if we have something in our pickup radius and we are holding something, drop what we are holding and pick up the new object) To be added if we feel its needed
         //else if (pickupList.Count > 0)
         //{
