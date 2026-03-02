@@ -120,7 +120,6 @@ public class DrivingController : MonoBehaviour
     public Transform CameraForwardTransform => cameraForwardPos;
     public Transform CameraReverseTransform => cameraReversePos;
 
-    FloatPickup floatPickup;
     bool lifting = false;
     bool selfIsLifted = false;
 
@@ -134,7 +133,6 @@ public class DrivingController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         audio_enabler = GetComponent<AudioEnabler>();
-        floatPickup = GetComponent<FloatPickup>();
 
         // Camera-transform variables initialisation 
         UpdateCameraTransformPositions();
@@ -186,7 +184,11 @@ public class DrivingController : MonoBehaviour
 
     private void updateMove()
     {
-        if (Mathf.Abs(speed) <= maxSpeed) playerCamera.GetComponent<CameraController>().resetFOV();
+        if (Mathf.Abs(speed) <= maxSpeed || selfIsLifted)
+        {
+            playerCamera.GetComponent<CameraController>().resetFOV();
+            speedLinesImage.SetActive(false);
+        }
 
         if (!isGrounded || selfIsLifted) return;
 
@@ -458,6 +460,7 @@ public class DrivingController : MonoBehaviour
     public void OnInteract()
     {
         castRay.GetComponent<CratePickUp>().PickUpSelected();
+        castRay.GetComponent<CratePickUp>().PickUpSelectedForklift();
     }
 
     public void OnDrop()
@@ -653,7 +656,7 @@ public class DrivingController : MonoBehaviour
     {
         if (collision.relativeVelocity.magnitude >= collisionVelocityForCrateDamage)
         {
-            floatPickup.TryDropSelectedObject();
+            castRay.GetComponent<CratePickUp>().DropHeld();
         }
     }
 
