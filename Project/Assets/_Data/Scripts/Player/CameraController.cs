@@ -11,6 +11,8 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] Camera cameraObject;
 
+    [SerializeField] float fovLerpValue = 0.1f;
+
     public float startingFov 
     {
         get;
@@ -27,7 +29,7 @@ public class CameraController : MonoBehaviour
     }
     public void resetFOV()
     {
-        fov = startingFov;
+        fov = Mathf.Lerp(fov, startingFov, fovLerpValue);
     }
 
     private void Awake()
