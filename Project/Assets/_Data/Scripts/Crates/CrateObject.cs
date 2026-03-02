@@ -139,10 +139,12 @@ public class CrateObject : MonoBehaviour, ICollectable
     void OnGrabbed()
     {
         UpdatePromptTextToDrop();
+        CanCollect = false;
     }
     void OnDropped() 
     { 
         UpdatePromptTextToGrab();
+        CanCollect = true;
     }
 
     // Reduces the crate's score and displays the text for that

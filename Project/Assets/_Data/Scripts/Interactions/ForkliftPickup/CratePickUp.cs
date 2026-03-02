@@ -77,7 +77,7 @@ public class CratePickUp : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         //if the other object is a box and the current player isn't holding a forklift
-        if (other.tag == "Float" && !holdingForklift)
+        if (other.tag == "Float" && !holdingForklift && other.GetComponent<ICollectable>().CanCollect)
         {
             interactionUIText.gameObject.SetActive(true);
             if (heldObjects.Count > 0 && !heldObjects.Contains(other.gameObject))
@@ -115,7 +115,7 @@ public class CratePickUp : MonoBehaviour
 
     public void PickUpSelected()
     { 
-        if(forkLiftSelected || holdingForklift)
+        if(forkLiftSelected || holdingForklift || !pickupList[0].GetComponent<ICollectable>().CanCollect)
             return;
 
         if(pickupList.Count == 0 && heldObjects.Count == 0)
@@ -156,7 +156,6 @@ public class CratePickUp : MonoBehaviour
         SetForkliftPostitionInParent(Angle);
 
         holdingForklift = true;
-
     }
 
     public void DropHeld()
