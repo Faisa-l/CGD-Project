@@ -21,9 +21,9 @@ public class CrateObject : MonoBehaviour, ICollectable
     float maxScore;
     string startingPromptText;
     ContextualPromptSource promptSource;
-    MaterialPropertyBlock block;
     PhysicsPickup pickup;
     TextMeshPro[] textObjects;
+    static MaterialPropertyBlock block;
 
     // As in the minimum score the crate can have
     float MaximumScoreReduction => maxScore * (1 - DamageBehaviour.maximumScoreLossPercentage) - DamageBehaviour.maximumScoreLossValue;
@@ -50,10 +50,9 @@ public class CrateObject : MonoBehaviour, ICollectable
     private void Awake()
     {
         CanCollect = CanDamage = true;
-
+        block ??= new();
         textObjects = GetComponentsInChildren<TextMeshPro>();
         promptSource = GetComponentInChildren<ContextualPromptSource>();
-        block = new MaterialPropertyBlock();
         startingPromptText = "<sprite name=\"Xbox_Y\">";
 
         // Bind grabbing event to pickup controller
@@ -130,8 +129,9 @@ public class CrateObject : MonoBehaviour, ICollectable
     void RecolourCrate()
     {
         var renderer = GetComponent<Renderer>();
+        block.Clear();
         renderer.GetPropertyBlock(block);
-        block.SetColor("_BaseColor", crateTag.GetColourFromTag());
+        block.SetColor("_Color", crateTag.GetColourFromTag());
         renderer.SetPropertyBlock(block);
     }
 
