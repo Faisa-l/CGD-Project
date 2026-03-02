@@ -972,7 +972,7 @@ GameObject:
   - component: {fileID: 5371393900428889625}
   - component: {fileID: 6872322213041797690}
   - component: {fileID: 6244381871608790726}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LiftAxis.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1058,7 +1058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3525187115573806257}
   - component: {fileID: 1984910288401124783}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6262,7 +6262,7 @@ Camera:
   m_GameObject: {fileID: 4477020908547930622}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -6636,7 +6636,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8869293310242120786}
   - component: {fileID: 673826257517940536}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6689,7 +6689,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7746276008453804714}
   - component: {fileID: 639859745972397085}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6741,7 +6741,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5186217170744748968}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6916,7 +6916,7 @@ GameObject:
   - component: {fileID: 3505735524786941813}
   - component: {fileID: 2706603672788514993}
   - component: {fileID: 3291324574770293935}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Lift.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11918,7 +11918,7 @@ GameObject:
   - component: {fileID: 8790941567827503619}
   - component: {fileID: 3426515862185119093}
   - component: {fileID: 6890998367224562299}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ForkCast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12691,7 +12691,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_Actions: {fileID: -944628639613478452, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
+  m_Actions: {fileID: 0}
   m_NotificationBehavior: 0
   m_UIInputModule: {fileID: 0}
   m_DeviceLostEvent:
