@@ -20,6 +20,9 @@ public class CrateCollector : MonoBehaviour
     CollectorScheduler scheduler;
 
     [SerializeField]
+    CrateColourDisplay colourDisplay;
+
+    [SerializeField]
     AudioEnabler audioEnabler;
 
     [Space, Header("Settings")]
@@ -50,6 +53,8 @@ public class CrateCollector : MonoBehaviour
     List<ICollectable> forCollection;
     ScheduleQuota collectionRequirement;
     Material markerMaterial;
+
+    
 
     public float Quota => collectionRequirement.requiredScore;
     //public CrateTag RequiredTag => collectionRequirement.requiredTag;
@@ -165,6 +170,7 @@ public class CrateCollector : MonoBehaviour
 
         collectionRequirement = scheduler.CurrentRequirement;
         onRequirementUpdate.Invoke(collectionRequirement);
+        colourDisplay.UpdateColourDisplay();
     }
 
     // Collects the crate (removes the object and adds some score)
@@ -204,6 +210,7 @@ public class CrateCollector : MonoBehaviour
             wasStarted = false;
         }
         UpdateRequirement();
+        colourDisplay.UpdateColourDisplay();
     }
 
     // Make this collect or not
