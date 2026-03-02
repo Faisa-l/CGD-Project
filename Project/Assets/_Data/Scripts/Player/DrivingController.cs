@@ -122,7 +122,9 @@ public class DrivingController : MonoBehaviour
 
     bool lifting = false;
     bool selfIsLifted = false;
-
+    public Animator frontwheel;
+    public Animator backwheel;
+    public Animator DriftBody;
 
     public void setPlayerGamepad(Gamepad gamepad)
     {
@@ -159,7 +161,8 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
-
+        frontwheel.SetFloat("Speed", speed);
+        backwheel.SetFloat("Speed", speed);
         if (TiersEnabled)
         {
             maxBoostSpeed = 30f;
@@ -216,7 +219,7 @@ public class DrivingController : MonoBehaviour
            {
                speed = 0;    
                movement.movingValue = 0;
-           }
+            }
            //otherwise decelerate
            else
            {
@@ -285,6 +288,7 @@ public class DrivingController : MonoBehaviour
         {
             body.transform.localRotation = new();
             body.transform.localPosition = new();
+            DriftBody.SetFloat("DRIFT", 0);
             return;
         }
 
@@ -304,6 +308,7 @@ public class DrivingController : MonoBehaviour
                 body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                 Vector3.up,
                 sign * movement.turningValue * manualAnimationSpeed * Time.deltaTime);
+            DriftBody.SetFloat("DRIFT", movement.turningValue);
         }
         else
         {
@@ -317,6 +322,7 @@ public class DrivingController : MonoBehaviour
                 body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                 Vector3.up,
                 sign * movement.turningValue * maxRotation);
+            
         }
     }
 
