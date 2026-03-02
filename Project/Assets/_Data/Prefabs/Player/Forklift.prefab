@@ -12202,7 +12202,7 @@ MonoBehaviour:
   breakMultiplier: 3
   speed: 0
   maxSpeed: 12
-  rotateSpeed: 51
+  rotateSpeed: 55
   groundCheckTransform: {fileID: 991374653987402780}
   isGrounded: 0
   groundMask:
@@ -12216,7 +12216,7 @@ MonoBehaviour:
   manualDriftAnim: 1
   manualAnimationSpeed: 50
   drifting: 0
-  driftMultiplier: 2
+  driftSpeed: 100
   trailPrefab: {fileID: 8995315915659653679, guid: 2dad2c5e065a3e749962bebb40438045, type: 3}
   leftTrailStart: {fileID: 3965177836052812689}
   rightTrailStart: {fileID: 7420846728768638810}
