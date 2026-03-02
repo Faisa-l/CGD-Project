@@ -41,7 +41,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] bool manualDriftAnim = true;
     [SerializeField] float manualAnimationSpeed = 1f;
     [SerializeField] bool drifting = false;
-    [SerializeField] float driftMultiplier = 2f;
+    [SerializeField] float driftSpeed = 100f;
     [SerializeField] GameObject trailPrefab;
     [SerializeField] GameObject leftTrailStart;
     [SerializeField] GameObject rightTrailStart;
@@ -259,7 +259,7 @@ public class DrivingController : MonoBehaviour
         if ((speed == 0 && !bounced) || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
-        transform.Rotate(0, sign * movement.turningValue * rotateSpeed * (drifting ? driftMultiplier : 1.0f) * Time.deltaTime, 0);
+        transform.Rotate(0, sign * movement.turningValue * (drifting ? driftSpeed : rotateSpeed) * Time.deltaTime, 0);
 
         //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
         float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f))%360;

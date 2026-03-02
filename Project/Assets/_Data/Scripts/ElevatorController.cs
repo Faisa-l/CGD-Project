@@ -29,11 +29,14 @@ public class ElevatorController : MonoBehaviour
     bool movingBack = false;
 
     Vector3 activationPostion = Vector3.zero;
+    float direction = 0;
 
     void Start()
     {
         startPosition = transform.position;
         endPosition = transform.position + new Vector3(0,distance,0);
+
+        direction = Mathf.Sign(distance);
 
         activationPostion = startPosition;
     }
@@ -49,7 +52,7 @@ public class ElevatorController : MonoBehaviour
         //if activated and not near the end position
         if (activated && Vector3.Distance(transform.position, endPosition) > threshold)
         {
-            float dist = Vector3.Distance(activationPostion, endPosition);
+            float dist = Vector3.Distance(activationPostion, endPosition) * direction;
 
             currentMovementTime += speed * Time.deltaTime;
             transform.position = activationPostion + new Vector3(0,easingCurve.Evaluate(currentMovementTime)*dist,0);
@@ -71,7 +74,7 @@ public class ElevatorController : MonoBehaviour
         //if not activated and not near the end position
         else if (Vector3.Distance(transform.position, startPosition) > threshold)
         {
-            float dist = Vector3.Distance(activationPostion, startPosition);
+            float dist = Vector3.Distance(activationPostion, startPosition) * direction;
 
             currentMovementTime += speed * Time.deltaTime;
             transform.position = activationPostion - new Vector3(0, easingCurve.Evaluate(currentMovementTime) * dist, 0);
@@ -104,6 +107,12 @@ public class ElevatorController : MonoBehaviour
 
     private void OnTriggerExit()
     {
-        playersUnderneath--;
+        if(moveBackOnCollide)
+            playersUnderneath--;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawCube(transform.position + new Vector3(0, distance, 0), new Vector3(0.5f,0.5f,0.5f));
     }
 }
