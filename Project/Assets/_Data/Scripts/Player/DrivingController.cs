@@ -122,7 +122,8 @@ public class DrivingController : MonoBehaviour
 
     bool lifting = false;
     bool selfIsLifted = false;
-
+    public Animator frontwheel;
+    public Animator backwheel;
 
     public void setPlayerGamepad(Gamepad gamepad)
     {
@@ -159,7 +160,8 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
-
+        frontwheel.SetFloat("Speed", speed);
+        backwheel.SetFloat("Speed", speed);
         if (TiersEnabled)
         {
             maxBoostSpeed = 30f;
