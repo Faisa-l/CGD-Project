@@ -77,6 +77,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DropHold",
+                    "type": "Button",
+                    "id": "2f62470d-6ebb-4b67-8ef4-0c7f57307a70",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -264,6 +273,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Drop",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "94a5340d-e497-4e66-a5a4-f47cc295e87d",
+                    "path": "<Gamepad>/buttonWest",
+                    "interactions": "Hold",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "DropHold",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
