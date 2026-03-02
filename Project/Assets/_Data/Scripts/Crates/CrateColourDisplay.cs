@@ -1,47 +1,29 @@
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.ProBuilder.MeshOperations;
+using static CrateExtensions;
 
+/// <summary>
+/// Changes the object's material's colour to whatever the current quota is.
+/// </summary>
+[RequireComponent(typeof(MeshRenderer))]
 public class CrateColourDisplay : MonoBehaviour
 {
+    Material material;
+    float alpha;
 
-    CrateExtensions.ScheduleQuota requirement;
-
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void Awake()
     {
-        
+        material = GetComponent<Renderer>().material;
+
+        // Should apply alpha of whats currently on the material
+        alpha = material.GetColor("_BaseColor").a;
     }
 
-    // Update is called once per frame
-    void Update()
+    // Changes the colour of this object's material.
+    // Should be called whenever a scheduler's update is called.
+    public void UpdateColourDisplay(ScheduleQuota quota)
     {
-        
-    }
-
-    private Dictionary<string, Color> colorMap = new Dictionary<string, Color>()
-    {
-        {"Red", Color.red},
-        {"Green", Color.green},
-        {"Blue", Color.blue},
-
-        // Add more colors if needed
-    };
-
-
-    public void UpdateColourDisplay()
-    {
-        string requiredColour = $"{requirement.requiredTag}";
-        requiredColour.ToLower();
-
-        if (colorMap.TryGetValue(requiredColour, out Color newColor))
-        {
-            GetComponent<Renderer>().sharedMaterial.color = newColor;
-        }
-        else
-        {
-            Debug.LogWarning("Colour change error in QuotaColourDisplay prefab");
-        }
+        var color = quota.requiredTag.GetColourFromTag();
+        color.a = alpha;
+        material.SetColor("_BaseColor", color);
     }
 }

@@ -11,29 +11,15 @@ using static CrateExtensions;
 public class CrateCollector : MonoBehaviour
 {
     [SerializeField]
-    GameObject marker;
-
-    [SerializeField]
     ScoreObject scoreObject;
 
     [SerializeField]
     CollectorScheduler scheduler;
 
     [SerializeField]
-    CrateColourDisplay colourDisplay;
-
-    [SerializeField]
     AudioEnabler audioEnabler;
 
     [Space, Header("Settings")]
-
-    /*
-    [SerializeField]
-    Color activeColor = Color.green;
-
-    [SerializeField]
-    Color inactiveColor = Color.red;
-     */
 
     [SerializeField, Range(0f, 100f)]
     float rejectionLaunchForce = 10f;
@@ -60,16 +46,12 @@ public class CrateCollector : MonoBehaviour
     bool wasStarted = false;
     List<ICollectable> forCollection;
     ScheduleQuota collectionRequirement;
-    Material markerMaterial;
-    static MaterialPropertyBlock markerBlock;
-    Renderer markerRenderer;
 
-    
-
-    public float Quota => collectionRequirement.requiredScore;
-    //public CrateTag RequiredTag => collectionRequirement.requiredTag;
     // Get vector for launching a crate
     Vector3 GetLaunchForce(float magnitude) => transform.forward * magnitude + new Vector3(0f, 5f, 0f);
+
+    // Returns predicted score
+    float GetScoreWaitingInCollection() => forCollection.Sum(item => item.Score);
 
     private void OnValidate()
     {
@@ -90,15 +72,7 @@ public class CrateCollector : MonoBehaviour
         {
             Debug.LogWarning("Collector is missing a collider.");
         }
-
-        
-        if (marker.TryGetComponent(out markerRenderer))
-        {
-            markerBlock = new MaterialPropertyBlock();
-            // markerMaterial.SetColor("_BaseColor", activeColor);
-        }
          
-
         forCollection = new List<ICollectable>();
     }
 
@@ -193,9 +167,7 @@ public class CrateCollector : MonoBehaviour
         if (!scheduler.Running) return;
 
         collectionRequirement = scheduler.CurrentRequirement;
-        AdjustMarkerColour();
         onRequirementUpdate.Invoke(collectionRequirement);
-        colourDisplay.UpdateColourDisplay();
     }
 
     // Collects the crate (removes the object and adds some score)
@@ -235,7 +207,6 @@ public class CrateCollector : MonoBehaviour
             wasStarted = false;
         }
         UpdateRequirement();
-        colourDisplay.UpdateColourDisplay();
     }
 
     // Make this collect or not
@@ -256,21 +227,6 @@ public class CrateCollector : MonoBehaviour
     // Variants of above but always true/false
     void DoCollect() => SetCollection(true);
     void NoCollect() => SetCollection(false);
-
-    // Returns predicted score
-    float GetScoreWaitingInCollection() => forCollection.Sum(item => item.Score);
-
-    
-    // Change material on object based on the required quota's tag
-    private void AdjustMarkerColour()
-    {
-        markerRenderer.GetPropertyBlock(markerBlock);
-        var color = collectionRequirement.requiredTag.GetColourFromTag();
-        color.a = markerRenderer.material.GetColor("_BaseColor").a;
-        markerBlock.SetColor("_BaseColor", color);
-        markerRenderer.SetPropertyBlock(markerBlock);
-    }
-    
 
     // Play successs or fail audio only if the state is in playing
     void ProcessSuccessFailAudio(bool pass)

@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 3778199760876918544}
   - component: {fileID: 6046876716792446090}
   - component: {fileID: 5924337645498668210}
+  - component: {fileID: 7142957843213478375}
   m_Layer: 6
   m_Name: Marker
   m_TagString: Untagged
@@ -245,6 +246,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &7142957843213478375
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2610756185775498066}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a284802c093aacc46b65046e999cf072, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2670508943770670778
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,7 +678,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f2533b8bc2d93d43bcbf5f651c6f1a7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  marker: {fileID: 2610756185775498066}
   scoreObject: {fileID: 11400000, guid: a81eb5c0ad339a34ebbcbe11b677fbaa, type: 2}
   scheduler: {fileID: 3022961426910664996}
   audioEnabler: {fileID: 6571032529647430877}
