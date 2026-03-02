@@ -8,6 +8,7 @@ public interface ICollectable
 {
     public float MaxScore { get; set; }
     public float Score { get; set; }
+    //CanCollect is being used to determine if the object  is held currently
     public bool CanCollect { get; set; }
     public bool CanDamage { get; set; }
     public GameObject GameObject { get; }

@@ -972,7 +972,7 @@ GameObject:
   - component: {fileID: 5371393900428889625}
   - component: {fileID: 6872322213041797690}
   - component: {fileID: 6244381871608790726}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: LiftAxis.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1058,7 +1058,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3525187115573806257}
   - component: {fileID: 1984910288401124783}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6262,7 +6262,7 @@ Camera:
   m_GameObject: {fileID: 4477020908547930622}
   m_Enabled: 1
   serializedVersion: 2
-  m_ClearFlags: 4
+  m_ClearFlags: 1
   m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
@@ -6626,6 +6626,7 @@ MonoBehaviour:
   lookingAtObject: {fileID: 3325905161990052438}
   lerpValue: 0.03
   cameraObject: {fileID: 8822135357838566119}
+  fovLerpValue: 0.1
 --- !u!1 &6489661091935311067
 GameObject:
   m_ObjectHideFlags: 0
@@ -6636,7 +6637,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8869293310242120786}
   - component: {fileID: 673826257517940536}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6689,7 +6690,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7746276008453804714}
   - component: {fileID: 639859745972397085}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position Back
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6741,7 +6742,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5186217170744748968}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Pickup Position
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6916,7 +6917,7 @@ GameObject:
   - component: {fileID: 3505735524786941813}
   - component: {fileID: 2706603672788514993}
   - component: {fileID: 3291324574770293935}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: Lift.002
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11918,7 +11919,7 @@ GameObject:
   - component: {fileID: 8790941567827503619}
   - component: {fileID: 3426515862185119093}
   - component: {fileID: 6890998367224562299}
-  m_Layer: 0
+  m_Layer: 2
   m_Name: ForkCast
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12016,7 +12017,7 @@ Transform:
   m_GameObject: {fileID: 8787852879880177809}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.8, z: 0.341}
+  m_LocalPosition: {x: 0, y: 1.6, z: 0.341}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12201,7 +12202,7 @@ MonoBehaviour:
   breakMultiplier: 3
   speed: 0
   maxSpeed: 12
-  rotateSpeed: 65
+  rotateSpeed: 55
   groundCheckTransform: {fileID: 991374653987402780}
   isGrounded: 0
   groundMask:
@@ -12215,7 +12216,7 @@ MonoBehaviour:
   manualDriftAnim: 1
   manualAnimationSpeed: 50
   drifting: 0
-  driftMultiplier: 2
+  driftSpeed: 100
   trailPrefab: {fileID: 8995315915659653679, guid: 2dad2c5e065a3e749962bebb40438045, type: 3}
   leftTrailStart: {fileID: 3965177836052812689}
   rightTrailStart: {fileID: 7420846728768638810}
