@@ -557,7 +557,7 @@ public class DrivingController : MonoBehaviour
         }
         else if (!drifting && boostReady)
         {
-            controller.fov = controller.fov * fovChangeMultiplier;
+            controller.fov = controller.startingFov * fovChangeMultiplier;
 
             speedLinesImage.SetActive(true);
 
