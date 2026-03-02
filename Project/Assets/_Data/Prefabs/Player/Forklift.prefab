@@ -12202,7 +12202,7 @@ MonoBehaviour:
   breakMultiplier: 3
   speed: 0
   maxSpeed: 12
-  rotateSpeed: 65
+  rotateSpeed: 51
   groundCheckTransform: {fileID: 991374653987402780}
   isGrounded: 0
   groundMask:
