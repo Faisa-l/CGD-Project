@@ -20,6 +20,9 @@ public class CrateCollector : MonoBehaviour
     CollectorScheduler scheduler;
 
     [SerializeField]
+    CrateColourDisplay colourDisplay;
+
+    [SerializeField]
     AudioEnabler audioEnabler;
 
     [Space, Header("Settings")]
@@ -61,6 +64,10 @@ public class CrateCollector : MonoBehaviour
     static MaterialPropertyBlock markerBlock;
     Renderer markerRenderer;
 
+    
+
+    public float Quota => collectionRequirement.requiredScore;
+    //public CrateTag RequiredTag => collectionRequirement.requiredTag;
     // Get vector for launching a crate
     Vector3 GetLaunchForce(float magnitude) => transform.forward * magnitude + new Vector3(0f, 5f, 0f);
 
@@ -188,6 +195,7 @@ public class CrateCollector : MonoBehaviour
         collectionRequirement = scheduler.CurrentRequirement;
         AdjustMarkerColour();
         onRequirementUpdate.Invoke(collectionRequirement);
+        colourDisplay.UpdateColourDisplay();
     }
 
     // Collects the crate (removes the object and adds some score)
@@ -227,6 +235,7 @@ public class CrateCollector : MonoBehaviour
             wasStarted = false;
         }
         UpdateRequirement();
+        colourDisplay.UpdateColourDisplay();
     }
 
     // Make this collect or not
