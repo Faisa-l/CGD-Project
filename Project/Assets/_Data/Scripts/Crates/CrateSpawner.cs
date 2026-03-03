@@ -74,7 +74,7 @@ public class CrateSpawner : MonoBehaviour
     public void StopSpawner() => timer.paused = true;
 
     // Attempts to spawn a crate at each point if its mapped GameObject is null
-    protected void TrySpawnCrates()
+    void TrySpawnCrates()
     {
         // Loop through each requirement and spawn in as many crates are needed
         foreach (var req in spawnRequirements)
