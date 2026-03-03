@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
@@ -78,7 +80,13 @@ public class DrivingController : MonoBehaviour
 
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
-    [SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
+    [SerializeField] private SkinnedMeshRenderer playerMesh;
+    // This data type so we can change the skin to match player getting in after alpha
+
+    [Header("Audio Variables")]
+    [SerializeField] AudioSource runningSound;
+    [SerializeField] float runningMaxPitch;
+    [SerializeField] private float audioSpeedRatio;
 
     [Header("Bouce variables")]
     [SerializeField] float bouncingForceMultiplier = 5f;
@@ -175,6 +183,10 @@ public class DrivingController : MonoBehaviour
             maxBoostSpeed = 20f;
             DriftBoost();
         }
+        
+        //Audio changes pitch depending on the speed of the forklift (however, because the forklift goes to max speed really quickly, the pitch change is almost unnoticable - Callum.S)
+        audioSpeedRatio = speed;
+        runningSound.pitch = Mathf.Lerp(0.3f, runningMaxPitch, audioSpeedRatio);
     }
 
 #region Updating functions
@@ -627,8 +639,8 @@ public class DrivingController : MonoBehaviour
 		if (collision.transform.CompareTag("Float"))
 		{
 			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
-		}
-		
+        }
+
         if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
@@ -654,6 +666,13 @@ public class DrivingController : MonoBehaviour
 		cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
 
         TryDropOnCollision(collision);
+        
+        //Audio impact for when the forklift bounces from a wall, it plays a sound
+        if (bounced == true)
+        {
+            audio_enabler.Enable("impact");
+            //print("IMPACT FORKLIFT");
+        }
     }
 
     // Drops the forklift's held object based on a collision
@@ -664,5 +683,4 @@ public class DrivingController : MonoBehaviour
             castRay.GetComponent<CratePickUp>().DropHeld();
         }
     }
-
 }
