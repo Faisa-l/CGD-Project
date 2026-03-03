@@ -622,15 +622,14 @@ public class DrivingController : MonoBehaviour
                 speed = maxBoostSpeed;
             }
 
-            driftingEffects.Emit(false);
-            driftingEffects.Stop();
         }
         else if (!drifting && !boostReady)
         {
+            driftingEffects.Emit(false);
+            driftingEffects.Stop();
             boostTimer = 0f;
             boostTier = 0;
         }
-
     }
 
     public void togglePlayerLifted()
