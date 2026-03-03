@@ -17,7 +17,7 @@ public class CrateSpawner : MonoBehaviour
     Timer timer;
 
     [SerializeField, Tooltip("How many objects should be spawned for a given tag."), ContextMenuItem("Apply default damage behaviour", "ResetAllDamageBehaviours")]
-    List<SpawnRequirements> spawnRequirements;
+    List<SpawnRequirements> spawnRequirements = new List<SpawnRequirements>();
 
     private void OnValidate()
     {

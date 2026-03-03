@@ -6628,7 +6628,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4477020908547930622}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &3824910192280806738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12589,7 +12589,6 @@ GameObject:
   - component: {fileID: 149636443516487714}
   - component: {fileID: 5281218984497139308}
   - component: {fileID: 660509750987994943}
-  - component: {fileID: 6575178007448525318}
   - component: {fileID: 5957374651335090734}
   m_Layer: 2
   m_Name: Forklift
@@ -13160,19 +13159,6 @@ MonoBehaviour:
   - driving
   - arms
   - reverse
---- !u!114 &6575178007448525318
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9127728803133528513}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c6b2bf487d725c6479d0f765906abdc3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pickupHolder: {fileID: 5186217170744748968}
 --- !u!114 &5957374651335090734
 MonoBehaviour:
   m_ObjectHideFlags: 0
