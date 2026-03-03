@@ -129,11 +129,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1332815553042197307, guid: a9135d40756a62a4c9192549d49611da, type: 3}
       propertyPath: m_Size.y
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1332815553042197307, guid: a9135d40756a62a4c9192549d49611da, type: 3}
       propertyPath: m_Center.y
-      value: -1
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1332815553042197307, guid: a9135d40756a62a4c9192549d49611da, type: 3}
+      propertyPath: m_IncludeLayers.m_Bits
+      value: 4294967295
       objectReference: {fileID: 0}
     - target: {fileID: 2761569653920321844, guid: a9135d40756a62a4c9192549d49611da, type: 3}
       propertyPath: m_LocalScale.x
@@ -2892,7 +2896,7 @@ PrefabInstance:
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: button
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 984152337}
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: pressedTransform
       value: 
@@ -2900,7 +2904,7 @@ PrefabInstance:
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: releasedTransform
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 504371117}
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: pressEvent.m_PersistentCalls.m_Calls.Array.size
       value: 2
@@ -3585,6 +3589,11 @@ Transform:
 Transform:
   m_CorrespondingSourceObject: {fileID: 5927151463584524728, guid: a66a47a91cf3e754898bb014ddcbcc43, type: 3}
   m_PrefabInstance: {fileID: 486330378}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &504371117 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1090527130986001099, guid: c865f46f791d11748bbd681168648d45, type: 3}
+  m_PrefabInstance: {fileID: 460541398}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &512032065
 GameObject:
@@ -5177,9 +5186,9 @@ GameObject:
   - component: {fileID: 899515518}
   - component: {fileID: 899515517}
   - component: {fileID: 899515516}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Plane (1)
-  m_TagString: Untagged
+  m_TagString: No Bounce
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7011,6 +7020,11 @@ Transform:
   - {fileID: 933466012}
   m_Father: {fileID: 14455828}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &984152337 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1787138147357021708, guid: c865f46f791d11748bbd681168648d45, type: 3}
+  m_PrefabInstance: {fileID: 460541398}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &986269737
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -13155,7 +13169,7 @@ GameObject:
   - component: {fileID: 2131982665}
   m_Layer: 3
   m_Name: Second_Floor
-  m_TagString: Untagged
+  m_TagString: No Bounce
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

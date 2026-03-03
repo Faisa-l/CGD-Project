@@ -12708,7 +12708,6 @@ MonoBehaviour:
   driftTrailsContainer: {fileID: 9016362086914594180}
   boostMultiplier: 2
   boostTimer: 0
-  boostDuration: 2
   boostReady: 0
   maxBoostSpeed: 20
   boostTier: 0
@@ -12738,6 +12737,11 @@ MonoBehaviour:
   lookAtTransform: {fileID: 3325905161990052438}
   cameraForwardPos: {fileID: 4984584100628000045}
   cameraReversePos: {fileID: 4772259750914084470}
+  cameraRayCastMask:
+  - Ignore Raycast
+  - UI
+  - Crates
+  - Drivable
   cameraShake: {fileID: 5916523926406786492}
   shakeDuration: 0.2
   shakeMagnitude: 0.01

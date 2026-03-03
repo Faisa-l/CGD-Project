@@ -99,15 +99,17 @@ public class ElevatorController : MonoBehaviour
 
     private void OnTriggerEnter()
     {
+        Debug.Log("Enter");
         if(moveBackOnCollide && movingBack)
         {
+            Debug.Log("Added");
             playersUnderneath++;
         }
     }
 
     private void OnTriggerExit()
     {
-        if(moveBackOnCollide)
+        if(moveBackOnCollide && playersUnderneath > 0)
             playersUnderneath--;
     }
 
