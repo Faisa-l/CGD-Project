@@ -624,6 +624,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2473816448168718303, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 123539534}
+    - target: {fileID: 2473816448168718303, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: SetSelectedGameObject
+      objectReference: {fileID: 0}
     - target: {fileID: 2622939950395198981, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -840,6 +848,14 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5701154189063144839, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 123539534}
+    - target: {fileID: 5701154189063144839, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: SetSelectedGameObject
+      objectReference: {fileID: 0}
     - target: {fileID: 5748955712509727392, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
@@ -947,6 +963,14 @@ PrefabInstance:
     - target: {fileID: 8909609014082441942, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9221144925450865445, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Target
+      value: 
+      objectReference: {fileID: 123539534}
+    - target: {fileID: 9221144925450865445, guid: aed831c42ab46214288b8a1742f789a7, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_MethodName
+      value: SetSelectedGameObject
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
