@@ -37,7 +37,7 @@ public class DrivingController : MonoBehaviour
     [Header("Drifting Variables")]
     [SerializeField] GameObject body;
     [SerializeField] float maxRotation = 30;
-    [SerializeField] Animation driftAnimation;
+    [SerializeField] Animator DriftBody;
     [SerializeField] bool manualDriftAnim = true;
     [SerializeField] float manualAnimationSpeed = 1f;
     [SerializeField] bool drifting = false;
@@ -46,7 +46,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject leftTrailStart;
     [SerializeField] GameObject rightTrailStart;
     GameObject currentTrailLeft;
-    GameObject currentTrailRight;
+    GameObject currentTrailRight; 
     [SerializeField]GameObject driftTrailsContainer;
 
     [Header("Boost Variables")]
@@ -122,9 +122,10 @@ public class DrivingController : MonoBehaviour
 
     bool lifting = false;
     bool selfIsLifted = false;
-    public Animator frontwheel;
-    public Animator backwheel;
-    public Animator DriftBody;
+
+    [Header("Wheel Animations")]
+    [SerializeField] Animator frontwheel;
+    [SerializeField] Animator backwheel;
 
     public void setPlayerGamepad(Gamepad gamepad)
     {
@@ -301,28 +302,16 @@ public class DrivingController : MonoBehaviour
             return;
         }
 
-        //If there is no animation added for the drift, then do a basic, manual animation
-        if(manualDriftAnim)
-        {
-            body.transform.RotateAround(
-                body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
-                Vector3.up,
-                sign * movement.turningValue * manualAnimationSpeed * Time.deltaTime);
-            DriftBody.SetFloat("DRIFT", movement.turningValue);
-        }
-        else
-        {
-            if(driftAnimation != null)
-            {
-                driftAnimation.Play();
-            }
+        //rotate the body of the forklift over time
+        body.transform.RotateAround(
+            body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
+            Vector3.up,
+            sign * movement.turningValue * manualAnimationSpeed * Time.deltaTime);
 
-            //matbe not needed, need animation first if we are using one
-            body.transform.RotateAround(
-                body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
-                Vector3.up,
-                sign * movement.turningValue * maxRotation);
-            
+        //If there is an animation added for the drift
+        if (!manualDriftAnim)
+        {
+            DriftBody?.SetFloat("DRIFT", movement.turningValue);
         }
     }
 
