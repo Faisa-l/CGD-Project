@@ -113,6 +113,6 @@ public class ElevatorController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(transform.position + new Vector3(0, distance, 0), new Vector3(0.5f,0.5f,0.5f));
+        Gizmos.DrawCube(transform.position + new Vector3(0, distance, 0), new Vector3(1f,1f,1f));
     }
 }
