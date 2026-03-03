@@ -6,6 +6,7 @@ public class QuotaDisplayText : MonoBehaviour
 {
     [SerializeField]
     TextMeshProUGUI quotaReqs, quotaTimer;
+
 	[SerializeField]
 	Animator anim;
 

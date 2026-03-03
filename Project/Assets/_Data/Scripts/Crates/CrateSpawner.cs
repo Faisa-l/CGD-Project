@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 using static CrateExtensions;
 
@@ -111,31 +112,58 @@ public class CrateSpawner : MonoBehaviour
         }
     }
 
-    // Draws the spawner locations and what colour they are for. Size is also based on the score 
+    // UTILITY FUNCTIONS
+#if UNITY_EDITOR
+    [Space, Header("Editor utilities")]
+
+    [SerializeField, Tooltip("Scale for the gizmo of a spawn point box. " +
+        "As the size is a ratio between this value and their score, the value of this property determines the score for a box to be drawn with a 1x1x1 size.")]
+    float spawnPointGizmoScale = 50f;
+
+    [SerializeField, Tooltip(
+        "Draw coloured cubes for each of the spawn points. " +
+        "This will only work if drawGizmos is initially set to true. " +
+        "if drawGizmosOnSelected is true, the boxes are only shown if this object is selected.")]
+    bool drawGizmos, drawGizmosOnSelected;
+
     private void OnDrawGizmosSelected()
+    {
+        if (drawGizmos && drawGizmosOnSelected) DrawSpawnPointGizmos();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (drawGizmos && !drawGizmosOnSelected) DrawSpawnPointGizmos();
+    }
+
+    // Draws the spawner locations and what colour they are for. Size is also based on the score 
+    private void DrawSpawnPointGizmos()
     {
         foreach (var req in spawnRequirements)
         {
             foreach (Transform t in req.parentTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray())
             {
                 Gizmos.color = req.tag.GetColourFromTag();
-                Gizmos.DrawCube(t.position, new Vector3(1, 1, 1) * (req.crateScore / 75f));
+                Gizmos.DrawCube(t.position, new Vector3(1f, 1f, 1f) * (req.crateScore * (1/ spawnPointGizmoScale)));
             }
         }
     }
 
-    // UTILITY FUNCTION
+    // Apply a default damage behaviour
     private void ResetAllDamageBehaviours()
     {
+        DamageBehaviour def = new()
+        {
+            collisionVelocityForCrateDamage = 10f,
+            damageCoefficient = 0.4f,
+            maximumScoreLossValue = 10f,
+            maximumScoreLossPercentage = 0f
+        };
         foreach(var req in spawnRequirements)
         {
-            req.damageBehaviour = new()
-            {
-                collisionVelocityForCrateDamage = 10f,
-                damageCoefficient = 0.4f,
-                maximumScoreLossValue = 10f,
-                maximumScoreLossPercentage = 0f
-            };
+            req.damageBehaviour = def;
         }
     }
+#endif
+
 }
