@@ -3,7 +3,7 @@ using UnityEngine.Events;
 
 public class FloatPickup : MonoBehaviour
 {
-    [SerializeField] GameObject Forkcast;
+    [SerializeField] public GameObject Forkcast;
     [SerializeField] GameObject PickupLocation;
     [SerializeField] GameObject ForkliftLeftLocation;
     [SerializeField] GameObject ForkliftRightLocation;
@@ -110,7 +110,11 @@ public class FloatPickup : MonoBehaviour
                 hit.rigidbody.AddForce(Vector3.up * (Floatforce(hit.transform.position.y) - hit.rigidbody.GetAccumulatedForce().y));
             }
 
-        }        
+        }   
+
+
+        
+        
     }
 
     // Fired on the input for the selected controller through the DrivingComponent
@@ -253,11 +257,5 @@ public class FloatPickup : MonoBehaviour
         newPosition.GetComponent<Collider>().enabled = true;
     }
 
-    void SetPhysicsValues(GameObject gameobject)
-    {
-        gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        gameObject.GetComponent<Collider>().enabled = false;
-
-    }
 }
  
