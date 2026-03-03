@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 using UnityEngine.UI;
 
 public class DrivingController : MonoBehaviour
@@ -52,7 +53,6 @@ public class DrivingController : MonoBehaviour
     [Header("Boost Variables")]
     [SerializeField] float boostMultiplier = 2f;
     [SerializeField] float boostTimer = 0f;
-    [SerializeField] float boostDuration = 2f;
     [SerializeField] bool boostReady = false;
     [SerializeField] float maxBoostSpeed = 20f;
     [SerializeField] int boostTier = 0;
@@ -75,12 +75,14 @@ public class DrivingController : MonoBehaviour
 
     [Header("UI")]
     [SerializeField] private HudManager hudManager;
+    [SerializeField] private GameObject dropAllUI;
+    [SerializeField] private Slider dropAllSlider;
 
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
     [SerializeField] private SkinnedMeshRenderer playerMesh; // This data type so we can change the skin to match player getting in after alpha
 
-    [Header("Bouce variables")]
+    [Header("Bounce variables")]
     [SerializeField] float bouncingForceMultiplier = 5f;
     [Range(1,2)]
     [SerializeField] float bounceDecay = 2f;
@@ -117,6 +119,9 @@ public class DrivingController : MonoBehaviour
 
     private Gamepad playerGamepad;
 
+    private bool holdingInteract = false;
+    private float interactHoldTime = 0f;
+
     public Transform CameraForwardTransform => cameraForwardPos;
     public Transform CameraReverseTransform => cameraReversePos;
 
@@ -150,6 +155,8 @@ public class DrivingController : MonoBehaviour
         driftTrailsContainer.transform.parent = null;
 
         speedLinesImage.SetActive(false);
+
+        dropAllUI.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -174,6 +181,12 @@ public class DrivingController : MonoBehaviour
         {
             maxBoostSpeed = 20f;
             DriftBoost();
+        }
+
+        if(holdingInteract)
+        {
+            interactHoldTime += Time.deltaTime / 0.4f; //default max hold time
+            dropAllSlider.value = interactHoldTime;
         }
     }
 
@@ -460,7 +473,17 @@ public class DrivingController : MonoBehaviour
 
     public void OnDrop()
     {
+        holdingInteract = true;
+        dropAllUI.SetActive(true);
+
         castRay.GetComponent<CratePickUp>().DropHeld();
+    }
+
+    public void OnReleaseDrop()
+    {
+        holdingInteract = false;
+        dropAllUI.SetActive(false);
+        interactHoldTime = 0f;
     }
 
     public void OnDropHold()
@@ -471,6 +494,10 @@ public class DrivingController : MonoBehaviour
         {
             cratePickup.DropHeld();    
         }
+
+        dropAllUI.SetActive(false);
+        interactHoldTime = 0f;
+        holdingInteract = false;
     }
 
     public void DriftBoost()
