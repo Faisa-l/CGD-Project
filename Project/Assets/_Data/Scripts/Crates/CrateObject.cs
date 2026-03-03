@@ -124,8 +124,6 @@ public class CrateObject : MonoBehaviour, ICollectable
     public GameObject GameObject { get => gameObject; }
     public bool CanCollect { get; set; }
 
-    [SerializeField] bool canCollect = true;
-
     public bool CanDamage { get; set; }
 
     // Colour this object based on its tag
@@ -136,14 +134,12 @@ public class CrateObject : MonoBehaviour, ICollectable
     {
         UpdatePromptTextToDrop();
         CanCollect = false;
-        canCollect = false;
     }
 
     void OnDropped() 
     { 
         UpdatePromptTextToGrab();
         CanCollect = true;
-        canCollect = true;
     }
 
     // Reduces the crate's score and displays the text for that
