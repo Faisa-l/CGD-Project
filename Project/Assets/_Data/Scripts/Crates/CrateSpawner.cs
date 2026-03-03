@@ -84,9 +84,10 @@ public class CrateSpawner : MonoBehaviour
             List<Transform> validPoints = allPoints.FindAll(item => (Object)req.instances[item] == null);
             ShuffleList(validPoints);
 
-            // Spawn more crates until we've reached the max spawn count
-            int j = 0;
-            for (int i = req.Spawned; i < req.spawnCount;  i++)
+            // Spawn more crates until we've reached the max spawn count or spawned at all valid points
+            int j = 0,
+                k = Mathf.Min(req.spawnCount, validPoints.Count);
+            for (int i = req.Spawned; i < k;  i++)
             {
                 SpawnCrate(validPoints[j], req);
                 j++;
