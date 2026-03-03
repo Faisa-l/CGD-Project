@@ -20,9 +20,12 @@ public class DriftingEffectsController : MonoBehaviour
 
     // Cache colours to use during runtime
     ParticleSystem.MinMaxGradient[] tierGradients;
+    bool playing;
+    
 
     private void Awake()
     {
+        playing = false;
         tierGradients = new ParticleSystem.MinMaxGradient[4];
         tierGradients[0] = new ParticleSystem.MinMaxGradient(boostGradient0);
         tierGradients[1] = new ParticleSystem.MinMaxGradient(boostGradient1);
@@ -49,6 +52,7 @@ public class DriftingEffectsController : MonoBehaviour
     /// </summary>
     public void SetEffectTier(int tier = 0)
     {
+        tier = Mathf.Clamp(tier, 0, 3);
         ParticleSystem.ColorOverLifetimeModule colorOverLifetime;
         for (int i = 0; i < mainObject.Length; ++i)
         {
@@ -65,6 +69,9 @@ public class DriftingEffectsController : MonoBehaviour
     /// </summary>
     public void Play()
     {
+        if (playing) return;
+        playing = true;
+
         for (int i = 0; i < mainObject.Length; ++i)
         {
             bubbles[i].Play();
@@ -78,6 +85,7 @@ public class DriftingEffectsController : MonoBehaviour
     /// </summary>
     public void Stop()
     {
+        playing = false;
         for (int i = 0; i < mainObject.Length; ++i)
         {
             bubbles[i].Stop();

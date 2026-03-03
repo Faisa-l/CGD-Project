@@ -85,8 +85,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   boostGradient1:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 1, g: 0.8438969, b: 0, a: 1}
+    key1: {r: 1, g: 0.93394846, b: 0, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -115,8 +115,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   boostGradient2:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 1, g: 0.31027773, b: 0.29458883, a: 1}
+    key1: {r: 1, g: 0, b: 0.4008791, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -145,8 +145,8 @@ MonoBehaviour:
     m_NumAlphaKeys: 2
   boostGradient3:
     serializedVersion: 2
-    key0: {r: 1, g: 1, b: 1, a: 1}
-    key1: {r: 1, g: 1, b: 1, a: 1}
+    key0: {r: 0.31838083, g: 0.18396229, b: 1, a: 1}
+    key1: {r: 0.51680994, g: 0, b: 1, a: 1}
     key2: {r: 0, g: 0, b: 0, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
@@ -224,6 +224,54 @@ PrefabInstance:
     - target: {fileID: 2625678485706725180, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
       propertyPath: m_Name
       value: Tyre Emitter
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284633049083518493, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: SizeModule.y.minMaxState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4284633049083518493, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: SizeModule.z.minMaxState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4970803660349475587, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: SizeModule.y.minMaxState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4970803660349475587, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: SizeModule.z.minMaxState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4970803660349475587, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: VelocityModule.orbitalX.scalar
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4970803660349475587, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: VelocityModule.orbitalX.minScalar
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4970803660349475587, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: VelocityModule.orbitalX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4970803660349475587, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: VelocityModule.orbitalY.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4970803660349475587, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: VelocityModule.orbitalZ.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6236356410595533817, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: EmissionModule.m_BurstCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6236356410595533817, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: InitialModule.startRotationX.minMaxState
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6236356410595533817, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+      propertyPath: InitialModule.startRotationY.minMaxState
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
