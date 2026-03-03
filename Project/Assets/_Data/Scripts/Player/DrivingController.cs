@@ -90,10 +90,11 @@ public class DrivingController : MonoBehaviour
     [SerializeField, Min(0f)] float collisionVelocityForCrateDamage = 10f;
     [SerializeField] List<string> ignoreBounceMask;
 
-    [Space(10)]
+    [Header("Camera Transform")]
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
+    [SerializeField] private List<string> cameraRayCastMask = new List<string>();
     Vector3 rootForward, rootReverse;
     Vector3 lookAtPosition;
     Vector3 cameraReverseOrigin;
@@ -111,7 +112,7 @@ public class DrivingController : MonoBehaviour
 
     [SerializeField] GameObject playerCamera = null;
 
-    [SerializeField] GameObject castRay;
+    [SerializeField] private GameObject castRay;
 
     private Rigidbody rb;
 
@@ -356,7 +357,7 @@ public class DrivingController : MonoBehaviour
         Vector3 direction;
 
         // Get layer mask we need
-        LayerMask mask = ~LayerMask.GetMask("Ignore Raycast", "UI", "Crates");
+        LayerMask mask = ~LayerMask.GetMask(cameraRayCastMask.ToArray());
 
         // Forward cam transform
         direction = cameraForwardOrigin - lookAtPosition;
@@ -655,7 +656,7 @@ public class DrivingController : MonoBehaviour
 		{
 			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
 		}
-		
+
         if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
@@ -680,7 +681,8 @@ public class DrivingController : MonoBehaviour
 		// Camera shake
 		cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
 
-        TryDropOnCollision(collision);
+        if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Float")
+            TryDropOnCollision(collision);
     }
 
     // Drops the forklift's held object based on a collision

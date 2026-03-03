@@ -105,8 +105,6 @@ public class CratePickUp : MonoBehaviour
         }
     }
 
-
-
     private void OnTriggerEnter(Collider other)
     {
         //if the other object is a box and the current player isn't holding a forklift
