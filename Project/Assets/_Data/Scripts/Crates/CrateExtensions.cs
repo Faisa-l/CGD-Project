@@ -17,6 +17,7 @@ public static class CrateExtensions
         [Tooltip("This must be the game object whose child transforms are used as spawn points.")]
         public Transform parentTransform;
         public CrateTag tag;
+        [Min(0)]
         public int spawnCount;
         public int crateScore;
         public DamageBehaviour damageBehaviour;
