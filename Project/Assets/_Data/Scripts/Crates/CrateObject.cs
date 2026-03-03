@@ -136,7 +136,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         CanCollect = false;
     }
 
-    void OnDropped() 
+    void OnDropped()   
     { 
         UpdatePromptTextToGrab();
         CanCollect = true;
