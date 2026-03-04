@@ -221,7 +221,7 @@ MonoBehaviour:
   m_NotificationBehavior: 0
   m_MaxPlayerCount: 4
   m_AllowJoining: 1
-  m_JoinBehavior: 1
+  m_JoinBehavior: 2
   m_PlayerJoinedEvent:
     m_PersistentCalls:
       m_Calls: []
@@ -289,9 +289,9 @@ MonoBehaviour:
       m_Calls: []
   debug_mode_on: 0
   player_prefab: {fileID: 434561073841790944, guid: f603a06dfc613bd4791da85cc95b3ac5, type: 3}
+  debugPlayerCount: 1
   blankCamera: {fileID: 362356778454053186}
   player_join_action: {fileID: 3128916251527242960, guid: 4419d82f33d36e848b3ed5af4c8da37e, type: 3}
-  minimap: {fileID: 0}
 --- !u!1 &4585707198148248717
 GameObject:
   m_ObjectHideFlags: 0

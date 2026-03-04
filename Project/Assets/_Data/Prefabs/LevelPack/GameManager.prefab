@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6118227874357799062}
   - component: {fileID: 3348724795274198753}
   - component: {fileID: -4791197900161960636}
+  - component: {fileID: -6542556864173564693}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -45,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e1f1cad5390495449a10bc22c330f48, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuManager: {fileID: 0}
+  button_sound: {fileID: 0}
 --- !u!114 &-4791197900161960636
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -59,3 +60,27 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pauseMenuPanel: {fileID: 0}
+--- !u!114 &-6542556864173564693
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6589892054514560231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f845c7ca496aeec4aa84ac919ee6e3f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onTimerStarted:
+    m_PersistentCalls:
+      m_Calls: []
+  onTimerStopped:
+    m_PersistentCalls:
+      m_Calls: []
+  onTimerNearlyRanOut:
+    m_PersistentCalls:
+      m_Calls: []
+  onTimerRanOut:
+    m_PersistentCalls:
+      m_Calls: []

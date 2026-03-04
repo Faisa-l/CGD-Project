@@ -1,204 +1,251 @@
-using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
+using static CrateExtensions;
 
 /// <summary>
 /// MonoBehaviour that uses the GameObject's collider to detect and collect crates.
 /// </summary>
+[RequireComponent(typeof(CollectorScheduler))]
 public class CrateCollector : MonoBehaviour
 {
     [SerializeField]
-    GameObject marker;
-
-    [SerializeField, Range(0f, 60f)]
-    float collectionInterval = 30f;
+    ScoreObject scoreObject;
 
     [SerializeField]
-    Color activeColor = Color.green;
+    CollectorScheduler scheduler;
 
     [SerializeField]
-    Color inactiveColor = Color.red;
+    AudioEnabler audioEnabler;
 
-    [SerializeField]
-    Vector2Int requirementRange;
-    
-    [SerializeField]
-    bool randomiseRequirementOnCollection = false;
+    [Space, Header("Settings")]
+
+    [SerializeField, Range(0f, 100f)]
+    float rejectionLaunchForce = 10f;
+
+    [SerializeField, Range(0f, 100f)]
+    float acceptLaunchForce = 5f;
 
     [Space, Header("Event Bindings")]
 
     [SerializeField]
-    UnityEvent<float> onCollection;
+    UnityEvent<ScheduleQuota> onRequirementUpdate;
 
     [SerializeField]
-    UnityEvent<int> onRequirementUpdate;
-
-
-    [SerializeField]
-    UnityEvent<float> onScoreUpdated;
+    UnityEvent<float> onItemsForCollectionChanged;
 
     [SerializeField]
-    UnityEvent onCollectionPeriodStarted;
+    UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded;
 
     [SerializeField]
-    UnityEvent onCollectionPeriodEnded;
-    
-    [SerializeField]
-    UnityEvent onQuotaMet;
+    public UnityEvent<bool> onEvaluatedRequirement;
 
-    float timer = 0f;
-    bool canCollect = false;
-    int collectionRequierment = 1;
-    float collectionScore = 0f;
     float currentCollectionScore = 0f;
-    List<ICollectable> toCollect;
-    Material markerMaterial;
+    bool canCollect = false;
+    bool wasStarted = false;
+    List<ICollectable> forCollection;
+    ScheduleQuota collectionRequirement;
 
-    public int Quota => collectionRequierment;
-    bool RequirementMet => (toCollect.Count >= collectionRequierment);
-    void UpdateRequirement()
-    {
-        collectionRequierment = UnityEngine.Random.Range(requirementRange.x, requirementRange.y);
-        onRequirementUpdate.Invoke(collectionRequierment);
-    }
+    // Get vector for launching a crate
+    Vector3 GetLaunchForce(float magnitude) => transform.forward * magnitude + new Vector3(0f, 5f, 0f);
 
-    void initialise()
-    {
-        if (!TryGetComponent<Collider>(out Collider collectorCollider))
-        {
-            Debug.LogWarning("Collector is missing a collider.");
-        }
-
-        if (marker.TryGetComponent<Renderer>(out Renderer renderer))
-        {
-            markerMaterial = renderer.sharedMaterial;
-            markerMaterial.SetColor("_BaseColor", activeColor);
-        }
-        UpdateRequirement();
-    }
+    // Returns predicted score
+    float GetScoreWaitingInCollection() => forCollection.Sum(item => item.Score);
 
     private void OnValidate()
     {
-        if (requirementRange.x < 0) requirementRange.x = 1; 
-        if (requirementRange.y < 0) requirementRange.y = 1;
-        if (requirementRange.x > requirementRange.y)
+        // Should I even bother doing this?
+        try
         {
-            requirementRange.x = requirementRange.y;
+            audioEnabler = GetComponentInChildren<AudioEnabler>();
         }
-        initialise();
+        catch (System.Exception)
+        {
+            throw;
+        }
+    }
+
+    void Initialise()
+    {
+        if (!TryGetComponent(out Collider _))
+        {
+            Debug.LogWarning("Collector is missing a collider.");
+        }
+         
+        forCollection = new List<ICollectable>();
     }
 
     private void Awake()
     {
-        initialise();
-        toCollect = new List<ICollectable>();
-        onScoreUpdated.Invoke(collectionScore);
+        Initialise();
+        scoreObject.SetScore(0f);
     }
 
+    private void OnEnable()
+    {
+        onEvaluatedRequirement.AddListener(ProcessSuccessFailAudio);
+        scheduler.SchedulerStarted.AddListener(DoCollect);
+        scheduler.SchedulerUpdated.AddListener(UpdateFromSchedule);
+        scheduler.SchedulerEnded.AddListener(NoCollect);
+        scheduler.SchedulerEnded.AddListener(EvaluateRequirement);
+    }
+    private void OnDisable()
+    {
+        onEvaluatedRequirement.RemoveListener(ProcessSuccessFailAudio);
+        scheduler.SchedulerStarted.RemoveListener(DoCollect);
+        scheduler.SchedulerUpdated.RemoveListener(UpdateFromSchedule);
+        scheduler.SchedulerEnded.RemoveListener(NoCollect);
+        scheduler.SchedulerEnded.RemoveListener(EvaluateRequirement);
+    }
+
+    private void Start()
+    {
+        StartCollector();
+    }
+
+    // If other is a collectable add it to list
     private void OnTriggerEnter(Collider other)
     {
-        // If collider is a 'collectable'
-        if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
+        if (other.TryGetComponent(out ICollectable collectable))
         {
-            // CollectCrate(collectable);
-            toCollect.Add(collectable);
-            Debug.Log("Added object");
+            TryCollect(collectable);
         }
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.TryGetComponent<ICollectable>(out ICollectable collectable))
+        if (other.TryGetComponent(out ICollectable collectable))
         {
-            if (toCollect.Contains(collectable))
-            {
-                toCollect.Remove(collectable);
-                Debug.Log("removed object");
-            }
+            // RemoveCollectable(collectable);
         }
     }
 
-    private void Update()
+    // Will attempt to collect the given collectable
+    void TryCollect(ICollectable collectable)
     {
-        UpdateTimer();
-        AdjustMaterial();
-        HandleCollection();
+        // Nothing is collectable
+        if (!canCollect || collectable.CanCollect == false) return;
+
+        if (collectable.Tag == collectionRequirement.requiredTag && !forCollection.Contains(collectable))
+        {
+            forCollection.Add(collectable);
+            onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
+            collectable.CanDamage = collectable.CanCollect = false;
+            collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(acceptLaunchForce), ForceMode.Impulse);
+        }
+        else if (collectable.Tag != collectionRequirement.requiredTag)
+        {
+            /* This should be the proper solution to handling the crate being dropped off incorectly
+             * for now we're just gonna destroy it and let the crate spawner bring it back to life
+            var rb = collectable.GameObject.GetComponent<Rigidbody>();
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(GetLaunchForce(rejectionLaunchForce) + new Vector3(0f, 1f, 0f), ForceMode.Impulse);
+            */
+            Destroy(collectable.GameObject);
+        }
+
+    }
+
+    // Remove collectable from the list
+    void RemoveCollectable(ICollectable collectable)
+    {
+        if (canCollect && forCollection.Contains(collectable))
+        {
+            forCollection.Remove(collectable);
+            collectable.CanDamage = true;
+            onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
+        }
+    }
+
+    // Starts the collector for collecting
+    public void StartCollector()
+    {
+        wasStarted = true;
+        scheduler.StartScheduler();
+    }
+
+    // Set the current collection requirement to what is currently scheduled
+    void UpdateRequirement()
+    {
+        if (!scheduler.Running) return;
+
+        collectionRequirement = scheduler.CurrentRequirement;
+        onRequirementUpdate.Invoke(collectionRequirement);
     }
 
     // Collects the crate (removes the object and adds some score)
     private void CollectCrate(ICollectable collectable)
     {
-        // Do something with its data
-        collectionScore += collectable.Score;
         currentCollectionScore += collectable.Score;
         Destroy(collectable.GameObject);
-        if (RequirementMet)
-        {
-            onQuotaMet.Invoke();
-        }
     }
 
-    // Handle timer
-    private void UpdateTimer()
+    // Check if the current requirement was met
+    void EvaluateRequirement()
     {
-        if (canCollect == true) return;
+        // Collect everything that should be collected
+        foreach(var c in forCollection) CollectCrate(c);
+        bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredScore);
+        currentCollectionScore *= isSuccess ? scheduler.BonusQuotaMultipler : 1f;
 
-        timer += Time.deltaTime;
-        if (timer < collectionInterval) return;
-
-        canCollect = true;
-        if (randomiseRequirementOnCollection) UpdateRequirement();
-
-        OnCollectionStarted();
-        return;
-    }
-
-    // Collects items in toCollect if canCollect is true
-    private void HandleCollection()
-    {
-        if (!canCollect) return;
-        if (!RequirementMet) return;
-        
-        foreach (ICollectable item in toCollect)
-        {
-            CollectCrate(item);
-        }
-
-        toCollect.Clear();
-        timer = 0f;
-        canCollect = false;
-        onCollection.Invoke(currentCollectionScore);
-        onScoreUpdated.Invoke(collectionScore);
+        // Add score + invoke events
+        scoreObject.AddScore(currentCollectionScore);
+        onEvaluatedRequirement.Invoke(isSuccess);
         currentCollectionScore = 0f;
 
-        // Hide text
-        OnCollectionEnded();
+        forCollection.Clear();
     }
 
-    // Change material on object based on canCollect state
-    private void AdjustMaterial()
+    // For invocation whenever the schedule changes the current collection requirement
+    void UpdateFromSchedule()
     {
-        if (canCollect)
+        // Call UpdateRequirement after evaluating the current requirement
+        // If this was called when the collector first started, don't evaluate (nothing to check)
+        if (!wasStarted)
         {
-            markerMaterial.SetColor("_BaseColor", activeColor);
+            EvaluateRequirement();
         }
         else
         {
-            markerMaterial.SetColor("_BaseColor", inactiveColor);
+            wasStarted = false;
+        }
+        UpdateRequirement();
+    }
+
+    // Make this collect or not
+    internal void SetCollection(bool can)
+    {
+        canCollect = can;
+
+        if (can)
+        {
+            onCollectionPeriodStarted.Invoke();
+        }
+        else
+        {
+            onCollectionPeriodEnded.Invoke();
         }
     }
 
-    // These functions could eventually be bound to an action so they aren't directly invoked via code
-    void OnCollectionStarted()
-    {
-        // Show requirement text
-        onCollectionPeriodStarted.Invoke();
-    }
+    // Variants of above but always true/false
+    void DoCollect() => SetCollection(true);
+    void NoCollect() => SetCollection(false);
 
-    void OnCollectionEnded()
+    // Play successs or fail audio only if the state is in playing
+    void ProcessSuccessFailAudio(bool pass)
     {
-        // Hide requirement text
-        onCollectionPeriodEnded.Invoke();
+        if (audioEnabler == null)
+        {
+            Debug.LogWarning("Crate collector does not have an AudioEnabler to play sounds from");
+            return;
+        }
+
+        if (GameManager.instance.currentState == GameManager.instance.playingState)
+        {
+            audioEnabler.Enable(pass ? "Pass" : "Fail");
+            return;
+        }
+        audioEnabler.Enable("Ended");
     }
 }

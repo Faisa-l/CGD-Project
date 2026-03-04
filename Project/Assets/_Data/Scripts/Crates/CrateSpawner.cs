@@ -1,138 +1,102 @@
-using System;
 using System.Collections.Generic;
-using Unity.Mathematics;
+using System.Linq;
 using UnityEngine;
+using static CrateExtensions;
 
 /// <summary>
 /// MonoBehaviour which handles spawning collectable crates.
 /// </summary>
+[RequireComponent(typeof(Timer))]
 public class CrateSpawner : MonoBehaviour
 {
     [SerializeField]
     GameObject cratePrefab;
 
-    [SerializeField, Range(0f, 30f)]
-    float spawnInterval = 10f;
+    [SerializeField, Tooltip("Timeout event is assigned at runtime.")]
+    Timer timer;
 
-    [SerializeField, Range(0, 100)]
-    int spawnExtra = 2;
-
-    [SerializeField, Tooltip("Spawns one crate at each point")]
-    List<Transform> points;
-
-    // I have the potential to do something incredibly funny here to get the quota
-    // Really it should be a value thats practically globally accessible so instead this will reference the crate collector
-    // The alternative would be to either make a singleton that holds this type of data or a ScriptableObject which holds the value
-    [SerializeField]
-    CrateCollector collector;
-
-    // Key is where the spawned crate came from
-    // Very important nothing directly indexes this otherwise bad things will happen
-    Dictionary<Transform, GameObject> spawnedObjects;
-    float timer = 0f;
-
-    int Quota => collector ? collector.Quota : 10;
+    [SerializeField, Tooltip("How many objects should be spawned for a given tag."), ContextMenuItem("Apply default damage behaviour", "ResetAllDamageBehaviours")]
+    List<SpawnRequirements> spawnRequirements = new List<SpawnRequirements>();
 
     private void OnValidate()
     {
         // Valid prefab
-        if(cratePrefab == null || !cratePrefab.TryGetComponent<ICollectable>(out ICollectable _))
+        if (cratePrefab == null || !cratePrefab.TryGetComponent(out ICollectable _))
         {
             Debug.LogWarning("Spawner does not have correct crate prefab.");
         }
 
-        // Valid range
-        if (spawnInterval < 0f)
+        if (TryGetComponent(out timer))
         {
-            spawnInterval = 0f;
+            timer.repeat = true;
+            timer.autoStart = false;
         }
-
-        // Auto-populate points
-        int count = transform.childCount;
-
-        for (int i = 0; i < count; i++)
-        {
-            Transform child = transform.GetChild(i);
-            if (!points.Contains(child))
-            {
-                points.Add(child);
-            }
-        }
-
     }
 
-    // Populates spawnedObjects
-    void Initalise()
+    void Initialise()
     {
-        spawnedObjects = new Dictionary<Transform, GameObject>();
-
-        foreach (Transform t in points)
+        // Initialise the instances map on each spawn requirement
+        for (int i = 0; i < spawnRequirements.Count; i++) 
         {
-            spawnedObjects.Add(t, null);
+            var dict = new Dictionary<Transform, ICollectable>();
+            foreach (var t in spawnRequirements[i].parentTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray())
+            {
+                dict.Add(t, null);
+            }
+
+            spawnRequirements[i].instances = dict;
         }
     }
 
     private void Awake()
     {
-        Initalise();
+        Initialise();
     }
 
-    private void Update()
+    private void OnEnable()
     {
-        bool ready = UpdateTimer();
-
-        if (ready)
+        if (timer != null)
         {
-            // Spawn crates
-            TrySpawnCrates();
+            timer.timeout.AddListener(TrySpawnCrates);
         }
     }
 
-    bool UpdateTimer()
+    private void OnDisable()
     {
-        timer += Time.deltaTime;
-        if (timer >= spawnInterval)
+        if (timer != null)
         {
-            timer = 0f;
-            return true;
+            timer.timeout.RemoveListener(TrySpawnCrates);
         }
-        return false;
     }
+
+    public void StartSpawner() => timer.paused = false;
+    public void StopSpawner() => timer.paused = true;
 
     // Attempts to spawn a crate at each point if its mapped GameObject is null
     void TrySpawnCrates()
     {
-        List<Transform> spawnPoints = new List<Transform>();
-        int spawned = 0;
-
-        // Get transforms to spawn
-        foreach (var pair in spawnedObjects)
+        // Loop through each requirement and spawn in as many crates are needed
+        foreach (var req in spawnRequirements)
         {
-            if (pair.Value == null)
-            {
-                spawnPoints.Add(pair.Key);
-            }
-            else
-            {
-                spawned++;
-            }
-        }
-        ShuffleList<Transform>(spawnPoints);
-        
-        // Only spawn enough crates to meet quota (truncate spawnPoints)
-        int diff = Quota - spawned + spawnExtra;
-        if (diff > 0)
-        {
-            diff = math.clamp(diff, 0, spawnPoints.Count);
-            spawnPoints = new List<Transform>(spawnPoints).GetRange(0, diff);
+            // Get a shuffled list of the spawn transforms which do not have any objects
+            List<Transform> allPoints = req.instances.Keys.ToList();
+            List<Transform> validPoints = allPoints.FindAll(item => (Object)req.instances[item] == null);
+            ShuffleList(validPoints);
 
-            // Actual spawning
-            foreach (Transform t in spawnPoints)
+            // Spawn more crates until we've reached the max spawn count or spawned at all valid points
+            int j = 0,
+                k = Mathf.Clamp(req.spawnCount,0 , validPoints.Count);
+            for (int i = req.Spawned; i < k;  i++)
             {
-                spawnedObjects[t] = Instantiate(cratePrefab, t);
+                SpawnCrate(validPoints[j], req);
+                j++;
             }
         }
     }
+
+    // Spawns a crate and set its data based on its requirement. Instantiate within spawnedObjects
+    void SpawnCrate(in Transform point, in SpawnRequirements requirement) 
+        => requirement.instances[point] = CrateObject.Instantiate(cratePrefab, point, requirement.tag, requirement.damageBehaviour, requirement.crateScore);
 
     // Randomise spawnable transforms (Fisher-Yates shuffle I found on stack overflow)
     // Partition list from 0 to pointer to end -> Select random element -> swap with pointer element -> decrement pointer
@@ -147,4 +111,59 @@ public class CrateSpawner : MonoBehaviour
             (list[n], list[k]) = (list[k], list[n]);
         }
     }
+
+    // UTILITY FUNCTIONS
+#if UNITY_EDITOR
+    [Space, Header("Editor utilities")]
+
+    [SerializeField, Tooltip("Scale for the gizmo of a spawn point box. " +
+        "As the size is a ratio between this value and their score, the value of this property determines the score for a box to be drawn with a 1x1x1 size.")]
+    float spawnPointGizmoScale = 50f;
+
+    [SerializeField, Tooltip(
+        "Draw coloured cubes for each of the spawn points. " +
+        "This will only work if drawGizmos is initially set to true. " +
+        "if drawGizmosOnSelected is true, the boxes are only shown if this object is selected.")]
+    bool drawGizmos, drawGizmosOnSelected;
+
+    private void OnDrawGizmosSelected()
+    {
+        if (drawGizmos && drawGizmosOnSelected) DrawSpawnPointGizmos();
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (drawGizmos && !drawGizmosOnSelected) DrawSpawnPointGizmos();
+    }
+
+    // Draws the spawner locations and what colour they are for. Size is also based on the score 
+    private void DrawSpawnPointGizmos()
+    {
+        foreach (var req in spawnRequirements)
+        {
+            foreach (Transform t in req.parentTransform.GetComponentsInChildren<Transform>().Skip(1).ToArray())
+            {
+                Gizmos.color = req.tag.GetColourFromTag();
+                Gizmos.DrawCube(t.position, new Vector3(1f, 1f, 1f) * (req.crateScore * (1/ spawnPointGizmoScale)));
+            }
+        }
+    }
+
+    // Apply a default damage behaviour
+    private void ResetAllDamageBehaviours()
+    {
+        DamageBehaviour def = new()
+        {
+            collisionVelocityForCrateDamage = 10f,
+            damageCoefficient = 0.4f,
+            maximumScoreLossValue = 10f,
+            maximumScoreLossPercentage = 0f
+        };
+        foreach(var req in spawnRequirements)
+        {
+            req.damageBehaviour = def;
+        }
+    }
+#endif
+
 }

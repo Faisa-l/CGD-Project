@@ -1,8 +1,9 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class FloatPickup : MonoBehaviour
 {
-    [SerializeField] GameObject Forkcast;
+    [SerializeField] public GameObject Forkcast;
     [SerializeField] GameObject PickupLocation;
     [SerializeField] GameObject ForkliftLeftLocation;
     [SerializeField] GameObject ForkliftRightLocation;
@@ -19,7 +20,10 @@ public class FloatPickup : MonoBehaviour
     [SerializeField] bool has_forklift;
     [SerializeField] RaycastHit hit;
     [SerializeField] private GameObject held_object;
-    float timer = 0;
+
+	// Events
+	public UnityEvent onGrabbed = new UnityEvent();
+	public UnityEvent onDropped = new UnityEvent();
 
     public string MessageInteract => "Picks Up";
 
@@ -105,24 +109,63 @@ public class FloatPickup : MonoBehaviour
                 hit.rigidbody.AddForce(Vector3.up * (Floatforce(hit.transform.position.y) - hit.rigidbody.GetAccumulatedForce().y));
             }
 
-        }        
+        }   
+
+
+        
+        
     }
 
+    // Fired on the input for the selected controller through the DrivingComponent
     public void PickUpSelected()
     {
-        if (object_selected && !has_object)
+        // Try to grab something, if not then try to drop what might be held
+        if (!TryGrabObject()) TryDropSelectedObject();
+    }
+
+    // Will attempt to grab the object in the ray's hit
+    public bool TryGrabObject()
+    {
+        if (!object_selected || has_object) return false;
+
+        SetPositionInParent(hit.collider.gameObject.transform);
+        held_object = hit.collider.gameObject;
+        has_object = true;
+
+        // Invoke grab event if it exists
+        if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
         {
-            SetPositionInParent(hit.collider.gameObject.transform);
-            held_object = hit.collider.gameObject;
-            has_object = true;
+            Debug.Log("Invoking onpickup");
+            pickup.OnGrabbed.Invoke();
+
+            // Let visual cue elements know the forklift has picked up a crate
+            onGrabbed?.Invoke();
         }
-        else if (object_selected == false && has_object == true)
+
+        return true;
+    }
+
+    // Drops the object in held_object
+    public bool TryDropSelectedObject()
+    {
+        if (object_selected || !has_object) return false;
+
+        // Invoke drop event if it exists
+        if (held_object.TryGetComponent<PhysicsPickup>(out var pickup))
         {
-            ray_dist = 1.5f;
-            UnsetPositionInParent(held_object.transform);
-            held_object = null;
-            has_object = false;
+            Debug.Log("Invoking ondrop");
+            pickup.OnDropped?.Invoke();
+
+            // Let visual cue elements know the forklift has dropped a crate
+            onDropped?.Invoke();
         }
+
+        ray_dist = 1.5f;
+        UnsetPositionInParent(held_object.transform);
+        held_object = null;
+        has_object = false;
+
+        return true;
     }
 
     public void PickUpSelectedForklift()
@@ -157,12 +200,18 @@ public class FloatPickup : MonoBehaviour
                 held_object = lifting_forklift;
                 has_forklift = true;
             }
+
+            if(has_forklift)
+            {
+                held_object.GetComponent<DrivingController>().togglePlayerLifted();
+            }
         }
         else if (forklift_selected == false && held_object != null && has_forklift == true)
         {
             //Debug.Log("Dropping Forklift");
             ray_dist = 1.5f;
             UnsetPositionInParent(held_object.transform);
+            held_object.GetComponent<DrivingController>().togglePlayerLifted();
             has_forklift = false;
         }
     }
@@ -207,11 +256,5 @@ public class FloatPickup : MonoBehaviour
         newPosition.GetComponent<Collider>().enabled = true;
     }
 
-    void SetPhysicsValues(GameObject gameobject)
-    {
-        gameObject.GetComponent<Rigidbody>().isKinematic = true;
-        gameObject.GetComponent<Collider>().enabled = false;
-
-    }
 }
  

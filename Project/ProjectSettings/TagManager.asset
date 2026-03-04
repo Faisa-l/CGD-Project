@@ -1,0 +1,54 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!78 &1
+TagManager:
+  serializedVersion: 3
+  tags:
+  - TriggerPrompt
+  - LeftSide
+  - BackSide
+  - RightSide
+  - Lift
+  - CinemachineTarget
+  - Float
+  - No Bounce
+  - forklift pickup
+  layers:
+  - Default
+  - TransparentFX
+  - Ignore Raycast
+  - Drivable
+  - Water
+  - UI
+  - Crates
+  - Ignore Crates
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  - 
+  m_SortingLayers:
+  - name: Default
+    uniqueID: 0
+    locked: 0
+  m_RenderingLayers:
+  - Default

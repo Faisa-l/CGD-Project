@@ -7,13 +7,12 @@ public class CollectionText : MonoBehaviour
     [SerializeField]
     TextMeshProUGUI display;
 
-    [SerializeField, TextArea]
-    string displayText = "Collected crates\r\nTotal score\r\n";
-
     [SerializeField, Range(0f, 10f)]
     float visbilityDuration = 3f;
 
     WaitForSeconds interval;
+
+    TimeManager TM => TimeManager.instance;
 
     private void Awake()
     {
@@ -22,9 +21,10 @@ public class CollectionText : MonoBehaviour
     }
 
     // This can be assigned to an event to update the displayed text
-    public void UpdateText(float score)
+    public void UpdateText(bool passed)
     {
-        display.SetText(displayText + score);
+        // The "Quota updated" text will only appear if the current game state is in the playing state
+        display.SetText($"{(passed ? "Passed" : "Missed")} quota\r\n{(TM.CurrentScheduleObject.actingScheduler.Schedule.Count > 0 ? "Quota updated" : "")}");
         gameObject.SetActive(true);
         StartCoroutine(TogglePanelVisibility());
     }

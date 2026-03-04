@@ -15,6 +15,9 @@ namespace Interaction
             public Vector3 position;
             public bool taken;
         }
+		
+		[SerializeField]
+		private bool requiresForklift = false;
 
         //defining an array the has the positions that each object will take
         List<ObjectPosition> positions = new List<ObjectPosition>();
@@ -87,5 +90,9 @@ namespace Interaction
 
         public virtual void Release() { }
 
+		public bool RequiresForklift()
+		{
+			return requiresForklift;
+		}
     }
 }

@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 public class Door : MonoBehaviour
 {
@@ -7,13 +8,17 @@ public class Door : MonoBehaviour
     public float speed = 1.0f;
     public float delay = 0.0f;
 
+    [Header("Time the door is open for")]
+    [SerializeField] private float open_time = 5.0f;
+
     [Header("Boolean Variables")]
     public bool moving = false;
     public bool opening = true;
     public bool timed = false;
-    
-    
-    
+
+    [SerializeField]
+    UnityEvent OnDoorOpening;
+
     private Vector3 startPos;
     private Vector3 endPos;
     
@@ -34,6 +39,7 @@ public class Door : MonoBehaviour
             if (opening)
             {
                 MoveDoor(endPos);
+                OnDoorOpening.Invoke();
             }
             else
             {
@@ -59,7 +65,7 @@ public class Door : MonoBehaviour
             if (opening && timed)
             {
                delay += Time.deltaTime;
-               if (delay > 1.5f)
+               if (delay > open_time)
                {
                    opening = false;
                }

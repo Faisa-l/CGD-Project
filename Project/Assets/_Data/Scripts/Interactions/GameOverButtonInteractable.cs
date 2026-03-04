@@ -8,6 +8,9 @@ public class GameOverButtonInteractable : MonoBehaviour, Interactable
 	
     public virtual string MessageInteract => "Press <sprite name=\"Xbox_X\"> to self-destruct warehouse";
 
+	[SerializeField]
+	private bool requiresForklift = false;
+
     public void Interact(InteractableControl interactableControl)
     {
 		// Let other scripts know
@@ -16,4 +19,9 @@ public class GameOverButtonInteractable : MonoBehaviour, Interactable
     }
 
     public virtual void Release() { }
+	
+	public bool RequiresForklift()
+	{
+		return requiresForklift;
+	}
 }
