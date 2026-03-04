@@ -46,6 +46,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject trailPrefab;
     [SerializeField] GameObject leftTrailStart;
     [SerializeField] GameObject rightTrailStart;
+    [SerializeField] DriftingEffectsController driftingEffects;
     GameObject currentTrailLeft;
     GameObject currentTrailRight; 
     [SerializeField]GameObject driftTrailsContainer;
@@ -530,23 +531,22 @@ public class DrivingController : MonoBehaviour
 
     public void TieredDriftBoost()
     {
-        ParticleSystem ps = boostParticlesBR.GetComponent<ParticleSystem>();
-        ParticleSystem.MainModule ma = ps.main;
-
-        ParticleSystem ps1 = boostParticlesBL.GetComponent<ParticleSystem>();
-        ParticleSystem.MainModule ma1 = ps1.main;
-
-        if(!drifting && boostParticlesBL.activeSelf)
-        {
-            boostParticlesBL.SetActive(false);
-            boostParticlesBR.SetActive(false);
-        }
-
+        // This should be cached in a variable not called here
         CameraController controller = playerCamera.GetComponent<CameraController>();
 
         if (drifting)
         {
+            // Set boosting tier 
             boostTimer += Time.deltaTime;
+            boostTier = Mathf.Clamp(Mathf.FloorToInt(boostTimer / boostTierTimeIncrement), 0, 3);
+            boostReady = boostTier > 0;
+
+            // Set drifting effects to current tier and play them
+            driftingEffects.SetEffectTier(boostTier);
+            driftingEffects.Emit(true);
+            driftingEffects.Play();
+
+            /* This sucks btw
             if (boostTimer <= boostTierTimeIncrement)
             {
                 boostTier = 0;
@@ -555,38 +555,42 @@ public class DrivingController : MonoBehaviour
             else if (boostTimer <= 2 * boostTierTimeIncrement)
             {
                 boostTier = 1;
+                boostReady = true;
+                
                 boostParticlesBL.SetActive(true);
                 boostParticlesBR.SetActive(true);
 
                 ma.startColor = Color.yellow;
                 ma1.startColor = Color.yellow;
-
-                boostReady = true;
+                 
             }
             else if (boostTimer <= 3 * boostTierTimeIncrement)
             {
                 boostTier = 2;
+                boostReady = true;
 
+                
                 boostParticlesBL.SetActive(true);
                 boostParticlesBR.SetActive(true);
 
                 ma.startColor = Color.red;
                 ma1.startColor = Color.red;
-
-                boostReady = true;
+                 
             }
             else if (boostTimer < 4 * boostTierTimeIncrement)
             {
                 boostTier = 3;
+                boostReady = true;
 
+                
                 boostParticlesBL.SetActive(true);
                 boostParticlesBR.SetActive(true);
 
                 ma.startColor = Color.blue;
                 ma1.startColor = Color.blue;
-
-                boostReady = true;
+                
             }
+             */
         }
         else if (!drifting && boostReady)
         {
@@ -617,13 +621,15 @@ public class DrivingController : MonoBehaviour
             {
                 speed = maxBoostSpeed;
             }
+
         }
         else if (!drifting && !boostReady)
         {
+            driftingEffects.Emit(false);
+            driftingEffects.Stop();
             boostTimer = 0f;
             boostTier = 0;
         }
-        
     }
 
     public void togglePlayerLifted()
