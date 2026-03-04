@@ -676,8 +676,6 @@ public class DrivingController : MonoBehaviour
 			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
         }
 
-		}
-
         if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
