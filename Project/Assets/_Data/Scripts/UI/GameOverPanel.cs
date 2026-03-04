@@ -27,7 +27,7 @@ public class GameOverPanel : MonoBehaviour
 	private void Update()
 	{
 		// Ignore input checks until game over
-		if (!panel.active)
+		if (!panel.activeSelf)
 			return;
 		
 		// Check all active gamepads

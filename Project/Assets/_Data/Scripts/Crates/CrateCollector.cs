@@ -76,7 +76,6 @@ public class CrateCollector : MonoBehaviour
         forCollection = new List<ICollectable>();
     }
 
-
     private void Awake()
     {
         Initialise();
@@ -104,7 +103,6 @@ public class CrateCollector : MonoBehaviour
     {
         StartCollector();
     }
-
 
     // If other is a collectable add it to list
     private void OnTriggerEnter(Collider other)

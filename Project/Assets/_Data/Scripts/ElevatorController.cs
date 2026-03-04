@@ -99,20 +99,22 @@ public class ElevatorController : MonoBehaviour
 
     private void OnTriggerEnter()
     {
+        Debug.Log("Enter");
         if(moveBackOnCollide && movingBack)
         {
+            Debug.Log("Added");
             playersUnderneath++;
         }
     }
 
     private void OnTriggerExit()
     {
-        if(moveBackOnCollide)
+        if(moveBackOnCollide && playersUnderneath > 0)
             playersUnderneath--;
     }
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(transform.position + new Vector3(0, distance, 0), new Vector3(0.5f,0.5f,0.5f));
+        Gizmos.DrawCube(transform.position + new Vector3(0, distance, 0), new Vector3(1f,1f,1f));
     }
 }
