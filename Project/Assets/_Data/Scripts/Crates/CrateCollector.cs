@@ -131,7 +131,7 @@ public class CrateCollector : MonoBehaviour
         {
             forCollection.Add(collectable);
             onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
-            collectable.CanDamage = false;
+            collectable.CanDamage = collectable.CanCollect = false;
             collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(acceptLaunchForce), ForceMode.Impulse);
         }
         else if (collectable.Tag != collectionRequirement.requiredTag)
