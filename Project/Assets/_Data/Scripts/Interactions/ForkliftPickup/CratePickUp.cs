@@ -92,11 +92,6 @@ public class CratePickUp : MonoBehaviour
     {
         liftFull = heldObjects.Count == maxObjects;
 
-        while (pickupList.Count > 0 && pickupList[0] == null)
-        {
-            pickupList.RemoveAt(0);
-        }
-
         if (pickupList.Count == 0)
         {
             forkLiftSelected = false;
@@ -107,6 +102,27 @@ public class CratePickUp : MonoBehaviour
         {
             forkLiftSelected = true;
         }
+    }
+
+    private void LateUpdate()
+    {
+        foreach (GameObject obj in heldObjects)
+        {
+            if (obj == null)
+            {
+                heldObjects.Remove(obj);
+            }
+        }
+
+        foreach (GameObject obj in pickupList)
+        {
+            if (obj == null)
+            {
+                pickupList.Remove(obj);
+            }
+        }
+
+        updatePositions();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -152,15 +168,12 @@ public class CratePickUp : MonoBehaviour
     }
 
     public void PickUpSelected()
-    { 
-        if(pickupList.Count == 0)
-            return;
-
-        foreach (GameObject obj in heldObjects)
+    {
+        foreach (GameObject obj in pickupList)
         {
             if (obj == null)
             {
-                heldObjects.Remove(obj);
+                pickupList.Remove(obj);
             }
         }
 
@@ -211,13 +224,15 @@ public class CratePickUp : MonoBehaviour
 
     public void DropHeld()
     {
-        var heldCount = heldObjects.Count - (heldObjects.Count == 0 ? 0 : 1);
-
-        while (heldObjects.Count > 0 && heldObjects[heldCount] == null)
+        foreach (GameObject obj in heldObjects)
         {
-            heldObjects.RemoveAt(heldCount);
-            heldCount--;
+            if (obj == null)
+            {
+                heldObjects.Remove(obj);
+            }
         }
+
+        var heldCount = heldObjects.Count - (heldObjects.Count == 0 ? 0 : 1);
 
         if (heldObjects.Count == 0)
         {
@@ -291,6 +306,16 @@ public class CratePickUp : MonoBehaviour
         //        PickUpSelected();
         //    }
         //}
+    }
+
+    private void updatePositions()
+    {
+        if (heldObjects[0].tag == "Player") return;
+
+        for(int i = 0; i < heldObjects.Count; i++)
+        {
+            SetPositionInParent(heldObjects[i].transform, i);
+        }
     }
 
     public void SetPositionInParent(Transform newPosition, int heldcount)

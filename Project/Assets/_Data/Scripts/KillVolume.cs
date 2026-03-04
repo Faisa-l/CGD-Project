@@ -18,7 +18,7 @@ public class KillVolume : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.tag == "Player")
+        if(other.tag == "Player" || other.tag == "Float")
         {
             Debug.LogError($"Kill volume \"{name}\" killed {other.gameObject.name}");
             var player_character = other.gameObject.transform;
