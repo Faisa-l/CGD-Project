@@ -131,12 +131,18 @@ public class CrateCollector : MonoBehaviour
         {
             forCollection.Add(collectable);
             onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
-            collectable.CanDamage = false;
+            collectable.CanDamage = collectable.CanCollect = false;
             collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(acceptLaunchForce), ForceMode.Impulse);
         }
         else if (collectable.Tag != collectionRequirement.requiredTag)
         {
-            collectable.GameObject.GetComponent<Rigidbody>().AddForce(GetLaunchForce(rejectionLaunchForce) + new Vector3(0f, 0f, 0f), ForceMode.Impulse);
+            /* This should be the proper solution to handling the crate being dropped off incorectly
+             * for now we're just gonna destroy it and let the crate spawner bring it back to life
+            var rb = collectable.GameObject.GetComponent<Rigidbody>();
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(GetLaunchForce(rejectionLaunchForce) + new Vector3(0f, 1f, 0f), ForceMode.Impulse);
+            */
+            Destroy(collectable.GameObject);
         }
 
     }
