@@ -137,7 +137,7 @@ public class DrivingController : MonoBehaviour
     public Transform CameraReverseTransform => cameraReversePos;
 
     bool lifting = false;
-    bool selfIsLifted = false;
+    [SerializeField] bool selfIsLifted = false;
 
     [Header("Wheel Animations")]
     [SerializeField] Animator frontwheel;
@@ -172,6 +172,13 @@ public class DrivingController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if(transform.parent == null)
+        {
+            selfIsLifted = false;
+            rigidBody.isKinematic = false;
+            GetComponent<BoxCollider>().enabled = true;
+        }
+
         groundCheck();  
         updateMove();
         updateRotate();
@@ -180,8 +187,10 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
+
         frontwheel.SetFloat("Speed", speed);
         backwheel.SetFloat("Speed", speed);
+
         if (TiersEnabled)
         {
             maxBoostSpeed = 30f;
@@ -648,6 +657,7 @@ public class DrivingController : MonoBehaviour
     public void togglePlayerLifted()
     {
         selfIsLifted = !selfIsLifted;
+        Debug.LogWarning($"is lifted: {selfIsLifted}");
     }
 
     #endregion

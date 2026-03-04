@@ -92,6 +92,11 @@ public class CratePickUp : MonoBehaviour
     {
         liftFull = heldObjects.Count == maxObjects;
 
+        while (pickupList.Count > 0 && pickupList[0] == null)
+        {
+            pickupList.RemoveAt(0);
+        }
+
         if (pickupList.Count == 0)
         {
             forkLiftSelected = false;
@@ -101,7 +106,6 @@ public class CratePickUp : MonoBehaviour
         if (pickupList[0].tag == "Player")
         {
             forkLiftSelected = true;
-
         }
     }
 
@@ -112,9 +116,9 @@ public class CratePickUp : MonoBehaviour
         {
             interactionUIText.gameObject.SetActive(true);
             if (heldObjects.Count > 0 && !heldObjects.Contains(other.gameObject))
-                interactionUIText.text = "Press <sprite name=\"Xbox_Y\"> to pick up box\nPress <sprite name=\"Xbox_X\"> to drop box";
+                interactionUIText.text = "<sprite name=\"Xbox_Y\"> to pick up\n<sprite name=\"Xbox_X\"> to drop";
             else if(!heldObjects.Contains(other.gameObject))
-                interactionUIText.text = "Press <sprite name=\"Xbox_Y\"> to pick up box";
+                interactionUIText.text = "<sprite name=\"Xbox_Y\"> to pick up";
 
             pickupList.Add(other.gameObject);
         }
@@ -123,7 +127,7 @@ public class CratePickUp : MonoBehaviour
         if(other.tag == "Player" && heldObjects.Count == 0)
         {
             interactionUIText.gameObject.SetActive(true);
-            interactionUIText.text = "Press <sprite name=\"Xbox_Y\"> to pick up player";
+            interactionUIText.text = "<sprite name=\"Xbox_Y\"> to pick up";
 
             pickupList.Add(other.gameObject);
         }
@@ -142,9 +146,9 @@ public class CratePickUp : MonoBehaviour
         }
 
         if (heldObjects.Count > 0)
-            interactionUIText.text = "Press <sprite name=\"Xbox_X\"> to drop box";
+            interactionUIText.text = "<sprite name=\"Xbox_X\"> to drop";
         if (holdingForklift)
-            interactionUIText.text = "Press <sprite name=\"Xbox_X\"> to drop player";
+            interactionUIText.text = "<sprite name=\"Xbox_X\"> to drop";
     }
 
     public void PickUpSelected()
@@ -152,7 +156,18 @@ public class CratePickUp : MonoBehaviour
         if(pickupList.Count == 0)
             return;
 
-        if(forkLiftSelected || holdingForklift || !pickupList[0].GetComponent<ICollectable>().CanCollect)
+        foreach (GameObject obj in heldObjects)
+        {
+            if (obj == null)
+            {
+                heldObjects.Remove(obj);
+            }
+        }
+
+        if (pickupList.Count == 0)
+            return;
+
+        if (forkLiftSelected || holdingForklift || !pickupList[0].GetComponent<ICollectable>().CanCollect)
             return;
 
         if (!liftFull && pickupList.Count > 0)
@@ -172,9 +187,9 @@ public class CratePickUp : MonoBehaviour
         }
 
         if (heldObjects.Count > 0)
-            interactionUIText.text = "Press <sprite name=\"Xbox_X\"> to drop box";
+            interactionUIText.text = "<sprite name=\"Xbox_X\"> to drop";
         if (holdingForklift)
-            interactionUIText.text = "Press <sprite name=\"Xbox_X\"> to drop player";
+            interactionUIText.text = "<sprite name=\"Xbox_X\"> to drop";
     }
 
     public void PickUpSelectedForklift()
@@ -190,13 +205,27 @@ public class CratePickUp : MonoBehaviour
         SetForkliftPostitionInParent(Angle);
 
         holdingForklift = true;
+
+        onGrabbed?.Invoke();
     }
 
     public void DropHeld()
     {
-        if (heldObjects.Count == 0) return;
+        var heldCount = heldObjects.Count - (heldObjects.Count == 0 ? 0 : 1);
 
-        var heldCount = heldObjects.Count - 1;
+        while (heldObjects.Count > 0 && heldObjects[heldCount] == null)
+        {
+            heldObjects.RemoveAt(heldCount);
+            heldCount--;
+        }
+
+        if (heldObjects.Count == 0)
+        {
+            Debug.LogWarning("No objects to drop");
+            //turn off lights when there are no crates
+            onDropped?.Invoke();
+            return; 
+        }
 
         if (heldObjects[heldCount].TryGetComponent<PhysicsPickup>(out var pickup))
         {
@@ -207,8 +236,12 @@ public class CratePickUp : MonoBehaviour
 
         if (heldObjects[0].tag == "Player")
         {
+            Debug.LogWarning("Dropping player");
             holdingForklift = false;
             heldObjects[0].GetComponent<BoxCollider>().enabled = true;
+            heldObjects[0].GetComponent<DrivingController>().togglePlayerLifted();
+
+            onDropped?.Invoke();
         }
 
 
@@ -220,6 +253,23 @@ public class CratePickUp : MonoBehaviour
 
         UnsetPositionInParent(heldObjects[heldCount].gameObject.transform, heldCount);
         heldObjects.Remove(heldObjects[heldCount]);
+
+        if(pickupList.Count > 0)
+        {
+            interactionUIText.text = "<sprite name=\"Xbox_Y\"> to pick up";
+        }
+        else if(pickupList.Count > 0 && heldObjects.Count > 0)
+        {
+            interactionUIText.text = "<sprite name=\"Xbox_Y\"> to pick up\n<sprite name=\"Xbox_X\"> to drop";
+        }
+        else if(heldObjects.Count > 0)
+        {
+            interactionUIText.text = "<sprite name=\"Xbox_X\"> to drop";
+        }
+        else
+        {
+            interactionUIText.text = "";
+        }
         
         //Swap Feature (if we have something in our pickup radius and we are holding something, drop what we are holding and pick up the new object) To be added if we feel its needed
         //else if (pickupList.Count > 0)

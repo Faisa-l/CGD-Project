@@ -12,6 +12,7 @@ TagManager:
   - CinemachineTarget
   - Float
   - No Bounce
+  - forklift pickup
   layers:
   - Default
   - TransparentFX
