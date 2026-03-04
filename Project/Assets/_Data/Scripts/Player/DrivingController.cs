@@ -80,6 +80,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private HudManager hudManager;
     [SerializeField] private GameObject dropAllUI;
     [SerializeField] private Slider dropAllSlider;
+    [SerializeField] private GameOverPanel gameOverMenu;
 
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;

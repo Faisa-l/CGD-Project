@@ -26,16 +26,18 @@ public class GameOverPanel : MonoBehaviour
 	
 	private void Update()
 	{
-		// Ignore input checks until game over
-		if (!panel.activeSelf)
-			return;
+        // Ignore input checks until game over
+        if (!panel.activeSelf)
+		{
+			return; 
+		}
 		
 		// Check all active gamepads
 		// Source - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/api/UnityEngine.InputSystem.Gamepad.html
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
-			// Replay?
-			if (gamepad.buttonSouth.wasPressedThisFrame)
+            // Replay?
+            if (gamepad.buttonSouth.wasPressedThisFrame)
 			{
 				gameManager.ReloadCurrentScene();
 			}
@@ -46,7 +48,17 @@ public class GameOverPanel : MonoBehaviour
 			}
 		}
 	}
-	
+
+	public void Reload()
+	{
+        gameManager.ReloadCurrentScene();
+    }
+
+	public void LoadMenu()
+	{
+        gameManager.LoadScene("MainMenu");
+    }
+
 	/// <summary>
 	/// Show the game over panel
 	/// Will select the firstButton button
@@ -54,7 +66,7 @@ public class GameOverPanel : MonoBehaviour
 	private void Show()
 	{
 		panel.SetActive(true);
-		
+
 		eventSystem.SetSelectedGameObject(firstButton);
 	}
 	
