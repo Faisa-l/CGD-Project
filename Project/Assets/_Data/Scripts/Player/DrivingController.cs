@@ -187,7 +187,7 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
-
+        
         frontwheel.SetFloat("Speed", speed);
         backwheel.SetFloat("Speed", speed);
 
@@ -326,7 +326,7 @@ public class DrivingController : MonoBehaviour
         {
             body.transform.localRotation = new();
             body.transform.localPosition = new();
-            DriftBody.SetFloat("DRIFT", 0);
+            DriftBody?.SetFloat("DriftDirection", 0);
             return;
         }
 
@@ -348,7 +348,7 @@ public class DrivingController : MonoBehaviour
         //If there is an animation added for the drift
         if (!manualDriftAnim)
         {
-            DriftBody?.SetFloat("DRIFT", movement.turningValue);
+            DriftBody?.SetFloat("DriftDirection", movement.turningValue);
         }
     }
 
