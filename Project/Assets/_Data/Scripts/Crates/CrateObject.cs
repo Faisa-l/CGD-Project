@@ -25,6 +25,10 @@ public class CrateObject : MonoBehaviour, ICollectable
     TextMeshPro[] textObjects;
     Material material;
 
+    [SerializeField] GameObject tempNewCrateMeshEdges;
+    [SerializeField] GameObject tempNewCrateMeshSupports;
+
+
     // As in the minimum score the crate can have
     float MaximumScoreReduction => maxScore * (1 - DamageBehaviour.maximumScoreLossPercentage) - DamageBehaviour.maximumScoreLossValue;
 
@@ -127,7 +131,14 @@ public class CrateObject : MonoBehaviour, ICollectable
     public bool CanDamage { get; set; }
 
     // Colour this object based on its tag
-    void RecolourCrate() => material.SetColor("_Color", crateTag.GetColourFromTag());
+    void RecolourCrate()
+    { 
+        material.SetColor("_Color", crateTag.GetColourFromTag());
+
+        //Temporary fix
+        tempNewCrateMeshEdges.GetComponent<Renderer>().material.SetColor("_Color", crateTag.GetColourFromTag());
+        tempNewCrateMeshSupports.GetComponent<Renderer>().material.SetColor("_Color", crateTag.GetColourFromTag());
+    }
 
     // Make the object collect-able or not
     void OnGrabbed()
