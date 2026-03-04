@@ -354,21 +354,21 @@ public class DrivingController : MonoBehaviour
 
     private void handleLift()
     {
-        float z = lift.localPosition.z;
+        float y = lift.localPosition.y;
 
         if (lifting)
         {
-            z += liftSpeed * Time.deltaTime;
-            z = Mathf.Clamp(z, minLiftPosition, maxLiftPosition);
+            y += liftSpeed * Time.deltaTime;
+            y = Mathf.Clamp(y, minLiftPosition, maxLiftPosition);
 
-            lift.localPosition = new Vector3(lift.localPosition.x, lift.localPosition.y, z);
+            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
         }
         else
         {
-            z -= liftSpeed * Time.deltaTime;
-            z = Mathf.Clamp(z, minLiftPosition, maxLiftPosition);
+            y -= liftSpeed * Time.deltaTime;
+            y = Mathf.Clamp(y, minLiftPosition, maxLiftPosition);
 
-            lift.localPosition = new Vector3(lift.localPosition.x, lift.localPosition.y, z);
+            lift.localPosition = new Vector3(lift.localPosition.x, y, lift.localPosition.z);
         }
     }
 

@@ -13226,9 +13226,9 @@ MonoBehaviour:
   boostTierTimeIncrement: 0.5
   speedLinesImage: {fileID: 1169574548009697341}
   lift: {fileID: 6628620392548968402}
-  liftSpeed: 0.5
+  liftSpeed: 1.5
   minLiftPosition: 0.01
-  maxLiftPosition: 0.1
+  maxLiftPosition: 1.35
   hudManager: {fileID: 0}
   dropAllUI: {fileID: 6029006062953194881}
   dropAllSlider: {fileID: 3315192560021256765}
