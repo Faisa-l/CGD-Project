@@ -7539,13 +7539,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6489661091935311067}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.70710677, y: -0, z: -0, w: 0.7071069}
+  m_LocalRotation: {x: 1, y: 0, z: 0, w: 0}
   m_LocalPosition: {x: -0.10793068, y: -0.019105436, z: -0.0029008286}
   m_LocalScale: {x: 1.0002842, y: 1.0002842, z: 1.0002842}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6628620392548968402}
-  m_LocalEulerAnglesHint: {x: -90, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 180, y: 0, z: 0}
 --- !u!65 &673826257517940536
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -7566,7 +7566,7 @@ BoxCollider:
   m_Enabled: 1
   serializedVersion: 3
   m_Size: {x: 0.053760123, y: 0.11930285, z: 0.14777169}
-  m_Center: {x: -0.0062552947, y: -0.0864444, z: 0.02248967}
+  m_Center: {x: -0.03, y: -0.03, z: -0.11}
 --- !u!1 &6554918970982615496
 GameObject:
   m_ObjectHideFlags: 0
@@ -13232,6 +13232,7 @@ MonoBehaviour:
   hudManager: {fileID: 0}
   dropAllUI: {fileID: 6029006062953194881}
   dropAllSlider: {fileID: 3315192560021256765}
+  gameOverMenu: {fileID: 0}
   steeringWheel: {fileID: 8328208722417563078}
   playerMesh: {fileID: 2736618683385788251}
   runningSound: {fileID: -5220215563985875057}

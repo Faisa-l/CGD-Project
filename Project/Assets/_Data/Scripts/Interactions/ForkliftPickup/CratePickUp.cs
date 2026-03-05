@@ -310,6 +310,7 @@ public class CratePickUp : MonoBehaviour
 
     private void updatePositions()
     {
+        if (heldObjects.Count == 0) return;
         if (heldObjects[0].tag == "Player") return;
 
         for(int i = 0; i < heldObjects.Count; i++)
