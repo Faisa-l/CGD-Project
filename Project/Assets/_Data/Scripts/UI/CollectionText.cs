@@ -24,7 +24,7 @@ public class CollectionText : MonoBehaviour
     public void UpdateText(bool passed)
     {
         // The "Quota updated" text will only appear if the current game state is in the playing state
-        display.SetText($"{(passed ? "Passed" : "Missed")} quota\r\n{(TM.CurrentScheduleObject.actingScheduler.Schedule.Count > 0 ? "Quota updated" : "")}");
+        display.SetText($"{(passed ? "PASSED" : "MISSED")} QUOTA\r\n{(TM.CurrentScheduleObject.actingScheduler.Schedule.Count > 0 ? "QUOTA UPDATED" : "")}");
         gameObject.SetActive(true);
         StartCoroutine(TogglePanelVisibility());
     }

@@ -43,11 +43,11 @@ public class TimeRemainingText : MonoBehaviour
 			var ts = TimeSpan.FromSeconds(TimeManager.instance.CurrentTimeRemaining);
 			
 			// E.g. 6:07
-			currentTimeRemainingText.text = "Time " + string.Format("{0}:{1:00}", ts.Minutes, ts.Seconds);
+			currentTimeRemainingText.text = "TIME " + string.Format("{0}:{1:00}", ts.Minutes, ts.Seconds);
 		}
 		else
 		{
-			currentTimeRemainingText.text = "Time's Up!";
+			currentTimeRemainingText.text = "TIME'S UP!";
 		}
 	}
 	
