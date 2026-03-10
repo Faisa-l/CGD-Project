@@ -3770,7 +3770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: {x: 0.2, y: 0.2, z: 0.2}
-  offset: {x: 0, y: 0, z: -3}
+  offset: {x: 0, y: 0, z: 0}
   gizmo_mesh: {fileID: 7656348851005705370, guid: d14042fb86936a94197f2e8cda269c65, type: 3}
 --- !u!114 &690094899
 MonoBehaviour:
@@ -3785,7 +3785,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: {x: 0.2, y: 0.2, z: 0.2}
-  offset: {x: 0, y: 0, z: -3}
+  offset: {x: 0, y: 0, z: 0}
   gizmo_mesh: {fileID: 7656348851005705370, guid: d14042fb86936a94197f2e8cda269c65, type: 3}
 --- !u!114 &690094900
 MonoBehaviour:
@@ -3800,7 +3800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: {x: 0.2, y: 0.2, z: 0.2}
-  offset: {x: 0, y: 0, z: -3}
+  offset: {x: 0, y: 0, z: 0}
   gizmo_mesh: {fileID: 7656348851005705370, guid: d14042fb86936a94197f2e8cda269c65, type: 3}
 --- !u!114 &690094901
 MonoBehaviour:
@@ -3815,7 +3815,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scale: {x: 0.2, y: 0.2, z: 0.2}
-  offset: {x: 0, y: 0, z: -3}
+  offset: {x: 0, y: 0, z: 0}
   gizmo_mesh: {fileID: 7656348851005705370, guid: d14042fb86936a94197f2e8cda269c65, type: 3}
 --- !u!1 &690240942 stripped
 GameObject:
@@ -10984,10 +10984,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1634350890}
     m_Modifications:
-    - target: {fileID: 7796745001561198519, guid: 3aade20b98f94d5418cd4f200993a85a, type: 3}
-      propertyPath: 'm_Materials.Array.data[0]'
-      value: 
-      objectReference: {fileID: 2100000, guid: 25d91941b76836c40a080938955f55ff, type: 2}
     - target: {fileID: -275962211184007214, guid: c2dd4e42d5478b04ab158c16c615e448, type: 3}
       propertyPath: m_Size.z
       value: 10
@@ -11044,6 +11040,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7796745001561198519, guid: 3aade20b98f94d5418cd4f200993a85a, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 25d91941b76836c40a080938955f55ff, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
