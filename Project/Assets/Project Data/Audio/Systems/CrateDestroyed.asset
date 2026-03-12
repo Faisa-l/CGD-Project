@@ -1,23 +1,23 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1233149941 &-2319546601300119926
+--- !u!1233149941 &1827308796293367899
 AudioContainerElement:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MetalSignImpact1_{-2319546601300119926}
-  m_AudioClip: {fileID: 8300000, guid: 922e6753f39035646a6bc9a2665b292f, type: 3}
+  m_Name: CrateDestroyed2_{1827308796293367899}
+  m_AudioClip: {fileID: 8300000, guid: ef2aacf03f7c75348a933929267cc610, type: 3}
   m_Volume: 0
   m_Enabled: 1
---- !u!1233149941 &3485392799739896797
+--- !u!1233149941 &2859404079943943947
 AudioContainerElement:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MetalSignImpact3_{3485392799739896797}
-  m_AudioClip: {fileID: 8300000, guid: 14f09eef2b7875147bf35558929e9231, type: 3}
+  m_Name: CrateDestroyed1_{2859404079943943947}
+  m_AudioClip: {fileID: 8300000, guid: 21b99697ad57b9f49ad4acacececfa9d, type: 3}
   m_Volume: 0
   m_Enabled: 1
 --- !u!1307931743 &6418180475301049370
@@ -26,7 +26,7 @@ AudioRandomContainer:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MetalSignHitARC
+  m_Name: CrateDestroyed
   m_Volume: 0
   m_Pitch: 0
   m_AutomaticTriggerTime: 0
@@ -36,9 +36,9 @@ AudioRandomContainer:
   m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
   m_LoopCountRandomizationRange: {x: 0, y: 0}
   m_Elements:
-  - {fileID: -2319546601300119926}
-  - {fileID: 8435135717671487327}
-  - {fileID: 3485392799739896797}
+  - {fileID: 2859404079943943947}
+  - {fileID: 1827308796293367899}
+  - {fileID: 7279825515841906832}
   m_AvoidRepeatingLast: 0
   m_PlaybackMode: 1
   m_TriggerMode: 0
@@ -48,13 +48,13 @@ AudioRandomContainer:
   m_PitchRandomizationEnabled: 0
   m_AutomaticTriggerTimeRandomizationEnabled: 0
   m_LoopCountRandomizationEnabled: 0
---- !u!1233149941 &8435135717671487327
+--- !u!1233149941 &7279825515841906832
 AudioContainerElement:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: MetalSignImpact2_{8435135717671487327}
-  m_AudioClip: {fileID: 8300000, guid: bd1c47b61aa71464a984a0345eae5e36, type: 3}
+  m_Name: CrateDestroyed3_{7279825515841906832}
+  m_AudioClip: {fileID: 8300000, guid: 9fe4518b57fd3184f9c5e2e0023fe547, type: 3}
   m_Volume: 0
   m_Enabled: 1

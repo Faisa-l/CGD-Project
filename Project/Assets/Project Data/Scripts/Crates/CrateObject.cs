@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using static CrateExtensions;
 
 /// <summary>
@@ -25,6 +26,9 @@ public class CrateObject : MonoBehaviour, ICollectable
     TextMeshPro[] textObjects;
     Material material;
 
+    [SerializeField]
+    UnityEvent OnDestroyed;
+
     [SerializeField] GameObject tempNewCrateMeshEdges;
     [SerializeField] GameObject tempNewCrateMeshSupports;
 
@@ -32,7 +36,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     // As in the minimum score the crate can have
     float MaximumScoreReduction => maxScore * (1 - DamageBehaviour.maximumScoreLossPercentage) - DamageBehaviour.maximumScoreLossValue;
 
-	private static readonly float floatingTextPlayerDetectionRadius = 1f;
+    private static readonly float floatingTextPlayerDetectionRadius = 1f;
 
     /// <summary>
     /// Instantiate and initialise a new crate.
@@ -108,8 +112,13 @@ public class CrateObject : MonoBehaviour, ICollectable
         {
             // Object is destroyed if score reaches 0
             score = value;
-            if (score <= 0) Destroy(GameObject);
-            else            UpdateTextObjects();
+            if (score <= 0)
+            {
+                Destroy(GameObject, 1.3f);
+                OnDestroyed.Invoke();
+            }
+
+            else UpdateTextObjects();
         }
     }
 
@@ -132,7 +141,7 @@ public class CrateObject : MonoBehaviour, ICollectable
 
     // Colour this object based on its tag
     void RecolourCrate()
-    { 
+    {
         material.SetColor("_Color", crateTag.GetColourFromTag());
 
         //Temporary fix
@@ -147,8 +156,8 @@ public class CrateObject : MonoBehaviour, ICollectable
         CanCollect = false;
     }
 
-    void OnDropped()   
-    { 
+    void OnDropped()
+    {
         UpdatePromptTextToGrab();
         CanCollect = true;
     }
