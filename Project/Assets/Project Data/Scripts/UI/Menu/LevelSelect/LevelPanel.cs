@@ -30,7 +30,9 @@ public class LevelPanel : MonoBehaviour
 		}
 		
 		levelNameText.text = level.GetDisplayName();
-		levelScreenshot.sprite = level.GetScreenshot();
+		
+		if (levelScreenshot)
+			levelScreenshot.sprite = level.GetScreenshot();
 	}
 	
 	// Use for button onclicked event

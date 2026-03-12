@@ -31,7 +31,9 @@ public class LevelGroupPanel : MonoBehaviour
 		}
 		
 		levelGroupNameText.text = levelGroup.GetDisplayName();
-		levelGroupScreenshot.sprite = levelGroup.GetScreenshot();
+		
+		if (levelGroupScreenshot)
+			levelGroupScreenshot.sprite = levelGroup.GetScreenshot();
 	}
 	
 	// Use for button onclicked event
