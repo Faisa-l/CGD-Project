@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class IndividualPlayerHud : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class IndividualPlayerHud : MonoBehaviour
 	
 	[Header("Crates")]
 	[SerializeField] private GameObject[] crates;
+	[SerializeField] private Image[] crateImages;
+	[SerializeField] private TMP_Text[] cratesText;
 	
 	// Cache
 	private CratePickUp cratePickUp;
@@ -84,7 +87,14 @@ public class IndividualPlayerHud : MonoBehaviour
 		// Show enough crate icons to match held ones
 		for(int i = 0; i < cratePickUp.heldObjectsCount; i++)
 		{
-		   crates[i].SetActive(true);
+			// Show crate square
+			crates[i].SetActive(true);
+		   
+			// Show crate score value
+			cratesText[i].text = cratePickUp.heldObjects[i].GetComponent<ICollectable>().Score.ToString();
+			
+			// Match crate icon colour to real crate
+			crateImages[i].color = CrateExtensions.GetColourFromTag(cratePickUp.heldObjects[i].GetComponent<ICollectable>().Tag);
 		}
 	}
 	
