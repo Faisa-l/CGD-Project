@@ -10,7 +10,7 @@ public class TotalScoreText : MonoBehaviour
     TextMeshProUGUI display;
 
     [SerializeField, TextArea]
-    string displayText = "Score: ";
+    string displayText = "SCORE: ";
 
     private void OnEnable()
     {

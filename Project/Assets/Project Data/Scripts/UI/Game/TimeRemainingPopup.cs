@@ -52,10 +52,10 @@ public class TimeRemainingPopup : MonoBehaviour
 		
 		// Plural
 		if (minutesRemaining > 1)
-			timerText.text = $"{minutesRemaining} minutes until shift end";
+			timerText.text = $"{minutesRemaining} MINUTES UNTIL SHIFT END";
 		// Singular
 		else
-			timerText.text = $"{minutesRemaining} minute until shift end";
+			timerText.text = $"{minutesRemaining} MINUTE UNTIL SHIFT END";
 		
 		minutesRemaining--;
 		

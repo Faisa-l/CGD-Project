@@ -18,8 +18,8 @@ public class QuotaDisplayText : MonoBehaviour
     CrateExtensions.ScheduleQuota requirement;
     float trackedScore;
 
-    string ReqsText => $"Collect\n<color={requirement.requiredTag.ToString()}>{requirement.requiredTag} Crates</color><line-height=50>\n</line-height>Needed\r\n{trackedScore}/{requirement.requiredScore}";
-    string GetQuotaTimeString(float time) => $"{time:F0}s Remaining";
+    string ReqsText => $"COLLECT\n<color={requirement.requiredTag.ToString()}>{requirement.requiredTag} CRATES</color><line-height=50>\n</line-height>NEEDED\r\n{trackedScore}/{requirement.requiredScore}";
+    string GetQuotaTimeString(float time) => $"{time:F0}s REMAINING";
 	
 	// Red text
 	bool timeNearlyUpTriggered = false;
@@ -47,11 +47,11 @@ public class QuotaDisplayText : MonoBehaviour
 	{
         switch (tag)
         {
-        case "Red":
+        case "RED":
             return Color.red;
-        case "Green":
+        case "GREEN":
             return Color.green;
-        case "Blue":
+        case "BLUE":
 			return Color.blue;
         default:
 			Debug.LogWarning(tag + " is not associated with a colour");

@@ -25,7 +25,7 @@ public class VictoryPanelLayout : MonoBehaviour
     /// </summary>
     public TextMeshProUGUI scoreText;
 
-    readonly string scoreFormat = "Score: ";
+    readonly string scoreFormat = "SCORE: ";
     Transform[] starIcons;
 
     private void Awake()
