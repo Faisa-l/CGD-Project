@@ -16,7 +16,7 @@ public class ElevatorController : MonoBehaviour
     [SerializeField] AnimationCurve easingCurve;
     [SerializeField] bool moveBackOnCollide = false;
 
-    bool activated = false;
+    [SerializeField] private bool activated = false;
 
     [SerializeField] int playersUnderneath = 0;
 
