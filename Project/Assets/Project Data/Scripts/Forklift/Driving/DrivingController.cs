@@ -75,6 +75,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private float liftSpeed = 1.0f;
     [SerializeField] private float minLiftPosition = 5f;
     [SerializeField] private float maxLiftPosition = 10f;
+	public UnityEvent<bool> onLift = new UnityEvent<bool>();
 
     [Header("UI")]
     [SerializeField] private HudManager hudManager;
@@ -473,6 +474,8 @@ public class DrivingController : MonoBehaviour
     public void OnLift()
     {
         lifting = !lifting;
+		
+		onLift?.Invoke(lifting);
     }
 
     public void OnLook(InputValue value)
