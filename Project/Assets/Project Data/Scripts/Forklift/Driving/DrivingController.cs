@@ -34,7 +34,6 @@ public class DrivingController : MonoBehaviour
     [Header("Ground Checking Variables")]
     [SerializeField] Transform groundCheckTransform;
     [SerializeField] bool isGrounded;
-    [SerializeField] LayerMask groundMask;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float wheelRadius = 0.5f;
 
@@ -226,7 +225,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit; 
         float rayLength = groundDistance + wheelRadius;
-        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask);
+        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength);
         Debug.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength, isGrounded ? Color.green : Color.red);
     }
 
@@ -677,7 +676,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
-        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask))
+        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength))
         {
             Gizmos.color = Color.green;
         }
