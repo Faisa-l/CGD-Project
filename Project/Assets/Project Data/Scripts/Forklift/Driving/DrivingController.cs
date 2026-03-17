@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AdaptivePerformance.VisualScripting;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -184,6 +185,8 @@ public class DrivingController : MonoBehaviour
             rigidBody.isKinematic = false;
             GetComponent<BoxCollider>().enabled = true;
         }
+
+        rb.angularVelocity = Vector3.zero;
 
         groundCheck();  
         updateMove();
@@ -707,11 +710,11 @@ public class DrivingController : MonoBehaviour
 
         forceDirection = normalDir;
 
-        //reflect the direction around the impulse of the collision
-        //float k = 2 * (forwardDir.x * normalDir.z + forwardDir.z * normalDir.x);
-        //forceDirection = new Vector3(forwardDir.x-k*normalDir.z, 0,forwardDir.z-k*normalDir.x).normalized;
+        addedForce =
+            forceDirection * bouncingForceMultiplier * rigidBody.mass * 
+            -Mathf.Sign(Vector3.Dot(normalDir, (collision.gameObject.transform.position - transform.position).normalized));
 
-        addedForce = forceDirection * bouncingForceMultiplier * rigidBody.mass;
+        
 
         movement.movingValue = 0;
 
