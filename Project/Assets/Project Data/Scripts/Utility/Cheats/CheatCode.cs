@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Events;
 
 [CreateAssetMenu(menuName = "Scriptable Objects/Cheats/Cheat Code")]
 public class CheatCode : ScriptableObject
@@ -10,6 +11,9 @@ public class CheatCode : ScriptableObject
 	[SerializeField] private CheatAction action;
 	
 	private bool activated = false;
+	
+	// Events
+	public static UnityEvent onCheatActivated = new UnityEvent();
 	
 	// Prevent activated cheat codes from persisting through gameplay
 	private void OnEnable()
@@ -28,6 +32,8 @@ public class CheatCode : ScriptableObject
 		activated = true;
 		
 		action.DoAction();
+		
+		onCheatActivated?.Invoke();
 	}
 	
 	public bool IsActivated()

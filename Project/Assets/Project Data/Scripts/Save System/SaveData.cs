@@ -15,6 +15,7 @@ public class SaveData
 	// Containers for variables
 	// Grouped to make it more manageable as we add more
 	public AudioSaveData audio;
+	public AchievementSaveData achievements = new AchievementSaveData();
 }
 
 #region Options menu
@@ -28,3 +29,23 @@ public class AudioSaveData
 }
 
 #endregion Options menu
+
+#region Achievements
+
+[System.Serializable]
+// Achievement variables
+public class AchievementSaveData
+{
+	// Unity can't serialize Dictionaries
+	public List<AchievementData> achievementData = new List<AchievementData>();
+}
+
+[System.Serializable]
+public class AchievementData
+{
+	public string name; // Filename (not displayName), data
+	public bool unlocked; // Tracked so we don't show "Achievement Unlocked" more than once
+	public int currentProgress;
+}
+
+#endregion Achievements
