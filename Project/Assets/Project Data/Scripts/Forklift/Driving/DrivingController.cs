@@ -68,6 +68,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject boostParticlesBR;
     [SerializeField] float boostTierTimeIncrement = 0.5f;
     [SerializeField] GameObject speedLinesImage;
+    [SerializeField] Vector3 crateBoostMultipliers = new(2f,2.5f,3f);
 
     float sign = 1f;
 
@@ -123,9 +124,7 @@ public class DrivingController : MonoBehaviour
 
     [Header("Camera Boost")]
     [SerializeField] float fovChangeMultiplier = 1.2f;
-
     [SerializeField] GameObject playerCamera = null;
-
     [SerializeField] private GameObject castRay;
 
     private Rigidbody rb;
@@ -640,12 +639,15 @@ public class DrivingController : MonoBehaviour
                     break;
                 case 1:
                     boostMultiplier = Tier1Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.x);
                     break;
                 case 2:
                     boostMultiplier = Tier2Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.y);
                     break;
                 case 3:
                     boostMultiplier = Tier3Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.z);
                     break;
             }
 
@@ -742,5 +744,10 @@ public class DrivingController : MonoBehaviour
         {
             castRay.GetComponent<CratePickUp>().DropHeld();
         }
+    }
+
+    private void multiplyCrateScore(float multiplier)
+    {
+        if()
     }
 }
