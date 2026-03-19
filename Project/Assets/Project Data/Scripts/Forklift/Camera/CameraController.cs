@@ -8,10 +8,14 @@ public class CameraController : MonoBehaviour
 
     [Range(0f, 1f)]
     [SerializeField] float lerpValue = 0.01f;
+    [Range(0f,1f)]
+    [SerializeField] float lookLerpValue = 0.5f;
 
     [SerializeField] Camera cameraObject;
 
     [SerializeField] float fovLerpValue = 0.1f;
+
+    Transform currentlyLookingAt;
 
     public float startingFov 
     {
@@ -35,6 +39,9 @@ public class CameraController : MonoBehaviour
     private void Awake()
     {
         startingFov = fov;
+
+        currentlyLookingAt = new GameObject().transform;
+        currentlyLookingAt.position = lookingAtObject.position;
     }
 
     // Update is called once per frame
@@ -51,13 +58,23 @@ public class CameraController : MonoBehaviour
 
         Vector3 direction = (lookingAtObject.position - transform.position).normalized;
         direction.y = 0;
-
         transform.localPosition += direction * distDifference;
-        transform.LookAt(lookingAtObject.position);
+        
+        currentlyLookingAt.position = Vector3.Lerp(
+            currentlyLookingAt.position,
+            lookingAtObject.position,
+            lookLerpValue);
+
+        transform.LookAt(currentlyLookingAt.position);
     }
 
     public void setFollowing(Transform pos)
     {
         followingObject = pos;
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawSphere(currentlyLookingAt.position, 0.3f);
     }
 }

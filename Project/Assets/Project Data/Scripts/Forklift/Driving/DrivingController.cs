@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AdaptivePerformance.VisualScripting;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
 using UnityEngine.InputSystem.Interactions;
 using UnityEngine.UI;
 
@@ -33,7 +35,6 @@ public class DrivingController : MonoBehaviour
     [Header("Ground Checking Variables")]
     [SerializeField] Transform groundCheckTransform;
     [SerializeField] bool isGrounded;
-    [SerializeField] LayerMask groundMask;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float wheelRadius = 0.5f;
 
@@ -75,6 +76,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private float liftSpeed = 1.0f;
     [SerializeField] private float minLiftPosition = 5f;
     [SerializeField] private float maxLiftPosition = 10f;
+	public UnityEvent<bool> onLift = new UnityEvent<bool>();
 
     [Header("UI")]
     [SerializeField] private HudManager hudManager;
@@ -105,6 +107,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
+    [SerializeField] private float cameraUpDist;
     [SerializeField] private List<string> cameraRayCastMask = new List<string>();
     Vector3 rootForward, rootReverse;
     Vector3 lookAtPosition;
@@ -133,6 +136,9 @@ public class DrivingController : MonoBehaviour
 
     private bool holdingInteract = false;
     private float interactHoldTime = 0f;
+
+    private bool lookingUp = false;
+    private bool lookingBack = false;
 
     public Transform CameraForwardTransform => cameraForwardPos;
     public Transform CameraReverseTransform => cameraReversePos;
@@ -180,6 +186,8 @@ public class DrivingController : MonoBehaviour
             GetComponent<BoxCollider>().enabled = true;
         }
 
+        rb.angularVelocity = Vector3.zero;
+
         groundCheck();  
         updateMove();
         updateRotate();
@@ -220,7 +228,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit; 
         float rayLength = groundDistance + wheelRadius;
-        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask);
+        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength);
         Debug.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength, isGrounded ? Color.green : Color.red);
     }
 
@@ -473,21 +481,16 @@ public class DrivingController : MonoBehaviour
     public void OnLift()
     {
         lifting = !lifting;
+		
+		onLift?.Invoke(lifting);
     }
 
-    public void OnLook(InputValue value)
+    public void OnLookBack(InputValue value)
     {
-        Vector2 direction = value.Get<Vector2>();
-        direction = new Vector2(Mathf.Round(direction.x), Mathf.Round(direction.y));
+        int val = Mathf.CeilToInt(value.Get<float>());
+        lookingBack = (val == 1);
 
-        if(direction.y == 1)
-        {
-            playerCamera.GetComponent<CameraController>().setFollowing(cameraReversePos);
-        }
-        else
-        {
-            playerCamera.GetComponent<CameraController>().setFollowing(cameraForwardPos);
-        }
+        playerCamera.GetComponent<CameraController>().setFollowing(lookingBack ? cameraReversePos : cameraForwardPos);
     }
 
     public void OnInteract()
@@ -523,6 +526,15 @@ public class DrivingController : MonoBehaviour
         dropAllUI.SetActive(false);
         interactHoldTime = 0f;
         holdingInteract = false;
+    }
+
+    public void OnLookUp()
+    {
+        lookingUp = !lookingUp;
+
+        lookAtTransform.SetLocalPositionAndRotation(
+            lookAtTransform.localPosition + new Vector3(0.0f,(lookingUp ? 1 : -1) * cameraUpDist,0.0f),
+            Quaternion.identity);
     }
 
     public void DriftBoost()
@@ -667,7 +679,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
-        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask))
+        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength))
         {
             Gizmos.color = Color.green;
         }
@@ -698,11 +710,11 @@ public class DrivingController : MonoBehaviour
 
         forceDirection = normalDir;
 
-        //reflect the direction around the impulse of the collision
-        //float k = 2 * (forwardDir.x * normalDir.z + forwardDir.z * normalDir.x);
-        //forceDirection = new Vector3(forwardDir.x-k*normalDir.z, 0,forwardDir.z-k*normalDir.x).normalized;
+        addedForce =
+            forceDirection * bouncingForceMultiplier * rigidBody.mass * 
+            -Mathf.Sign(Vector3.Dot(normalDir, (collision.gameObject.transform.position - transform.position).normalized));
 
-        addedForce = forceDirection * bouncingForceMultiplier * rigidBody.mass;
+        
 
         movement.movingValue = 0;
 
