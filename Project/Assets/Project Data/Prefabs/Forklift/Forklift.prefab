@@ -12967,8 +12967,8 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_LocalScale: {x: 0.9, y: 0.9, z: 0.9}
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4670194306561086270}
   - {fileID: 4984584100628000045}
@@ -13045,13 +13045,10 @@ MonoBehaviour:
   acceleration: 7
   breakMultiplier: 3
   speed: 0
-  maxSpeed: 12
-  rotateSpeed: 55
+  maxSpeed: 11
+  rotateSpeed: 50
   groundCheckTransform: {fileID: 991374653987402780}
   isGrounded: 0
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 8
   groundDistance: 0.4
   wheelRadius: 0.5
   body: {fileID: 9073678049860366156}
@@ -13083,6 +13080,9 @@ MonoBehaviour:
   liftSpeed: 1.5
   minLiftPosition: 0.01
   maxLiftPosition: 1.35
+  onLift:
+    m_PersistentCalls:
+      m_Calls: []
   hudManager: {fileID: 0}
   dropAllUI: {fileID: 6029006062953194881}
   dropAllSlider: {fileID: 3315192560021256765}
@@ -13092,8 +13092,8 @@ MonoBehaviour:
   runningSound: {fileID: -5220215563985875057}
   runningMaxPitch: 3
   audioSpeedRatio: 0
-  bouncingForceMultiplier: 350
-  bounceDecay: 1.396
+  bouncingForceMultiplier: 250
+  bounceDecay: 1.5
   collisionVelocityForCrateDamage: 10
   ignoreBounceMask:
   - Float
