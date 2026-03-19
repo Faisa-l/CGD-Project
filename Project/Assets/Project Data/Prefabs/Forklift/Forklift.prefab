@@ -13049,9 +13049,6 @@ MonoBehaviour:
   rotateSpeed: 55
   groundCheckTransform: {fileID: 991374653987402780}
   isGrounded: 0
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 8
   groundDistance: 0.4
   wheelRadius: 0.5
   body: {fileID: 9073678049860366156}
@@ -13083,6 +13080,9 @@ MonoBehaviour:
   liftSpeed: 1.5
   minLiftPosition: 0.01
   maxLiftPosition: 1.35
+  onLift:
+    m_PersistentCalls:
+      m_Calls: []
   hudManager: {fileID: 0}
   dropAllUI: {fileID: 6029006062953194881}
   dropAllSlider: {fileID: 3315192560021256765}
@@ -13090,8 +13090,8 @@ MonoBehaviour:
   steeringWheel: {fileID: 8328208722417563078}
   playerMesh: {fileID: 2736618683385788251}
   runningSound: {fileID: -5220215563985875057}
-  runningMaxPitch: 3
-  audioSpeedRatio: 0
+  runningMaxPitch: 1
+  audioSpeedRatio: 0.5
   bouncingForceMultiplier: 350
   bounceDecay: 1.396
   collisionVelocityForCrateDamage: 10
