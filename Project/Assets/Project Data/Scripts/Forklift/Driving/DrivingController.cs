@@ -53,6 +53,7 @@ public class DrivingController : MonoBehaviour
     GameObject currentTrailLeft;
     GameObject currentTrailRight; 
     [SerializeField]GameObject driftTrailsContainer;
+    bool manuallyStoppedDrift = false;
 
     [Header("Boost Variables")]
     [SerializeField] float boostMultiplier = 2f;
@@ -458,7 +459,14 @@ public class DrivingController : MonoBehaviour
 
     public void OnDrift()
     {
-        drifting = !drifting;
+        if(manuallyStoppedDrift)
+        {
+            manuallyStoppedDrift = false;
+        }
+        else
+        {
+            drifting = !drifting;
+        }
 
         if(drifting)
         {
@@ -695,13 +703,19 @@ public class DrivingController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
+
 		// Shake camera when colliding with crates
 		if (collision.transform.CompareTag("Float"))
 		{
 			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
         }
+        //if collision is not with a crate then stop drifting
+        else if(drifting)
+        {
+            manuallyStopDrifting();
+        }
 
-        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
 
@@ -748,6 +762,21 @@ public class DrivingController : MonoBehaviour
 
     private void multiplyCrateScore(float multiplier)
     {
-        if()
+        castRay.GetComponent<CratePickUp>().multiplyCrateScore(multiplier);
+    }
+
+    private void manuallyStopDrifting()
+    {
+        manuallyStoppedDrift = true;
+
+        drifting = false;
+        boostReady = false;
+        driftingEffects.Emit(false);
+        driftingEffects.Stop();
+        boostTimer = 0f;
+        boostTier = 0;
+
+        currentTrailRight.transform.parent = driftTrailsContainer.transform;
+        currentTrailLeft.transform.parent = driftTrailsContainer.transform;
     }
 }
