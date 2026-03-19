@@ -7,10 +7,10 @@
             "id": "f62a4b92-ef5e-4175-8f4c-c9075429d32c",
             "actions": [
                 {
-                    "name": "Look",
+                    "name": "LookBack",
                     "type": "Value",
                     "id": "2690c379-f54d-45be-a724-414123833eb4",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Integer",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -95,28 +95,37 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "LookUp",
+                    "type": "Button",
+                    "id": "1159c831-619e-4748-99d0-53f8ee7cbc94",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
                 {
                     "name": "",
-                    "id": "ed66cbff-2900-4a62-8896-696503cfcd31",
-                    "path": "<Mouse>/delta",
+                    "id": "d1d171b6-19d8-47a6-ba3a-71b6a8e7b3c0",
+                    "path": "<Gamepad>/rightStick/down",
                     "interactions": "",
-                    "processors": "InvertVector2(invertX=false),ScaleVector2(x=0.05,y=0.05)",
-                    "groups": "KeyboardMouse",
-                    "action": "Look",
+                    "processors": "",
+                    "groups": "Gamepad",
+                    "action": "LookBack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "",
-                    "id": "d1d171b6-19d8-47a6-ba3a-71b6a8e7b3c0",
-                    "path": "<Gamepad>/rightStick",
-                    "interactions": "",
-                    "processors": "InvertVector2(invertX=false),StickDeadzone",
+                    "id": "136c8790-173f-4a1d-b6c4-d54070f9cb82",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "Press(behavior=1)",
+                    "processors": "",
                     "groups": "Gamepad",
-                    "action": "Look",
+                    "action": "LookBack",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -304,6 +313,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "DropHold",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a9e282b-b435-4f32-89eb-6affd2a32844",
+                    "path": "<Gamepad>/rightStick/up",
+                    "interactions": "Press(behavior=2)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "LookUp",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

@@ -42,7 +42,7 @@ public class CratePickUp : MonoBehaviour
 
     [SerializeField] List<GameObject> pickupList = new();
 
-    [SerializeField] List<GameObject> heldObjects = new();
+    [SerializeField] public List<GameObject> heldObjects = new();
 
     [SerializeField] int maxObjects;
 
