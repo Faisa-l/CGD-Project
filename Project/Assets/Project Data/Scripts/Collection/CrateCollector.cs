@@ -1,9 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.Burst.CompilerServices;
 using UnityEngine;
 using UnityEngine.Events;
 using static CrateExtensions;
+
+// Crate launching doesn't do anything now but I'm still keeping the code here in the event we want to revert the changes
 
 /// <summary>
 /// MonoBehaviour that uses the GameObject's collider to detect and collect crates.
@@ -19,6 +20,9 @@ public class CrateCollector : MonoBehaviour
 
     [SerializeField]
     AudioEnabler audioEnabler;
+
+    [SerializeField]
+    ArrayArrangement gridArrangement;
 
     [Space, Header("Settings")]
 
@@ -133,7 +137,8 @@ public class CrateCollector : MonoBehaviour
             forCollection.Add(collectable);
             onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
             collectable.CanDamage = collectable.CanCollect = false;
-            collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(acceptLaunchForce), ForceMode.Impulse);
+            gridArrangement.Add(collectable.GameObject.transform);
+            // collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(acceptLaunchForce), ForceMode.Impulse);
         }
         else if (collectable.Tag != collectionRequirement.requiredTag)
         {
@@ -179,6 +184,7 @@ public class CrateCollector : MonoBehaviour
     private void CollectCrate(ICollectable collectable)
     {
         currentCollectionScore += collectable.Score;
+        gridArrangement.Remove(collectable.GameObject.transform);
         Destroy(collectable.GameObject);
     }
 
