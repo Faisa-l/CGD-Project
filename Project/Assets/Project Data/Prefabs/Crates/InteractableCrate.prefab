@@ -342,6 +342,7 @@ MonoBehaviour:
   useColouredTags: 1
   tempNewCrateMeshEdges: {fileID: 1522030544662680082}
   tempNewCrateMeshSupports: {fileID: 7696058888468624302}
+  effectLibrary: {fileID: 11400000, guid: d87d210b5fa737845a0937f11f6c4db6, type: 2}
 --- !u!114 &6758174210526124029
 MonoBehaviour:
   m_ObjectHideFlags: 0
