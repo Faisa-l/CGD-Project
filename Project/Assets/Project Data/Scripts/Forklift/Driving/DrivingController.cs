@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.AdaptivePerformance.VisualScripting;
 using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
@@ -34,7 +35,6 @@ public class DrivingController : MonoBehaviour
     [Header("Ground Checking Variables")]
     [SerializeField] Transform groundCheckTransform;
     [SerializeField] bool isGrounded;
-    [SerializeField] LayerMask groundMask;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float wheelRadius = 0.5f;
 
@@ -188,6 +188,8 @@ public class DrivingController : MonoBehaviour
             GetComponent<BoxCollider>().enabled = true;
         }
 
+        rb.angularVelocity = Vector3.zero;
+
         groundCheck();  
         updateMove();
         updateRotate();
@@ -234,7 +236,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit; 
         float rayLength = groundDistance + wheelRadius;
-        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask);
+        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength);
         Debug.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength, isGrounded ? Color.green : Color.red);
     }
 
@@ -684,7 +686,7 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
-        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength, groundMask))
+        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength))
         {
             Gizmos.color = Color.green;
         }
@@ -715,11 +717,11 @@ public class DrivingController : MonoBehaviour
 
         forceDirection = normalDir;
 
-        //reflect the direction around the impulse of the collision
-        //float k = 2 * (forwardDir.x * normalDir.z + forwardDir.z * normalDir.x);
-        //forceDirection = new Vector3(forwardDir.x-k*normalDir.z, 0,forwardDir.z-k*normalDir.x).normalized;
+        addedForce =
+            forceDirection * bouncingForceMultiplier * rigidBody.mass * 
+            -Mathf.Sign(Vector3.Dot(normalDir, (collision.gameObject.transform.position - transform.position).normalized));
 
-        addedForce = forceDirection * bouncingForceMultiplier * rigidBody.mass;
+        
 
         movement.movingValue = 0;
 
