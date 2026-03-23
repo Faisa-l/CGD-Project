@@ -16,8 +16,8 @@ public class ParticleEffectLibrary : ScriptableObject
         public ParticleEffect particleEffect;
     }
 
-    [SerializeField, Tooltip("The internal name of a particle effect and the particle effect script attached to the prefab, NOT the prefab itself.")]
-    List<Pair> particleEffects;
+    [field: SerializeField, Tooltip("The internal name of a particle effect and the particle effect script attached to the prefab, NOT the prefab itself.")]
+    public List<Pair> ParticleEffects { get ; private set; }
 
     /// <summary>
     /// Play a particle effect prefab. The object is destroyed once the effect ends.
@@ -28,6 +28,8 @@ public class ParticleEffectLibrary : ScriptableObject
     /// <returns> The particle effect component. Note that non-looping effects are pending destruction once the effect stops. </returns>
     public ParticleEffect Play(string effectName, Vector3 position = default, Quaternion rotation = default)
     {
+        if (rotation == default) rotation = Quaternion.identity;
+
         ParticleEffect effect = Get(effectName)
             .AtPosition(position)
             .AtRotation(rotation);
@@ -41,7 +43,7 @@ public class ParticleEffectLibrary : ScriptableObject
     /// Returns an instantaited Particle Effect prefab.
     /// </summary>
     /// <param name="effectName"> Name of the particle effect. Must exist in the <see cref="particleEffects"/> list. </param>
-    public ParticleEffect Get(string effectName) => Instantiate(particleEffects.Find(x => x.name == effectName).particleEffect);
+    public ParticleEffect Get(string effectName) => Instantiate(ParticleEffects.Find(x => x.name == effectName).particleEffect);
 
 
     // These do what the above functions does but it will automatically cast them into the required type

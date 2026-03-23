@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1b10710d2b4a865448eccc79ee90a0ea, type: 3}
   m_Name: ParticleEffectLibrary
   m_EditorClassIdentifier: 
-  particleEffects:
+  <ParticleEffects>k__BackingField:
   - name: CrateCollisionSparks
     particleEffect: {fileID: 7950071618651394735, guid: 37c30c81b76e52f4aaafd4010adca29c, type: 3}

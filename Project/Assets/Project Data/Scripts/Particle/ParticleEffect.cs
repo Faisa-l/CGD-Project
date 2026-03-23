@@ -44,6 +44,7 @@ public abstract class ParticleEffect : MonoBehaviour
     /// <summary>
     /// Calls <see cref="ParticleSystem.Play()"/> and destroy's this object once the effect stops.
     /// </summary>
+    /// <remarks> When overriding this function, ensure that any logic or setup is done before calling base.Play() </remarks>
     public virtual void Play()
     {
         var main = ParticleSystem.main;
