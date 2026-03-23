@@ -230,17 +230,6 @@
                 },
                 {
                     "name": "",
-                    "id": "6762cace-f0b7-40c4-a891-1d849e177f17",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardMouse",
-                    "action": "Join",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "046c93ec-7964-4390-b37a-bd51146e9399",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
