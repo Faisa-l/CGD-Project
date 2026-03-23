@@ -680,6 +680,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreObject: {fileID: 11400000, guid: a81eb5c0ad339a34ebbcbe11b677fbaa, type: 2}
+  effectLibrary: {fileID: 11400000, guid: d87d210b5fa737845a0937f11f6c4db6, type: 2}
   scheduler: {fileID: 3022961426910664996}
   audioEnabler: {fileID: 6571032529647430877}
   gridArrangement: {fileID: 4826853903939942524}

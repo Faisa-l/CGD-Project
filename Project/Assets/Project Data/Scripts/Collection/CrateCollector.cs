@@ -16,6 +16,9 @@ public class CrateCollector : MonoBehaviour
     ScoreObject scoreObject;
 
     [SerializeField]
+    ParticleEffectLibrary effectLibrary;
+
+    [SerializeField]
     CollectorScheduler scheduler;
 
     [SerializeField]
