@@ -412,7 +412,7 @@ public class CratePickUp : MonoBehaviour
         {
             CrateObject crate = obj.GetComponent<CrateObject>();
             
-            crate.Score *= multiplier;
+            crate.Score += crate.MaxScore * multiplier;
         }
     }
 }
