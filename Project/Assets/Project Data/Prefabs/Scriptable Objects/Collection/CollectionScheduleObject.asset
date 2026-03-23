@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: CollectionScheduleObject
   m_EditorClassIdentifier: 
   collectionSchedule:
-  - requiredTag: 0
+  - requiredTag: 2
     requiredScore: 200
     timeLimit: 100
-  - requiredTag: 2
+  - requiredTag: 0
     requiredScore: 200
     timeLimit: 100
   - requiredTag: 1
@@ -24,6 +24,6 @@ MonoBehaviour:
     timeLimit: 100
   randomiseRequiredTag: 1
   quotaBonusMultiplier: 2
-  penaltyScoreMultiplier: 0.3
+  penaltyScoreMultiplier: -29.68
   totalTime: 300
   actingScheduler: {fileID: 0}
