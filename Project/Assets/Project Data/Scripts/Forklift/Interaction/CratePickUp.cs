@@ -256,7 +256,6 @@ public class CratePickUp : MonoBehaviour
             Debug.LogWarning("Dropping player");
             holdingForklift = false;
             heldObjects[0].GetComponent<BoxCollider>().enabled = true;
-            heldObjects[0].GetComponent<DrivingController>().togglePlayerLifted();
 
             onDropped?.Invoke();
         }
@@ -338,7 +337,7 @@ public class CratePickUp : MonoBehaviour
         if (heldObjects[0].gameObject.tag == "Player")
         {
             heldObjects[0].GetComponent<Rigidbody>().useGravity = true;
-            heldObjects[0].GetComponent<DrivingController>().togglePlayerLifted();
+            heldObjects[0].GetComponent<DrivingController>().togglePlayerLifted(false);
         }
         newPosition.parent = null;
         newPosition.GetComponent<Rigidbody>().isKinematic = false;
@@ -373,7 +372,7 @@ public class CratePickUp : MonoBehaviour
     public void SetForkliftPostitionInParent(PickUpDirection direction)
     {
         GameObject otherPlayer = heldObjects[0].gameObject;
-        otherPlayer.GetComponent<DrivingController>().togglePlayerLifted();
+        otherPlayer.GetComponent<DrivingController>().togglePlayerLifted(true, this);
         otherPlayer.GetComponent<Rigidbody>().isKinematic = true;
         otherPlayer.GetComponent<BoxCollider>().enabled = false;
 

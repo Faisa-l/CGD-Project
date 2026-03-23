@@ -96,8 +96,6 @@ public class PlayerManager : MonoBehaviour
 
             playerJoined.Invoke(player_count, player.gameObject.transform);
 
-            player.gameObject.name = $"Player {player_count}";
-
             return;
         }
 
@@ -123,5 +121,7 @@ public class PlayerManager : MonoBehaviour
         player.gameObject.transform.rotation = player_positions[player.playerIndex].rotation;
         
         playerJoined.Invoke(player_count, player.gameObject.transform);
+
+        player.gameObject.name = $"Player {player_count}";
     }
 }

@@ -75,7 +75,7 @@ public class IndividualPlayerHud : MonoBehaviour
 	
 	private void UpdateCrates()
 	{
-		if (!cratePickUp)
+		if (!cratePickUp || cratePickUp.heldObjects.Count == 0 || cratePickUp.heldObjects[0].tag == "Player")
 			return;
 		
 		// Hide all crate icons
