@@ -317,7 +317,7 @@ public class DrivingController : MonoBehaviour
         if ((speed == 0 && !bounced) || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
-        transform.Rotate(0, sign * movement.turningValue * (drifting ? driftSpeed : rotateSpeed) * Time.deltaTime, 0);
+        transform.Rotate(0, movement.turningValue * (drifting ? driftSpeed : rotateSpeed) * Time.deltaTime, 0);
 
         //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
         float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f))%360;
@@ -456,7 +456,7 @@ public class DrivingController : MonoBehaviour
     public void OnTurn(InputValue value)
     {   
         float prevTurnValue = movement.turningValue;
-        movement.turningValue = value.Get<Vector2>().x;
+        movement.turningValue = value.Get<Vector2>().x * sign;
 
         if (movement.turningValue != prevTurnValue) 
         {
