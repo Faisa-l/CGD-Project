@@ -149,6 +149,8 @@ public class DrivingController : MonoBehaviour
     [Header("Wheel Animations")]
     [SerializeField] Animator frontwheel;
     [SerializeField] Animator backwheel;
+    [SerializeField] Animator frontwheel2;
+    [SerializeField] Animator backwheel2;
 
     public void setPlayerGamepad(Gamepad gamepad)
     {
@@ -199,6 +201,12 @@ public class DrivingController : MonoBehaviour
         
         frontwheel.SetFloat("Speed", speed);
         backwheel.SetFloat("Speed", speed);
+        frontwheel2.SetFloat("Speed", speed);
+        backwheel2.SetFloat("Speed", speed);
+        frontwheel.SetFloat("wheeldir", movement.turningValue);
+        backwheel.SetFloat("wheeldir", movement.turningValue);
+        frontwheel2.SetFloat("wheeldir", movement.turningValue);
+        backwheel2.SetFloat("wheeldir", movement.turningValue);
 
         if (TiersEnabled)
         {
@@ -329,7 +337,6 @@ public class DrivingController : MonoBehaviour
                 body.transform.localPosition = new();
             }
         }
-
         //if the forklift isn't drifting, make sure it is looking forward
         if(!drifting || movement.movingValue == -1 || movement.turningValue == 0)
         {
