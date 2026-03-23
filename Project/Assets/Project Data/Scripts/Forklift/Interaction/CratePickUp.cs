@@ -403,5 +403,17 @@ public class CratePickUp : MonoBehaviour
         }
 
     }
+
+    public void multiplyCrateScore(float multiplier)
+    {
+        if (holdingForklift || heldObjects.Count == 0) return;
+
+        foreach(var obj in heldObjects)
+        {
+            CrateObject crate = obj.GetComponent<CrateObject>();
+            
+            crate.Score += crate.MaxScore * multiplier;
+        }
+    }
 }
 
