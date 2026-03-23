@@ -145,6 +145,7 @@ public class DrivingController : MonoBehaviour
 
     bool lifting = false;
     [SerializeField] bool selfIsLifted = false;
+    CratePickUp lifterPickup;
 
     [Header("Wheel Animations")]
     [SerializeField] Animator frontwheel;
@@ -687,10 +688,17 @@ public class DrivingController : MonoBehaviour
         }
     }
 
-    public void togglePlayerLifted()
+    public void togglePlayerLifted(bool lifted, CratePickUp cratePickUp = null)
     {
         selfIsLifted = !selfIsLifted;
-        Debug.LogWarning($"is lifted: {selfIsLifted}");
+        lifterPickup = cratePickUp;
+
+        Debug.Log($"You called on {gameObject.name}");
+    }
+
+    public void OnDisconnectFromPickup()
+    {
+        lifterPickup.DropHeld();
     }
 
     #endregion

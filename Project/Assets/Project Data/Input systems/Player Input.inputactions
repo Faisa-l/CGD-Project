@@ -104,6 +104,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DisconnectFromPickup",
+                    "type": "Button",
+                    "id": "b4b87612-8a0e-4aa9-8636-25bb4b1a4e6b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -313,6 +322,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "LookUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a40c9fc-9a2b-44e7-af72-e08f4bff1461",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "MultiTap(tapCount=4)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DisconnectFromPickup",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
