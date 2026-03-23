@@ -149,6 +149,8 @@ public class DrivingController : MonoBehaviour
     [Header("Wheel Animations")]
     [SerializeField] Animator frontwheel;
     [SerializeField] Animator backwheel;
+    [SerializeField] Animator frontwheel2;
+    [SerializeField] Animator backwheel2;
 
     public void setPlayerGamepad(Gamepad gamepad)
     {
@@ -199,6 +201,12 @@ public class DrivingController : MonoBehaviour
         
         frontwheel.SetFloat("Speed", speed);
         backwheel.SetFloat("Speed", speed);
+        frontwheel2.SetFloat("Speed", speed);
+        backwheel2.SetFloat("Speed", speed);
+        frontwheel.SetFloat("wheeldir", movement.turningValue);
+        backwheel.SetFloat("wheeldir", movement.turningValue);
+        frontwheel2.SetFloat("wheeldir", movement.turningValue);
+        backwheel2.SetFloat("wheeldir", movement.turningValue);
 
         if (TiersEnabled)
         {
@@ -309,7 +317,7 @@ public class DrivingController : MonoBehaviour
         if ((speed == 0 && !bounced) || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
-        transform.Rotate(0, sign * movement.turningValue * (drifting ? driftSpeed : rotateSpeed) * Time.deltaTime, 0);
+        transform.Rotate(0, movement.turningValue * (drifting ? driftSpeed : rotateSpeed) * Time.deltaTime, 0);
 
         //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
         float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f))%360;
@@ -329,7 +337,6 @@ public class DrivingController : MonoBehaviour
                 body.transform.localPosition = new();
             }
         }
-
         //if the forklift isn't drifting, make sure it is looking forward
         if(!drifting || movement.movingValue == -1 || movement.turningValue == 0)
         {
@@ -449,7 +456,7 @@ public class DrivingController : MonoBehaviour
     public void OnTurn(InputValue value)
     {   
         float prevTurnValue = movement.turningValue;
-        movement.turningValue = value.Get<Vector2>().x;
+        movement.turningValue = value.Get<Vector2>().x * sign;
 
         if (movement.turningValue != prevTurnValue) 
         {
