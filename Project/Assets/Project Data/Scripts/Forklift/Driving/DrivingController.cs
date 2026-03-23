@@ -329,7 +329,7 @@ public class DrivingController : MonoBehaviour
                 body.transform.RotateAround(
                  body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                  Vector3.up,
-                 sign * -Mathf.Sign(bodyAngle) * manualAnimationSpeed);
+                 -Mathf.Sign(bodyAngle) * manualAnimationSpeed);
             }
             else
             {
@@ -355,11 +355,12 @@ public class DrivingController : MonoBehaviour
             return;
         }
 
+
         //rotate the body of the forklift over time
         body.transform.RotateAround(
             body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
             Vector3.up,
-            sign * movement.turningValue * manualAnimationSpeed * Time.deltaTime);
+            movement.turningValue * manualAnimationSpeed * Time.deltaTime);
 
         //If there is an animation added for the drift
         if (!manualDriftAnim)
@@ -456,7 +457,7 @@ public class DrivingController : MonoBehaviour
     public void OnTurn(InputValue value)
     {   
         float prevTurnValue = movement.turningValue;
-        movement.turningValue = value.Get<Vector2>().x * sign;
+        movement.turningValue = value.Get<Vector2>().x;
 
         if (movement.turningValue != prevTurnValue) 
         {
@@ -474,6 +475,8 @@ public class DrivingController : MonoBehaviour
         {
             drifting = !drifting;
         }
+
+
 
         if(drifting)
         {
