@@ -27,14 +27,6 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     ArrayArrangement gridArrangement;
 
-    [Space, Header("Settings")]
-
-    [SerializeField, Range(0f, 100f)]
-    float rejectionLaunchForce = 10f;
-
-    [SerializeField, Range(0f, 100f)]
-    float acceptLaunchForce = 5f;
-
     [Space, Header("Event Bindings")]
 
     [SerializeField]
@@ -121,50 +113,18 @@ public class CrateCollector : MonoBehaviour
         }
     }
 
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.TryGetComponent(out ICollectable collectable))
-        {
-            // RemoveCollectable(collectable);
-        }
-    }
-
     // Will attempt to collect the given collectable
     void TryCollect(ICollectable collectable)
     {
-        // Nothing is collectable
-        if (!canCollect || collectable.CanCollect == false) return;
+        // Nothing is collectable or can be collected
+        if (!canCollect || collectable.CanCollect == false || forCollection.Contains(collectable)) return;
 
-        if (collectable.Tag == collectionRequirement.requiredTag && !forCollection.Contains(collectable))
-        {
-            forCollection.Add(collectable);
-            onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
-            collectable.CanDamage = collectable.CanCollect = false;
-            gridArrangement.Add(collectable.GameObject.transform);
-            // collectable.GameObject.GetComponent<Rigidbody>().AddForce(-GetLaunchForce(acceptLaunchForce), ForceMode.Impulse);
-        }
-        else if (collectable.Tag != collectionRequirement.requiredTag)
-        {
-            /* This should be the proper solution to handling the crate being dropped off incorectly
-             * for now we're just gonna destroy it and let the crate spawner bring it back to life
-            var rb = collectable.GameObject.GetComponent<Rigidbody>();
-            rb.linearVelocity = Vector3.zero;
-            rb.AddForce(GetLaunchForce(rejectionLaunchForce) + new Vector3(0f, 1f, 0f), ForceMode.Impulse);
-            */
-            Destroy(collectable.GameObject);
-        }
-
-    }
-
-    // Remove collectable from the list
-    void RemoveCollectable(ICollectable collectable)
-    {
-        if (canCollect && forCollection.Contains(collectable))
-        {
-            forCollection.Remove(collectable);
-            collectable.CanDamage = true;
-            onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
-        }
+        // Apply penalty multiplier if the collectable doesn't match the quota
+        collectable.Score = (collectable.Tag != collectionRequirement.requiredTag) ? (int)(collectable.Score * scheduler.PenaltyScoreMultiplier) : collectable.Score;
+        collectable.CanDamage = collectable.CanCollect = false;
+        forCollection.Add(collectable);
+        gridArrangement.Add(collectable.GameObject.transform);
+        onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
     }
 
     // Starts the collector for collecting
