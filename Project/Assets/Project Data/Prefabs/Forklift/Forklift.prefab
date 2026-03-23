@@ -7076,7 +7076,7 @@ AudioListener:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4477020908547930622}
-  m_Enabled: 1
+  m_Enabled: 0
 --- !u!114 &3824910192280806738
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13234,7 +13234,7 @@ MonoBehaviour:
   - {fileID: 6345584485158045421}
   - {fileID: 7926182565432800992}
   - {fileID: 1091967465573894297}
-  - {fileID: 7057100223135987020}
+  - {fileID: 0}
   - {fileID: 7186633148653776512}
   - {fileID: 2187074226644360779}
   - {fileID: 3059987184978373120}
@@ -13263,7 +13263,7 @@ MonoBehaviour:
   - {fileID: 3116037850982308436}
   - {fileID: 1956959510872372770}
   - {fileID: 1091967465573894297}
-  - {fileID: 7057100223135987020}
+  - {fileID: 0}
   - {fileID: 7186633148653776512}
   - {fileID: 2736618683385788251}
   - {fileID: 2187074226644360779}
@@ -13416,6 +13416,7 @@ MonoBehaviour:
   boostParticlesBR: {fileID: 3503533113234833472}
   boostTierTimeIncrement: 0.5
   speedLinesImage: {fileID: 1169574548009697341}
+  crateBoostMultipliers: {x: 2, y: 2.5, z: 3}
   lift: {fileID: 6628620392548968402}
   liftSpeed: 1.5
   minLiftPosition: 0.01
