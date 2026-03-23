@@ -114,8 +114,15 @@ public class CrateObject : MonoBehaviour, ICollectable
         {
             // Object is destroyed if score reaches 0
             score = value;
-            if (score <= 0) Destroy(GameObject);
-            else            UpdateTextObjects();
+            if (score <= 0)
+            {
+                effectLibrary.Play("CrateExplosion", transform.position);
+                Destroy(GameObject);
+            }
+            else
+            {
+                UpdateTextObjects();
+            }
         }
     }
 
