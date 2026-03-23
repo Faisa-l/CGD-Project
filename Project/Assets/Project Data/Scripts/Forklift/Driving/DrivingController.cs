@@ -53,6 +53,7 @@ public class DrivingController : MonoBehaviour
     GameObject currentTrailLeft;
     GameObject currentTrailRight; 
     [SerializeField]GameObject driftTrailsContainer;
+    bool manuallyStoppedDrift = false;
 
     [Header("Boost Variables")]
     [SerializeField] float boostMultiplier = 2f;
@@ -68,6 +69,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject boostParticlesBR;
     [SerializeField] float boostTierTimeIncrement = 0.5f;
     [SerializeField] GameObject speedLinesImage;
+    [SerializeField] Vector3 crateBoostMultipliers = new(2f,2.5f,3f);
 
     float sign = 1f;
 
@@ -123,9 +125,7 @@ public class DrivingController : MonoBehaviour
 
     [Header("Camera Boost")]
     [SerializeField] float fovChangeMultiplier = 1.2f;
-
     [SerializeField] GameObject playerCamera = null;
-
     [SerializeField] private GameObject castRay;
 
     private Rigidbody rb;
@@ -329,7 +329,7 @@ public class DrivingController : MonoBehaviour
                 body.transform.RotateAround(
                  body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
                  Vector3.up,
-                 sign * -Mathf.Sign(bodyAngle) * manualAnimationSpeed);
+                 -Mathf.Sign(bodyAngle) * manualAnimationSpeed);
             }
             else
             {
@@ -355,11 +355,12 @@ public class DrivingController : MonoBehaviour
             return;
         }
 
+
         //rotate the body of the forklift over time
         body.transform.RotateAround(
             body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
             Vector3.up,
-            sign * movement.turningValue * manualAnimationSpeed * Time.deltaTime);
+            movement.turningValue * manualAnimationSpeed * Time.deltaTime);
 
         //If there is an animation added for the drift
         if (!manualDriftAnim)
@@ -456,7 +457,7 @@ public class DrivingController : MonoBehaviour
     public void OnTurn(InputValue value)
     {   
         float prevTurnValue = movement.turningValue;
-        movement.turningValue = value.Get<Vector2>().x * sign;
+        movement.turningValue = value.Get<Vector2>().x;
 
         if (movement.turningValue != prevTurnValue) 
         {
@@ -466,7 +467,16 @@ public class DrivingController : MonoBehaviour
 
     public void OnDrift()
     {
-        drifting = !drifting;
+        if(manuallyStoppedDrift)
+        {
+            manuallyStoppedDrift = false;
+        }
+        else
+        {
+            drifting = !drifting;
+        }
+
+
 
         if(drifting)
         {
@@ -647,12 +657,15 @@ public class DrivingController : MonoBehaviour
                     break;
                 case 1:
                     boostMultiplier = Tier1Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.x);
                     break;
                 case 2:
                     boostMultiplier = Tier2Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.y);
                     break;
                 case 3:
                     boostMultiplier = Tier3Multiplier;
+                    multiplyCrateScore(crateBoostMultipliers.z);
                     break;
             }
 
@@ -700,13 +713,19 @@ public class DrivingController : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
+
 		// Shake camera when colliding with crates
 		if (collision.transform.CompareTag("Float"))
 		{
 			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
         }
+        //if collision is not with a crate then stop drifting
+        else if(drifting)
+        {
+            manuallyStopDrifting();
+        }
 
-        if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
         bounced = true;
 
@@ -749,5 +768,25 @@ public class DrivingController : MonoBehaviour
         {
             castRay.GetComponent<CratePickUp>().DropHeld();
         }
+    }
+
+    private void multiplyCrateScore(float multiplier)
+    {
+        castRay.GetComponent<CratePickUp>().multiplyCrateScore(multiplier);
+    }
+
+    private void manuallyStopDrifting()
+    {
+        manuallyStoppedDrift = true;
+
+        drifting = false;
+        boostReady = false;
+        driftingEffects.Emit(false);
+        driftingEffects.Stop();
+        boostTimer = 0f;
+        boostTier = 0;
+
+        currentTrailRight.transform.parent = driftTrailsContainer.transform;
+        currentTrailLeft.transform.parent = driftTrailsContainer.transform;
     }
 }
