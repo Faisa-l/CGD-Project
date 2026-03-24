@@ -3,7 +3,17 @@ guid: 593ed8ba654e4c641b1ad35958c7c45d
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BinBoxBodyMaterial
+    second: {fileID: 2100000, guid: a6e7dc68bd4b0fc4f8b36f8a20ef2435, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BinBoxLid
+    second: {fileID: 2100000, guid: a5957773e0a35cf448fc3905c495d838, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
