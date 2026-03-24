@@ -18,9 +18,13 @@ public class CollectionScheduleObject : ScriptableObject
     [SerializeField, Min(1f)]
     float quotaBonusMultiplier = 1f;
 
+    [SerializeField]
+    float penaltyScoreMultiplier = 0.8f;
 
+    // These should just be the property with the field:SerializeFieldAttribute set
     [Tooltip("Score multiplier if the quota is met.")]
     public float QuotaBonusMultiplier => quotaBonusMultiplier;
+    public float PenaltyScoreMultiplier => penaltyScoreMultiplier;
 
     // This should use some special attribute so it's not editable in the inspector
     [SerializeField]

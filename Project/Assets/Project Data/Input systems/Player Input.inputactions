@@ -104,6 +104,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "DisconnectFromPickup",
+                    "type": "Button",
+                    "id": "b4b87612-8a0e-4aa9-8636-25bb4b1a4e6b",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -230,17 +239,6 @@
                 },
                 {
                     "name": "",
-                    "id": "6762cace-f0b7-40c4-a891-1d849e177f17",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardMouse",
-                    "action": "Join",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "046c93ec-7964-4390-b37a-bd51146e9399",
                     "path": "<Gamepad>/leftShoulder",
                     "interactions": "",
@@ -324,6 +322,17 @@
                     "processors": "",
                     "groups": "",
                     "action": "LookUp",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "3a40c9fc-9a2b-44e7-af72-e08f4bff1461",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "MultiTap(tapCount=4)",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DisconnectFromPickup",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
