@@ -13,6 +13,10 @@ using static CrateExtensions;
 public class CrateCollector : MonoBehaviour
 {
     [SerializeField]
+    StarScore starScore;
+
+
+    [SerializeField]
     ScoreObject scoreObject;
 
     [SerializeField]
@@ -165,6 +169,10 @@ public class CrateCollector : MonoBehaviour
         currentCollectionScore = 0f;
 
         forCollection.Clear();
+        
+
+        starScore.ShowStars();
+
     }
 
     // For invocation whenever the schedule changes the current collection requirement
