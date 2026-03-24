@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.Splines.Interpolators;
 using UnityEngine.UIElements;
 using UnityEngine.UIElements.Experimental;
@@ -20,6 +21,12 @@ public class ElevatorController : MonoBehaviour
 
     [SerializeField] int playersUnderneath = 0;
 
+    [Header("Audio Variables")]
+    [SerializeField] AudioSource runningSound;
+    [SerializeField] float audioSpeedRatio;
+    [SerializeField] float runningMaxPitch;
+    private AudioEnabler audio_enabler;
+
     float timeWaited = 0f;
 
     Vector3 startPosition;
@@ -39,6 +46,7 @@ public class ElevatorController : MonoBehaviour
         direction = Mathf.Sign(distance);
 
         activationPostion = startPosition;
+        audio_enabler = GetComponent<AudioEnabler>();
     }
 
     // Update is called once per frame
@@ -61,11 +69,12 @@ public class ElevatorController : MonoBehaviour
         else if (activated && Vector3.Distance(transform.position, endPosition) <= threshold)
         {
             currentMovementTime = 0f;
-
+            audio_enabler.Disable("Activated");
             timeWaited += Time.deltaTime;
             if (timeWaited >= waitTime)
             {
                 activated = false;
+                audio_enabler.Disable("Activated");
                 timeWaited = 0f;
 
                 activationPostion = transform.position;
@@ -80,12 +89,18 @@ public class ElevatorController : MonoBehaviour
             transform.position = activationPostion - new Vector3(0, easingCurve.Evaluate(currentMovementTime) * dist, 0);
 
             movingBack = true;
+            audio_enabler.Enable("Activated");
         }
         else
         {
             movingBack = false;
+            audio_enabler.Disable("Activated");
             currentMovementTime = 0f;
         }
+
+        //Audio changes pitch depending on the speed of the forklift.
+        audioSpeedRatio = speed;
+        runningSound.pitch = Mathf.Lerp(speed * 5, runningMaxPitch, Time.deltaTime * (audioSpeedRatio * 3));
     }
 
     public void activate()
@@ -95,6 +110,8 @@ public class ElevatorController : MonoBehaviour
         currentMovementTime = 0f;
 
         activationPostion = transform.position;
+
+        audio_enabler.Enable("Activated");
     }
 
     private void OnTriggerEnter()

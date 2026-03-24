@@ -221,7 +221,7 @@ public class DrivingController : MonoBehaviour
             DriftBoost();
         }
         
-        //Audio changes pitch depending on the speed of the forklift (however, because the forklift goes to max speed really quickly, the pitch change is almost unnoticable - Callum.S)
+        //Audio changes pitch depending on the speed of the forklift.
         audioSpeedRatio = speed;
         runningSound.pitch = Mathf.Lerp(speed / 2, runningMaxPitch, Time.deltaTime * audioSpeedRatio);
 

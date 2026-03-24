@@ -26,6 +26,8 @@ public class CrateObject : MonoBehaviour, ICollectable
     [SerializeField] 
     GameObject tempNewCrateMeshEdges, tempNewCrateMeshSupports;
 
+    [SerializeField]
+    UnityEvent onDestroyed;
 
     float maxScore;
     string startingPromptText;
@@ -118,7 +120,8 @@ public class CrateObject : MonoBehaviour, ICollectable
             if (score <= 0)
             {
                 Destroy(GameObject, 1.3f);
-                OnDestroyed.Invoke();
+                //onDestroyed uses audio for when the crate's number reaches 0 - Callum.S
+                onDestroyed.Invoke();
             }
 
             else UpdateTextObjects();
