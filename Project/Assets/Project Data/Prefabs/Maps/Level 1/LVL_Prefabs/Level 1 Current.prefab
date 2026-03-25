@@ -66560,7 +66560,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8574207824011913944}
   - component: {fileID: 5010441374774521443}
-  - component: {fileID: 3314212241917278505}
   m_Layer: 0
   m_Name: Elevator
   m_TagString: No Bounce
@@ -66606,49 +66605,6 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.45242307, y: 7.0416408, z: 1.2398773}
   m_Center: {x: 0.35860234, y: 3.596038, z: -0.11993917}
---- !u!114 &3314212241917278505
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9058537904634769506}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 834e75d9002aeee448f9b66e8845fe7a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  speed: 3
-  distance: 8
-  waitTime: 5
-  threshold: 0.01
-  easingCurve:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  moveBackOnCollide: 1
-  activated: 1
-  playersUnderneath: 0
 --- !u!1 &9074109764209986871
 GameObject:
   m_ObjectHideFlags: 0
