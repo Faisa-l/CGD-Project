@@ -9,6 +9,18 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: -8679921383154817045, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.7
+      objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.43
       objectReference: {fileID: 0}
@@ -48,6 +60,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -8679921383154817045, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: -4718040791104185828, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 1e2cab0a39c1b3c4c8eb747a520556c2, type: 2}
     - target: {fileID: -4683669308469848369, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -58,7 +78,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: c197b07388acf214abcaef5554aa5e3a, type: 2}
     - target: {fileID: 919132149155446097, guid: 4ec3bae149ec7f642ba9b405ea8458bd, type: 3}
       propertyPath: m_Name
-      value: PIPE PALLET
+      value: M_PIPE PALLET
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -92,5 +112,5 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 3.4, y: 2.2076712, z: 6.56}
-  m_Center: {x: -0, y: 1.0688353, z: 0}
+  m_Size: {x: 3.3535962, y: 11.84288, z: 6.2244678}
+  m_Center: {x: -0.0039344174, y: 5.8864403, z: -0.01935448}

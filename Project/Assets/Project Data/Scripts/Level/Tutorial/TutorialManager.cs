@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.Events;
 using TMPro;
+using static CrateExtensions;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -9,21 +10,16 @@ public class TutorialManager : MonoBehaviour
 	
 	[Header("Cache")]
 	[SerializeField] private TMP_Text instructionsMessageText;
+	[SerializeField] private CollectionScheduleObject schedule;
+	[SerializeField] private GameManager gameManager;
 	
 	private int currentTutorialStage = -1;
 	private bool tutorialComplete;
 	
 	private void Start()
 	{
+		// Make sure events trigger
 		ProgressTutorial();
-	}
-	
-	private void Update()
-	{
-		if (Input.GetKeyDown(KeyCode.Space))
-		{
-			ProgressTutorial();
-		}
 	}
 	
 	#region Setters
@@ -42,7 +38,9 @@ public class TutorialManager : MonoBehaviour
 		if (currentTutorialStage >= tutorialStages.Length)
 		{
 			tutorialComplete = true;
-			print("Tutorial complete!");
+			
+			gameManager.SetVictoryState();
+			
 			return;
 		}
 		
@@ -50,6 +48,15 @@ public class TutorialManager : MonoBehaviour
 		
 		// Setup new stage
 		instructionsMessageText.text = tutorialStages[currentTutorialStage].instructionsMessage;
+	}
+	
+	public void CheckTutorialCompleted(float currentScore)
+	{		
+		// Only one quota to complete tutorial
+		if (currentScore >= schedule.CollectionSchedule[0].requiredScore)
+		{
+			ProgressTutorial();
+		}
 	}
 	
 	#endregion Setters
