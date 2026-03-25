@@ -112,7 +112,7 @@ public class ElevatorController : MonoBehaviour
 
         currentMovementTime = 0f;
 
-        activationPostion = transform.position;
+        activationPostion = transform.localPosition;
 
         audio_enabler.Enable("Activated");
     }
@@ -146,6 +146,6 @@ public class ElevatorController : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Gizmos.DrawCube(transform.position + startPosition + new Vector3(0, distance, 0), new Vector3(1f,1f,1f));
+        Gizmos.DrawCube(transform.localPosition + startPosition + new Vector3(0, distance, 0), new Vector3(1f,1f,1f));
     }
 }
