@@ -22,9 +22,7 @@ public class KillVolume : MonoBehaviour
         {
             Debug.LogError($"Kill volume \"{name}\" killed {other.gameObject.name}");
             var player_character = other.gameObject.transform;
-            player_character.GetComponent<CharacterController>().enabled = false;
             player_character.transform.position = respawn_pos.position;
-            player_character.GetComponent <CharacterController>().enabled = true;   
         }
     }
 }
