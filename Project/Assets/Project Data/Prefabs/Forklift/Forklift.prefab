@@ -864,8 +864,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchoredPosition: {x: -2.2999878, y: -0.7000122}
+  m_SizeDelta: {x: 177.6, y: 138.1}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6274255116095845950
 CanvasRenderer:
@@ -13646,7 +13646,7 @@ MonoBehaviour:
   boostParticlesBR: {fileID: 3503533113234833472}
   boostTierTimeIncrement: 0.5
   speedLinesImage: {fileID: 1169574548009697341}
-  crateBoostMultipliers: {x: 2, y: 2.5, z: 3}
+  crateBoostMultipliers: {x: 1.1, y: 1.3, z: 1.5}
   lift: {fileID: 6628620392548968402}
   liftSpeed: 1.5
   minLiftPosition: 0.01
@@ -13665,7 +13665,6 @@ MonoBehaviour:
   audioSpeedRatio: 0.5
   bouncingForceMultiplier: 350
   bounceDecay: 1.396
-  bounceDecay: 1.5
   collisionVelocityForCrateDamage: 10
   ignoreBounceMask:
   - Float
