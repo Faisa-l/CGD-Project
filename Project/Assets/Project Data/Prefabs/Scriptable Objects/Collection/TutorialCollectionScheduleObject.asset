@@ -15,8 +15,8 @@ MonoBehaviour:
   collectionSchedule:
   - requiredTag: 0
     requiredScore: 200
-    timeLimit: 99999
+    timeLimit: 999999
   randomiseRequiredTag: 1
   quotaBonusMultiplier: 2
-  totalTime: 99999
+  totalTime: 999999
   actingScheduler: {fileID: 0}

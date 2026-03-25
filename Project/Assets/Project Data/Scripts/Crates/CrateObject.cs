@@ -18,15 +18,20 @@ public class CrateObject : MonoBehaviour, ICollectable
     [SerializeField]
     bool useColouredTags = true;
 
+    [Space]
+    [SerializeField]
+    ParticleEffectLibrary effectLibrary;
+
+    [SerializeField] 
+    GameObject tempNewCrateMeshEdges, tempNewCrateMeshSupports;
+
+
     float maxScore;
     string startingPromptText;
     ContextualPromptSource promptSource;
     PhysicsPickup pickup;
     TextMeshPro[] textObjects;
     Material material;
-
-    [SerializeField] GameObject tempNewCrateMeshEdges;
-    [SerializeField] GameObject tempNewCrateMeshSupports;
 
 
     // As in the minimum score the crate can have
@@ -57,6 +62,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         material = GetComponent<Renderer>().material;
         textObjects = GetComponentsInChildren<TextMeshPro>();
         promptSource = GetComponentInChildren<ContextualPromptSource>();
+
         startingPromptText = "<sprite name=\"Xbox_Y\">";
 
         // Bind grabbing event to pickup controller
@@ -91,7 +97,7 @@ public class CrateObject : MonoBehaviour, ICollectable
         var relativeVelocity = collision.relativeVelocity;
         if (relativeVelocity.magnitude > DamageBehaviour.collisionVelocityForCrateDamage)
         {
-            if (CanDamage) DamageCrate(relativeVelocity);
+            if (CanDamage) DamageCrate(relativeVelocity, collision.contacts[0].point);
         }
     }
 
@@ -154,13 +160,28 @@ public class CrateObject : MonoBehaviour, ICollectable
     }
 
     // Reduces the crate's score and displays the text for that
-    private void DamageCrate(Vector3 relativeVelocity)
+    private void DamageCrate(Vector3 relativeVelocity, Vector3 position)
     {
         // Handle literal scores as integers - cast as int
         float temp = Score;
         float damage = (int)GetScoreLoss(relativeVelocity);
-        Score = (int)Mathf.Max(MaximumScoreReduction, Score - damage);
-        if (score != temp) InstanceDamageText(damage);
+        int reduction = (int)Mathf.Max(MaximumScoreReduction, Score - damage);
+        if (reduction != temp)
+        {
+            InstanceDamageText(damage);
+            PlayCollisionSparks(position, Quaternion.Euler(relativeVelocity.normalized));
+        }
+        Score = reduction;
+    }
+
+    // Play the collision spark effect when taking damage
+    private void PlayCollisionSparks(Vector3 position, Quaternion direction)
+    {
+        var effect = effectLibrary.Get<ColoredParticleEffect>(ParticleEffectLibrary.CrateCollisionSparks);
+        effect.color = effect.emissionColor = crateTag.GetColourFromTag();
+        effect.AtPosition(position)
+              .AtRotation(direction)
+              .Play();
     }
 
     // Creates text representing damage that the crate will take

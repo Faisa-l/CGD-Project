@@ -30,6 +30,7 @@ public class CollectorScheduler : MonoBehaviour
     public Queue<ScheduleQuota> Schedule { get; private set; }
     public ScheduleQuota CurrentRequirement { get; private set; }
     public float BonusQuotaMultipler { get; private set; }
+    public float PenaltyScoreMultiplier { get; private set; }
     public bool Running => isRunning;
     public float RemainingQuotaTime => Mathf.Max(CurrentRequirement.timeLimit - timer.ElapsedTime, 0f);
 
@@ -56,7 +57,7 @@ public class CollectorScheduler : MonoBehaviour
         isRunning = false;
         timer.repeat = false;
         timer.autoStart = false;
-        BonusQuotaMultipler = 1f;
+        BonusQuotaMultipler = PenaltyScoreMultiplier = 1f;
     }
 
     private void OnEnable()
@@ -97,6 +98,7 @@ public class CollectorScheduler : MonoBehaviour
             Schedule.Enqueue(req);
         }
         BonusQuotaMultipler = scheduleObject.QuotaBonusMultiplier;
+        PenaltyScoreMultiplier = scheduleObject.PenaltyScoreMultiplier;
         scheduleObject.actingScheduler = this;
     }
 
@@ -121,7 +123,7 @@ public class CollectorScheduler : MonoBehaviour
         }
     }
 
-    // Attempts to get a new requirement from the stack
+    // Attempts to get a new requirement from the queue
     bool TryGetNextInSchedule(out ScheduleQuota requirement)
     {
         requirement = new ScheduleQuota();
