@@ -698,7 +698,7 @@ public class DrivingController : MonoBehaviour
 
     public void OnDisconnectFromPickup()
     {
-        lifterPickup.DropHeld();
+        lifterPickup?.DropHeld();
     }
 
     #endregion
