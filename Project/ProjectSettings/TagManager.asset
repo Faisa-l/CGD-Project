@@ -12,22 +12,23 @@ TagManager:
   - CinemachineTarget
   - Float
   - No Bounce
+  - forklift pickup
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Drivable
+  - 
   - Water
   - UI
   - Crates
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Ignore Crates
+  - Trailer Camera 1
+  - Trailer Camera 2
+  - Trailer Camera 3
+  - Trailer Camera 4
+  - Trailer Camera 5
+  - Trailer Camera 6
+  - Trailer Camera 7
   - 
   - 
   - 
