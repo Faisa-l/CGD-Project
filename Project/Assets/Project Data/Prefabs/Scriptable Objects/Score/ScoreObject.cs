@@ -7,7 +7,7 @@ public class ScoreObject : ScriptableObject
     /// <summary>
     /// Maximum score can obtain in a stage.
     /// </summary>
-    public float maxScore = 1000f;
+    public float maxScore = 600f;
 
     /// <summary>
     /// Fired when the score changes value.

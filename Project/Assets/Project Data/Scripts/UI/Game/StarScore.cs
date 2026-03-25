@@ -15,7 +15,7 @@ public class StarScore : MonoBehaviour
     private float timeCheck;
     public void CheckStarScore()
     {
-        float percentage = ScoreObject.maxScore / ScoreObject.CurrentScore;
+        float percentage = ScoreObject.CurrentScore / ScoreObject.maxScore;
 
         if (percentage < 2)
         {
@@ -51,12 +51,12 @@ public class StarScore : MonoBehaviour
         }
     }
 
-    public void ShowStars()
-    {
+    public void ShowStars()                         //to change total required for max - change the maxScore in the ScoreObject object
+    {                                                           
         ScoreUpdateUI.SetActive(true);
-        float percentage = ScoreObject.maxScore / ScoreObject.CurrentScore;
+        float percentage =  (ScoreObject.CurrentScore / ScoreObject.maxScore) * 100;
         ScoreSlider.value = percentage;
-        timeCheck = Time.time + 8;
+        timeCheck = Time.time + 5;
     }
 
     // Update is called once per frame
