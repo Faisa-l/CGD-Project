@@ -13519,6 +13519,7 @@ GameObject:
   - component: {fileID: 660509750987994943}
   - component: {fileID: 5957374651335090734}
   - component: {fileID: 6575178007448525318}
+  - component: {fileID: 7347283472126688668}
   m_Layer: 2
   m_Name: Forklift
   m_TagString: Player
@@ -13660,9 +13661,10 @@ MonoBehaviour:
   steeringWheel: {fileID: 8328208722417563078}
   playerMesh: {fileID: 2736618683385788251}
   runningSound: {fileID: -5220215563985875057}
-  runningMaxPitch: 3
-  audioSpeedRatio: 0
-  bouncingForceMultiplier: 250
+  runningMaxPitch: 1
+  audioSpeedRatio: 0.5
+  bouncingForceMultiplier: 350
+  bounceDecay: 1.396
   bounceDecay: 1.5
   collisionVelocityForCrateDamage: 10
   ignoreBounceMask:
@@ -14238,6 +14240,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupHolder: {fileID: 5186217170744748968}
+--- !u!81 &7347283472126688668
+AudioListener:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9127728803133528513}
+  m_Enabled: 1
 --- !u!1001 &1609504384734522101
 PrefabInstance:
   m_ObjectHideFlags: 0
