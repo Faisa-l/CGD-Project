@@ -94,7 +94,7 @@ public class DrivingController : MonoBehaviour
     [Header("Audio Variables")]
     [SerializeField] AudioSource runningSound;
     [SerializeField] float runningMaxPitch;
-    [SerializeField] private float audioSpeedRatio;
+    [SerializeField] float audioSpeedRatio;
 
     [Header("Bouce variables")]
     [Header("Bounce variables")]
@@ -221,9 +221,9 @@ public class DrivingController : MonoBehaviour
             DriftBoost();
         }
         
-        //Audio changes pitch depending on the speed of the forklift (however, because the forklift goes to max speed really quickly, the pitch change is almost unnoticable - Callum.S)
+        //Audio changes pitch depending on the speed of the forklift.
         audioSpeedRatio = speed;
-        runningSound.pitch = Mathf.Lerp(0.3f, runningMaxPitch, audioSpeedRatio);
+        runningSound.pitch = Mathf.Lerp(speed / 2, runningMaxPitch, Time.deltaTime * audioSpeedRatio);
 
         if(holdingInteract)
         {
@@ -318,7 +318,7 @@ public class DrivingController : MonoBehaviour
         if ((speed == 0 && !bounced) || selfIsLifted) return;
 
         //do the actual forklift rotation so it turns
-        transform.Rotate(0, movement.turningValue * (drifting ? driftSpeed : rotateSpeed) * Time.deltaTime, 0);
+        transform.Rotate(0, movement.turningValue * (drifting ? driftSpeed * sign : rotateSpeed * Mathf.Sign(speed)) * Time.deltaTime, 0);
 
         //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
         float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f))%360;
@@ -698,7 +698,7 @@ public class DrivingController : MonoBehaviour
 
     public void OnDisconnectFromPickup()
     {
-        lifterPickup.DropHeld();
+        lifterPickup?.DropHeld();
     }
 
     #endregion

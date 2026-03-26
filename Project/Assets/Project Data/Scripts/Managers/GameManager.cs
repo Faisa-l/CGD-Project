@@ -78,7 +78,8 @@ public class GameManager : MonoBehaviour
         ChangeState(gameOverState);
     }
 	
-	private void SetVictoryState()
+	// Allow tutorial level to force win
+	public void SetVictoryState()
 	{
 		ChangeState(victoryState);
 	}
