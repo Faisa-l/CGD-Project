@@ -342,7 +342,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f2f5c8247145ae46943361b86324711, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  requiredPlayerCount: 1
+  requiredPlayerCount: 4
   onPlayerCountReached:
     m_PersistentCalls:
       m_Calls:
