@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: CollectionScheduleObject
   m_EditorClassIdentifier: 
   collectionSchedule:
-  - requiredTag: 2
+  - requiredTag: 1
     requiredScore: 200
     timeLimit: 100
-  - requiredTag: 1
+  - requiredTag: 2
     requiredScore: 200
     timeLimit: 100
   - requiredTag: 0
