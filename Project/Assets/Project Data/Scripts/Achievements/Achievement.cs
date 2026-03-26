@@ -59,7 +59,11 @@ public class Achievement : ScriptableObject
 		if (SaveManager.instance)
 			SaveManager.instance.Save();
 		
-		Debug.Log("Achievement Unlocked: " + displayName);
+		// Show achievement unlocked notification
+		if (ToastNotificationManager.instance)
+			ToastNotificationManager.instance.Add("Achievement Unlocked", displayName);
+		else
+			Debug.LogWarning("Achievement couldn't find Toast Notification Manager");
 	}
 	
 	#region Getters

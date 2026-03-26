@@ -112,6 +112,10 @@ public class CheatManager : MonoBehaviour
 					// Activate cheat
 					cheat.Activate();
 					
+					// Show notification
+					if (ToastNotificationManager.instance)
+						ToastNotificationManager.instance.Add("Cheat Activated", cheat.GetNotificationText());
+					
 					// Exit function
 					return true;
 				}
