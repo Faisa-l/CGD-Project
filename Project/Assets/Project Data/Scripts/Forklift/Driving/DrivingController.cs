@@ -85,6 +85,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private GameObject dropAllUI;
     [SerializeField] private Slider dropAllSlider;
     [SerializeField] private GameOverPanel gameOverMenu;
+	[SerializeField] private GameObject breakFreePrompt;
 
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
@@ -185,6 +186,8 @@ public class DrivingController : MonoBehaviour
         if(transform.parent == null)
         {
             selfIsLifted = false;
+			breakFreePrompt.SetActive(false);
+			
             rigidBody.isKinematic = false;
             GetComponent<BoxCollider>().enabled = true;
         }
@@ -691,6 +694,8 @@ public class DrivingController : MonoBehaviour
     public void togglePlayerLifted(bool lifted, CratePickUp cratePickUp = null)
     {
         selfIsLifted = !selfIsLifted;
+		breakFreePrompt.SetActive(selfIsLifted);
+		
         lifterPickup = cratePickUp;
 
         Debug.Log($"You called on {gameObject.name}");
