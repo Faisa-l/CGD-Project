@@ -14063,6 +14063,7 @@ MonoBehaviour:
   backwheel: {fileID: 2571630939153753037}
   frontwheel2: {fileID: 4500842460840464059}
   backwheel2: {fileID: 5556618364638766973}
+  stunanim: {fileID: 3484283738497431759}
 --- !u!82 &-5220215563985875057
 AudioSource:
   m_ObjectHideFlags: 0
