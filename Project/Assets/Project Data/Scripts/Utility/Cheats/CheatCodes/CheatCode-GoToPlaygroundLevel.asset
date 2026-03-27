@@ -24,3 +24,4 @@ MonoBehaviour:
   - B
   - A
   action: {fileID: 11400000, guid: 66e5cf4c7d66c284f8808a796e76aa20, type: 2}
+  notificationText: Go to Secret Level

@@ -24,3 +24,4 @@ MonoBehaviour:
   - B
   - A
   action: {fileID: 11400000, guid: 80d1bcb37b08fb24db1b66a5cec23aba, type: 2}
+  notificationText: Invisible forklifts

@@ -24,3 +24,4 @@ MonoBehaviour:
   - X
   - A
   action: {fileID: 11400000, guid: 068cb6dbc0b84e14aa3e236548c70e90, type: 2}
+  notificationText: Invisible crates

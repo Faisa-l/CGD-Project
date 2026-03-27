@@ -24,3 +24,4 @@ MonoBehaviour:
   - X
   - Y
   action: {fileID: 11400000, guid: 317e8d6fbbb8e6645be82e65bcd1bd2a, type: 2}
+  notificationText: Big head mode
