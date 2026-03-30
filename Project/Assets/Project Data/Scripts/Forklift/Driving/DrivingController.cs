@@ -460,8 +460,6 @@ public class DrivingController : MonoBehaviour
 #region Input Functions
     public void OnMove(InputValue value)
     {
-        if (!isGrounded) return;
-
         movement.movingValue = value.Get<Vector2>().y;
 
         if (movement.movingValue != 0)
