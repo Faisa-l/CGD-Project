@@ -153,6 +153,8 @@ public class DrivingController : MonoBehaviour
     [SerializeField] Animator frontwheel2;
     [SerializeField] Animator backwheel2;
 
+    [SerializeField] Animator stunanim;
+
     public void setPlayerGamepad(Gamepad gamepad)
     {
         playerGamepad = gamepad;
@@ -210,6 +212,18 @@ public class DrivingController : MonoBehaviour
         backwheel.SetFloat("wheeldir", movement.turningValue);
         frontwheel2.SetFloat("wheeldir", movement.turningValue);
         backwheel2.SetFloat("wheeldir", movement.turningValue);
+        
+        if (speed > 10f)
+        {
+            if (bounced == true)
+            {
+                stunanim.SetBool("Stun", true);
+            }
+        }
+        else {
+                stunanim.SetBool("Stun", false);
+        }
+        
 
         if (TiersEnabled)
         {
@@ -728,8 +742,8 @@ public class DrivingController : MonoBehaviour
         {
             manuallyStopDrifting();
         }
-
-
+        
+        
         bounced = true;
 
         Vector3 forceDirection = Vector3.zero;
