@@ -119,18 +119,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!114 &17482
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &6388046
 GameObject:
   m_ObjectHideFlags: 0
@@ -14891,6 +14879,17 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 882622604}
   m_Mesh: {fileID: -4552961407312753236, guid: 9b9b9ecc01ce6ce4da7d95d683afc042, type: 3}
+--- !u!114 &899171066 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5145527152425543266, guid: 4c653b9344288474c874e9df5c77ef6f, type: 3}
+  m_PrefabInstance: {fileID: 9020944773684107747}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 834e75d9002aeee448f9b66e8845fe7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &899362164
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -14985,7 +14984,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: pressEvent.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: releaseEvent.m_PersistentCalls.m_Calls.Array.size
@@ -15002,7 +15001,7 @@ PrefabInstance:
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: pressEvent.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 17482}
+      objectReference: {fileID: 899171066}
     - target: {fileID: 8800519711826403695, guid: c865f46f791d11748bbd681168648d45, type: 3}
       propertyPath: pressEvent.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
