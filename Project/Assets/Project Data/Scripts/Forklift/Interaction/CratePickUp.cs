@@ -44,6 +44,8 @@ public class CratePickUp : MonoBehaviour
 
     [SerializeField] public List<GameObject> heldObjects = new();
 
+    [SerializeField] float maxCrateMultipliedScore = 2f;
+
     [SerializeField] int maxObjects;
 
     [SerializeField] bool forkLiftSelected;
@@ -410,8 +412,15 @@ public class CratePickUp : MonoBehaviour
         foreach(var obj in heldObjects)
         {
             CrateObject crate = obj.GetComponent<CrateObject>();
+
+            if (crate.Score == crate.MaxScore * maxCrateMultipliedScore) continue;
             
             crate.Score += crate.MaxScore * multiplier;
+
+            if (crate.Score > crate.MaxScore * maxCrateMultipliedScore)
+            {
+                crate.Score = crate.MaxScore * maxCrateMultipliedScore; 
+            }
         }
     }
 }

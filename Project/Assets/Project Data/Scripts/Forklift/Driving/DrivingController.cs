@@ -70,6 +70,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float boostTierTimeIncrement = 0.5f;
     [SerializeField] GameObject speedLinesImage;
     [SerializeField] Vector3 crateBoostMultipliers = new(2f,2.5f,3f);
+    [SerializeField] Slider boostBar;
 
     float sign = 1f;
 
@@ -606,6 +607,9 @@ public class DrivingController : MonoBehaviour
             driftingEffects.Emit(true);
             driftingEffects.Play();
 
+            boostBar.gameObject.SetActive(true);
+            boostBar.value = Mathf.Min(boostTimer / (3 * boostTierTimeIncrement), 3);
+
             /* This sucks btw
             if (boostTimer <= boostTierTimeIncrement)
             {
@@ -692,6 +696,9 @@ public class DrivingController : MonoBehaviour
             driftingEffects.Stop();
             boostTimer = 0f;
             boostTier = 0;
+
+            boostBar.value = 0f;
+            boostBar.gameObject.SetActive(false);
         }
     }
 
