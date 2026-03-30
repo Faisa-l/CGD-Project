@@ -7,6 +7,7 @@ public class Achievement : ScriptableObject
 {	
 	[Header("Settings")]
 	[SerializeField] private string displayName;
+	[SerializeField] private string description;
 	[Tooltip("When the achievement reaches this amount of progress, it will unlock")]
 	[SerializeField] private int requiredProgress = 1;
 	
@@ -67,6 +68,21 @@ public class Achievement : ScriptableObject
 	}
 	
 	#region Getters
+	
+	public string GetDisplayName()
+	{
+		return displayName;
+	}
+	
+	public string GetDescription()
+	{
+		return description;
+	}
+	
+	public int GetRequiredProgress()
+	{
+		return requiredProgress;
+	}
 	
 	public bool IsUnlocked()
 	{
