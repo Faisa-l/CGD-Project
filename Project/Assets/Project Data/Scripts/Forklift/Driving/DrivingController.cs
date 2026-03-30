@@ -110,7 +110,6 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
-    [SerializeField] private float cameraUpDist;
     [SerializeField] private List<string> cameraRayCastMask = new List<string>();
     Vector3 rootForward, rootReverse;
     Vector3 lookAtPosition;
@@ -547,15 +546,6 @@ public class DrivingController : MonoBehaviour
         dropAllUI.SetActive(false);
         interactHoldTime = 0f;
         holdingInteract = false;
-    }
-
-    public void OnLookUp()
-    {
-        lookingUp = !lookingUp;
-
-        lookAtTransform.SetLocalPositionAndRotation(
-            lookAtTransform.localPosition + new Vector3(0.0f,(lookingUp ? 1 : -1) * cameraUpDist,0.0f),
-            Quaternion.identity);
     }
 
     public void DriftBoost()

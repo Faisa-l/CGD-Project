@@ -7922,7 +7922,6 @@ MonoBehaviour:
   followingObject: {fileID: 4984584100628000045}
   lookingAtObject: {fileID: 3325905161990052438}
   lerpValue: 0.03
-  lookLerpValue: 0.5
   cameraObject: {fileID: 8822135357838566119}
   fovLerpValue: 0.1
 --- !u!1 &6489661091935311067
@@ -8056,7 +8055,7 @@ Transform:
   m_GameObject: {fileID: 6560490963314522202}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000008940697, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.090225644, y: 0, z: 0.028908208}
+  m_LocalPosition: {x: -0.1047, y: -0, z: 0.0399}
   m_LocalScale: {x: 1.0002842, y: 1.0002842, z: 1.0002842}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -13532,7 +13531,7 @@ Transform:
   m_GameObject: {fileID: 8787852879880177809}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.73, z: 0.341}
+  m_LocalPosition: {x: 0, y: 1.83, z: 0.52}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -14046,7 +14045,6 @@ MonoBehaviour:
   lookAtTransform: {fileID: 3325905161990052438}
   cameraForwardPos: {fileID: 4984584100628000045}
   cameraReversePos: {fileID: 4772259750914084470}
-  cameraUpDist: 1
   cameraRayCastMask:
   - Ignore Raycast
   - UI
