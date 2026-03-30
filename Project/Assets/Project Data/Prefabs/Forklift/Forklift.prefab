@@ -15156,6 +15156,11 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+--- !u!198 &1325377668719917557 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 302502322389504768, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+  m_PrefabInstance: {fileID: 1609504384734522101}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1655289675668025271 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 49221309868574018, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
@@ -16371,6 +16376,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1265887067602357211, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}
+      propertyPath: particles.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1265887067602357211, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}
       propertyPath: 'smokes.Array.data[1]'
       value: 
       objectReference: {fileID: 4674145601784252684}
@@ -16386,6 +16395,14 @@ PrefabInstance:
       propertyPath: mainObject.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 1265887067602357211, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}
+      propertyPath: 'particles.Array.data[0]'
+      value: 
+      objectReference: {fileID: 6796110230255546808}
+    - target: {fileID: 1265887067602357211, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}
+      propertyPath: 'particles.Array.data[1]'
+      value: 
+      objectReference: {fileID: 1325377668719917557}
     - target: {fileID: 1265887067602357211, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}
       propertyPath: 'mainObject.Array.data[1]'
       value: 
@@ -16462,6 +16479,11 @@ PrefabInstance:
       addedObject: {fileID: 1655289675668025271}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}
+--- !u!198 &6796110230255546808 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 3020243791550094420, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}
+  m_PrefabInstance: {fileID: 8627398830350642668}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &7362250772137420343 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1265887067602357211, guid: b1b859db61c58ce489e3f38611afe3b0, type: 3}

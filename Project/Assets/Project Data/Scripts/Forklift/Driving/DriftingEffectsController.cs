@@ -9,7 +9,7 @@ public class DriftingEffectsController : MonoBehaviour
 {
     // Generally shouldn't need to be accessed by other classes
     [Tooltip("The 0 index refers to the left tyre. The 1 index refers to the right tyre.")]
-    public ParticleSystem[] bubbles, smokes, sparks;
+    public ParticleSystem[] bubbles, smokes, sparks, particles;
 
     // Purely to know how many groups of systems there are
     [SerializeField]
@@ -61,6 +61,9 @@ public class DriftingEffectsController : MonoBehaviour
 
             colorOverLifetime = sparks[i].colorOverLifetime;
             colorOverLifetime.color = tierGradients[tier];
+
+            colorOverLifetime = particles[i].colorOverLifetime;
+            colorOverLifetime.color = tierGradients[tier];
         }
     }
 
@@ -77,6 +80,7 @@ public class DriftingEffectsController : MonoBehaviour
             bubbles[i].Play();
             sparks[i].Play();
             smokes[i].Play();
+            particles[i].Play();
         }
     }
 
@@ -91,6 +95,7 @@ public class DriftingEffectsController : MonoBehaviour
             bubbles[i].Stop();
             sparks[i].Stop();
             smokes[i].Stop();
+            particles[i].Stop();
         }
     }
 
