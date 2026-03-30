@@ -13272,6 +13272,7 @@ MonoBehaviour:
   pickupPositionOffset: {x: 0, y: 0, z: 0}
   pickupList: []
   heldObjects: []
+  maxCrateMultipliedScore: 2
   maxObjects: 3
   forkLiftSelected: 1
   holdingForklift: 0
@@ -14043,7 +14044,7 @@ MonoBehaviour:
   boostParticlesBR: {fileID: 3503533113234833472}
   boostTierTimeIncrement: 0.5
   speedLinesImage: {fileID: 1169574548009697341}
-  crateBoostMultipliers: {x: 1.1, y: 1.3, z: 1.5}
+  crateBoostMultipliers: {x: 0.1, y: 0.3, z: 0.5}
   lift: {fileID: 6628620392548968402}
   liftSpeed: 1.5
   minLiftPosition: 0.01
