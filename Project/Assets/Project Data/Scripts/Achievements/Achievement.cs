@@ -128,25 +128,30 @@ public class Achievement : ScriptableObject
 	#region Setters
 	
 	public void IncreaseProgress(int amount = 1)
-	{
+	{		
 		if (!SaveManager.instance)
 		{
 			Debug.LogWarning("Achievement couldn't find Save Manager instance");
 			return;
 		}
-		
-		// Prevent increasing progress for a completed achievement
-		if (GetAchievementData(name).unlocked)
-			return;
-		
-		
-		
+				
 		// Is there any Save Data for this achievement?
 		if (GetAchievementData(name) != null)
-		{
+		{			
 			GetAchievementData(name).currentProgress += amount;
 		}
-		
+		// Create some new Save Data
+		else
+		{			
+			// Create
+			AchievementData data = new AchievementData();
+			data.name = name;
+			data.currentProgress = amount;
+			
+			// Submit
+			SaveManager.instance.currentSaveData.achievements.achievementData.Add(data);
+		}
+				
 		// Have we progressed enough to unlock the achievement?
 		CheckRequirementsMet();
 		

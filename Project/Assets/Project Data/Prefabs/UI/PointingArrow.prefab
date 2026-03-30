@@ -82,6 +82,18 @@ PrefabInstance:
       value: SM_PolygonPrototype_Icon_Arrow_Small_01
       objectReference: {fileID: 0}
     - target: {fileID: 400000, guid: b9979013b18adc147ac208c3520b982e, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: b9979013b18adc147ac208c3520b982e, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: b9979013b18adc147ac208c3520b982e, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 400000, guid: b9979013b18adc147ac208c3520b982e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}

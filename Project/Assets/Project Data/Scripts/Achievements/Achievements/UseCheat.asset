@@ -10,8 +10,8 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ebdd82b5512fead42bcc315e3ffe4418, type: 3}
-  m_Name: Mute Music
+  m_Name: UseCheat
   m_EditorClassIdentifier: 
-  displayName: Silence is Golden
-  description: Mute the music
+  displayName: Cheater
+  description: Use a cheat code
   requiredProgress: 1
