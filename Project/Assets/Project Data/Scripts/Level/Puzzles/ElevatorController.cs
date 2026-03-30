@@ -102,7 +102,9 @@ public class ElevatorController : MonoBehaviour
 
         //Audio changes pitch depending on the speed of the forklift.
         audioSpeedRatio = speed;
-        runningSound.pitch = Mathf.Lerp(speed * 5, runningMaxPitch, Time.deltaTime * (audioSpeedRatio * 3));
+
+        if(runningSound != null)
+            runningSound.pitch = Mathf.Lerp(speed * 5, runningMaxPitch, Time.deltaTime * (audioSpeedRatio * 3));
     }
 
     [ProButton]
