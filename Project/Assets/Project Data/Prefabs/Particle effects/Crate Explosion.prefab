@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 5689569568781872236}
   - component: {fileID: 1007401986754706300}
   m_Layer: 0
-  m_Name: Particle System
+  m_Name: Crate Explosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4902,11 +4902,11 @@ AudioSource:
   m_GameObject: {fileID: 4118410414493713225}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -8998127060194001047, guid: fb7fa2da7aa779b4fa07dec20a1c0ed2, type: 2}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Resource: {fileID: 6418180475301049370, guid: 45ad5c4c95fdde54987eefdbb816d2d4, type: 2}
+  m_PlayOnAwake: 0
+  m_Volume: 0.75
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -5004,3 +5004,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soundSource: {fileID: 5689569568781872236}
   mixerGroup: {fileID: -8998127060194001047, guid: fb7fa2da7aa779b4fa07dec20a1c0ed2, type: 2}
+  pitchRange: 0.05

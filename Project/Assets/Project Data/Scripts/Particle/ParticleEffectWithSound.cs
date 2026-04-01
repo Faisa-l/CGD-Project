@@ -5,6 +5,7 @@ public class ParticleEffectWithSound : ParticleEffect
 {
     public AudioSource soundSource;
     public AudioMixerGroup mixerGroup;
+    public float pitchRange = 0.05f;
 
     private void Awake()
     {
@@ -15,7 +16,7 @@ public class ParticleEffectWithSound : ParticleEffect
 
     public override void Play()
     {
-        // Debug.Log("Playing");
+        soundSource.pitch *= Random.Range(-pitchRange, pitchRange) + 1;
         soundSource.Play();
         base.Play();
     }
