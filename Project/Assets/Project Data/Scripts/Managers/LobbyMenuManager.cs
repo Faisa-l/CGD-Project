@@ -60,8 +60,8 @@ public class LobbyMenuManager : MonoBehaviour
 		// Source - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/api/UnityEngine.InputSystem.Gamepad.html
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
-			// Has this gamepad just pressed the A button?
-			if (gamepad.buttonSouth.wasPressedThisFrame)
+			// Has this gamepad just pressed the Y button?
+			if (gamepad.buttonNorth.wasPressedThisFrame)
 			{
 				// Prevent the same player joining twice
 				if (!currentPlayers.Contains(gamepad))
