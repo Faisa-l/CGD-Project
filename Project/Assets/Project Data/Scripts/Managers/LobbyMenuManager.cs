@@ -10,10 +10,12 @@ public class LobbyMenuManager : MonoBehaviour
 {
 	[Header("Settings")]
 	// Game can't be started unless at least this many players have joined
-	[SerializeField][Range(1,4)] static private int minPlayerCount = 1;
+	[SerializeField][Range(1,4)] private int minPlayerCount = 1;
 	// Incase we ever want to adjust the maximum player count in the future
-	[SerializeField][Range(1,4)] static private int maxPlayerCount = 4;
-	
+	[SerializeField][Range(1,4)] private int maxPlayerCount = 4;
+
+	static int maxPlayers;
+
 	[Header("Cache")]
 	[Tooltip("References to the Game Object in the scene each gamepad image is on. Index 0 (the first one) will be player 1 and so on.")]
 	[SerializeField] private GameObject[] playerControllerImages; // Offset by 1 (0 = player 1)
@@ -38,6 +40,8 @@ public class LobbyMenuManager : MonoBehaviour
 	{
 		// Reset list of players whether this is the first time or players quit to main menu then re-entered
 		currentPlayers = new List<Gamepad>();
+
+		maxPlayers = maxPlayerCount;
 	}
 	
 	private void Update()
@@ -177,7 +181,7 @@ public class LobbyMenuManager : MonoBehaviour
 
 	static public int getMaxPlayers()
 	{
-		return maxPlayerCount;
+		return maxPlayers;
 	}
 	
 	#endregion Utility
