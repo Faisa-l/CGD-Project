@@ -24,3 +24,4 @@ MonoBehaviour:
   - RT
   - A
   action: {fileID: 11400000, guid: ad2f220977bc961459116a5c1e9912f6, type: 2}
+  notificationText: Play as Cowboy

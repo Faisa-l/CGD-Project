@@ -9,6 +9,8 @@ public class CheatCode : ScriptableObject
 	[SerializeField] private string[] requiredInputs;
 	[Tooltip("Specific functionality that will happen once the code is activated. Seperated so one cheat action can have multiple codes to activate it")]
 	[SerializeField] private CheatAction action;
+	[Tooltip("Description in the toast notification")]
+	[SerializeField] private string notificationText;
 	
 	private bool activated = false;
 	
@@ -21,11 +23,6 @@ public class CheatCode : ScriptableObject
         activated = false;
     }
 	
-	public string GetRequiredInput(int index)
-	{
-		return requiredInputs[index];
-	}
-	
 	public void Activate()
 	{
 		// So other scenes can check it's activated (such as gameplay scene)
@@ -36,8 +33,22 @@ public class CheatCode : ScriptableObject
 		onCheatActivated?.Invoke();
 	}
 	
+	#region Getters
+	
+	public string GetRequiredInput(int index)
+	{
+		return requiredInputs[index];
+	}
+	
 	public bool IsActivated()
 	{
 		return activated;
 	}
+	
+	public string GetNotificationText()
+	{
+		return notificationText;
+	}
+	
+	#endregion Getters
 }

@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using static CrateExtensions;
 
 /// <summary>
@@ -25,6 +26,11 @@ public class CrateObject : MonoBehaviour, ICollectable
     [SerializeField] 
     GameObject tempNewCrateMeshEdges, tempNewCrateMeshSupports;
 
+    [SerializeField, Range(0f, 100f)]
+    float dropLaunchForce = 5f;
+
+    [SerializeField]
+    UnityEvent onDestroyed;
 
     float maxScore;
     string startingPromptText;
@@ -32,12 +38,13 @@ public class CrateObject : MonoBehaviour, ICollectable
     PhysicsPickup pickup;
     TextMeshPro[] textObjects;
     Material material;
+    Rigidbody body;
 
 
     // As in the minimum score the crate can have
     float MaximumScoreReduction => maxScore * (1 - DamageBehaviour.maximumScoreLossPercentage) - DamageBehaviour.maximumScoreLossValue;
 
-	private static readonly float floatingTextPlayerDetectionRadius = 1f;
+    private static readonly float floatingTextPlayerDetectionRadius = 1f;
 
     /// <summary>
     /// Instantiate and initialise a new crate.
@@ -59,6 +66,7 @@ public class CrateObject : MonoBehaviour, ICollectable
     private void Awake()
     {
         CanCollect = CanDamage = true;
+        body = GetComponent<Rigidbody>();
         material = GetComponent<Renderer>().material;
         textObjects = GetComponentsInChildren<TextMeshPro>();
         promptSource = GetComponentInChildren<ContextualPromptSource>();
@@ -116,13 +124,12 @@ public class CrateObject : MonoBehaviour, ICollectable
             score = value;
             if (score <= 0)
             {
-                effectLibrary.Play("CrateExplosion", transform.position);
-                Destroy(GameObject);
+                Destroy(GameObject, 1.3f);
+                //onDestroyed uses audio for when the crate's number reaches 0 - Callum.S
+                onDestroyed.Invoke();
             }
-            else
-            {
-                UpdateTextObjects();
-            }
+
+            else UpdateTextObjects();
         }
     }
 
@@ -145,7 +152,7 @@ public class CrateObject : MonoBehaviour, ICollectable
 
     // Colour this object based on its tag
     void RecolourCrate()
-    { 
+    {
         material.SetColor("_Color", crateTag.GetColourFromTag());
 
         //Temporary fix
@@ -157,13 +164,17 @@ public class CrateObject : MonoBehaviour, ICollectable
     void OnGrabbed()
     {
         UpdatePromptTextToDrop();
-        CanCollect = false;
+        CanCollect = CanDamage = false;
+        body.isKinematic = true;
     }
 
-    void OnDropped()   
-    { 
+    void OnDropped()
+    {
         UpdatePromptTextToGrab();
-        CanCollect = true;
+        CanCollect = CanDamage = true;
+        body.isKinematic = false;
+        // -transform.right is apparently the forward direction of the crate relative to the forklift's forward direction
+        body.AddForce(-transform.right * dropLaunchForce, ForceMode.Impulse);
     }
 
     // Reduces the crate's score and displays the text for that

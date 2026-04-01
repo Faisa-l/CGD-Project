@@ -51,6 +51,8 @@ MonoBehaviour:
   - {fileID: 8886524446440631469}
   sparks:
   - {fileID: 1634429485877580105}
+  particles:
+  - {fileID: 3020243791550094420}
   mainObject:
   - {fileID: 696073668647884904}
   boostGradient0:
@@ -286,6 +288,11 @@ GameObject:
 --- !u!198 &1634429485877580105 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 4284633049083518493, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
+  m_PrefabInstance: {fileID: 3303597015932194644}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3020243791550094420 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 302502322389504768, guid: e409ac5e84778ee489b696a256d6f950, type: 3}
   m_PrefabInstance: {fileID: 3303597015932194644}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &3275917374384327190 stripped
