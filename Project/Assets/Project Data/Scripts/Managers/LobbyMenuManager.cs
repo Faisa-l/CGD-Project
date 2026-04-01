@@ -10,9 +10,9 @@ public class LobbyMenuManager : MonoBehaviour
 {
 	[Header("Settings")]
 	// Game can't be started unless at least this many players have joined
-	[SerializeField][Range(1,4)] private int minPlayerCount = 1;
+	[SerializeField][Range(1,4)] static private int minPlayerCount = 1;
 	// Incase we ever want to adjust the maximum player count in the future
-	[SerializeField][Range(1,4)] private int maxPlayerCount = 4;
+	[SerializeField][Range(1,4)] static private int maxPlayerCount = 4;
 	
 	[Header("Cache")]
 	[Tooltip("References to the Game Object in the scene each gamepad image is on. Index 0 (the first one) will be player 1 and so on.")]
@@ -61,7 +61,7 @@ public class LobbyMenuManager : MonoBehaviour
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
 			// Has this gamepad just pressed the A button?
-			if (gamepad.buttonSouth.wasPressedThisFrame)
+			if (gamepad.buttonNorth.wasPressedThisFrame)
 			{
 				// Prevent the same player joining twice
 				if (!currentPlayers.Contains(gamepad))
@@ -173,6 +173,11 @@ public class LobbyMenuManager : MonoBehaviour
 		if (sceneToLoad != string.Empty)
 			// Load the scene by first unloading the current scene, then loading the new scene (the default Unity way)
 			SceneManager.LoadScene(sceneToLoad);
+	}
+
+	static public int getMaxPlayers()
+	{
+		return maxPlayerCount;
 	}
 	
 	#endregion Utility
