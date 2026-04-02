@@ -1236,6 +1236,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: LevelPanel (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2239566739903388787, guid: a875f80133f9d05499a85d39b073ab90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2787746464854038578, guid: a875f80133f9d05499a85d39b073ab90, type: 3}
       propertyPath: level
       value: 
@@ -1640,6 +1644,12 @@ PrefabInstance:
     - target: {fileID: 7947189467880948173, guid: 5a89cd7f622c2514abf6cc60cab2fcde, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8363447254092773876, guid: 5a89cd7f622c2514abf6cc60cab2fcde, type: 3}
+      propertyPath: m_text
+      value: 'Total Stars: 0 / 3
+
+'
       objectReference: {fileID: 0}
     - target: {fileID: 8363447254092773876, guid: 5a89cd7f622c2514abf6cc60cab2fcde, type: 3}
       propertyPath: m_fontAsset
@@ -2217,6 +2227,10 @@ PrefabInstance:
     - target: {fileID: 2239566739903388787, guid: a875f80133f9d05499a85d39b073ab90, type: 3}
       propertyPath: m_Name
       value: LevelPanel (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2239566739903388787, guid: a875f80133f9d05499a85d39b073ab90, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2787746464854038578, guid: a875f80133f9d05499a85d39b073ab90, type: 3}
       propertyPath: level

@@ -41,6 +41,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Project Data/Scenes/Levels/Current Level.unity
     guid: 86e4b39ce6ef19b4dbe83340df2ffd57
+  - enabled: 1
+    path: Assets/Project Data/Scenes/Menus/TrophiesMenu.unity
+    guid: f316d071a3d17934f8d00f06f31d56be
   m_configObjects:
     com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: 15975689c78128b4abffc05eb70ff166, type: 2}
     com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: ae803bae08a07d748b72f9629f14791c, type: 2}

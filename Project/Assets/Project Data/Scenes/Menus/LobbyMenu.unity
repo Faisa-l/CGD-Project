@@ -1178,6 +1178,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8308658599176952991, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
   m_PrefabInstance: {fileID: 430533984}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &430533989 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 419042404405094459, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
+  m_PrefabInstance: {fileID: 430533984}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &507749708
 GameObject:
   m_ObjectHideFlags: 0
@@ -1643,6 +1648,11 @@ GameObject:
 --- !u!1 &1031429351 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8308658599176952991, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
+  m_PrefabInstance: {fileID: 1031429347}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &1031429352 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 419042404405094459, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
   m_PrefabInstance: {fileID: 1031429347}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1042865376
@@ -2151,6 +2161,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8308658599176952991, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
   m_PrefabInstance: {fileID: 1166940366}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1166940371 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 419042404405094459, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
+  m_PrefabInstance: {fileID: 1166940366}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1191252802
 GameObject:
   m_ObjectHideFlags: 0
@@ -2609,6 +2624,11 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 8308658599176952991, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
   m_PrefabInstance: {fileID: 1399826258}
   m_PrefabAsset: {fileID: 0}
+--- !u!95 &1399826263 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 419042404405094459, guid: 58e4b597de4006847885fa9bb65b2df3, type: 3}
+  m_PrefabInstance: {fileID: 1399826258}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1497836870
 GameObject:
   m_ObjectHideFlags: 0
@@ -2836,10 +2856,10 @@ MonoBehaviour:
   - {fileID: 507749708}
   - {fileID: 378781231}
   playerConnectAnims:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 1399826263}
+  - {fileID: 430533989}
+  - {fileID: 1031429352}
+  - {fileID: 1166940371}
   startButton: {fileID: 157305071}
   instructionsText: {fileID: 1534129869}
   onPlayerJoined:

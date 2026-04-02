@@ -194,77 +194,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 47200273}
   m_CullTransparentMesh: 1
---- !u!1 &102242556
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 102242558}
-  - component: {fileID: 102242560}
-  - component: {fileID: 102242559}
-  - component: {fileID: 102242561}
-  m_Layer: 0
-  m_Name: OptionsMenuManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &102242558
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 102242556}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -683, y: -384, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 615245077}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &102242559
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 102242556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f5faa980d2fcf45459c8d76934f3bead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneToLoad: MainMenu
---- !u!114 &102242560
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 102242556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2f7448de2e2a79341ba7dc9f09da32f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &102242561
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 102242556}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec376317f7f1eaa45933592d6c03b273, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &123539532
 GameObject:
   m_ObjectHideFlags: 0
@@ -875,6 +804,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376726355412353011, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: bf99e1cbfc965664e81b46068df649c6, type: 2}
     - target: {fileID: 7859546558363616204, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
       propertyPath: m_Name
       value: TrophyGroup
@@ -1020,7 +953,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 102242558}
   - {fileID: 757106847}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -1053,16 +985,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb064549ac40104c8901aeb4ef35fb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backData:
-  - activePanel: {fileID: 0}
-    backPanel: {fileID: 0}
-    backPanelFirstButton: {fileID: 0}
-  - activePanel: {fileID: 0}
-    backPanel: {fileID: 0}
-    backPanelFirstButton: {fileID: 0}
-  - activePanel: {fileID: 0}
-    backPanel: {fileID: 0}
-    backPanelFirstButton: {fileID: 0}
+  backData: []
   rootBackScene: MainMenu
 --- !u!4 &757106847
 Transform:
@@ -1419,6 +1342,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376726355412353011, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: a51aa74eacbb6b846956649e4f6ee91a, type: 2}
     - target: {fileID: 7859546558363616204, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
       propertyPath: m_Name
       value: TrophyGroup (1)
