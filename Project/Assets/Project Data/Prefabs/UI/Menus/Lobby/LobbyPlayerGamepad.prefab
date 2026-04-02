@@ -220,6 +220,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2366348200304143138}
+  - component: {fileID: 8168541926861243131}
   m_Layer: 5
   m_Name: LobbyPlayerGamepad
   m_TagString: Untagged

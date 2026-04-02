@@ -24,3 +24,4 @@ MonoBehaviour:
   - B
   - A
   action: {fileID: 11400000, guid: 44d71ed715a0ba94890095c3d72235b3, type: 2}
+  notificationText: Go to Level Select

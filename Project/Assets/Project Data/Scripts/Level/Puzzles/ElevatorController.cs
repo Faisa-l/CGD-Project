@@ -71,12 +71,12 @@ public class ElevatorController : MonoBehaviour
         else if (activated && Vector3.Distance(transform.localPosition, endPosition) <= threshold)
         {
             currentMovementTime = 0f;
-            audio_enabler.Disable("Activated");
+            audio_enabler?.Disable("Activated");
             timeWaited += Time.deltaTime;
             if (timeWaited >= waitTime)
             {
                 activated = false;
-                audio_enabler.Disable("Activated");
+                audio_enabler?.Disable("Activated");
                 timeWaited = 0f;
 
                 activationPostion = transform.localPosition;
@@ -91,18 +91,20 @@ public class ElevatorController : MonoBehaviour
             transform.localPosition = activationPostion - new Vector3(0, easingCurve.Evaluate(currentMovementTime) * dist, 0);
 
             movingBack = true;
-            audio_enabler.Enable("Activated");
+            audio_enabler?.Enable("Activated");
         }
         else
         {
             movingBack = false;
-            audio_enabler.Disable("Activated");
+            audio_enabler?.Disable("Activated");
             currentMovementTime = 0f;
         }
 
         //Audio changes pitch depending on the speed of the forklift.
         audioSpeedRatio = speed;
-        runningSound.pitch = Mathf.Lerp(speed * 5, runningMaxPitch, Time.deltaTime * (audioSpeedRatio * 3));
+
+        if(runningSound != null)
+            runningSound.pitch = Mathf.Lerp(speed * 5, runningMaxPitch, Time.deltaTime * (audioSpeedRatio * 3));
     }
 
     [ProButton]
@@ -114,7 +116,7 @@ public class ElevatorController : MonoBehaviour
 
         activationPostion = transform.localPosition;
 
-        audio_enabler.Enable("Activated");
+        audio_enabler?.Enable("Activated");
     }
 
 #if UNITY_EDITOR

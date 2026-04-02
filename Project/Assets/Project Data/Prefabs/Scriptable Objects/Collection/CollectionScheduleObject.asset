@@ -24,6 +24,6 @@ MonoBehaviour:
     timeLimit: 100
   randomiseRequiredTag: 1
   quotaBonusMultiplier: 2
-  penaltyScoreMultiplier: -29.68
+  penaltyScoreMultiplier: 0.1
   totalTime: 300
   actingScheduler: {fileID: 0}

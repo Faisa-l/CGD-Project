@@ -70,6 +70,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float boostTierTimeIncrement = 0.5f;
     [SerializeField] GameObject speedLinesImage;
     [SerializeField] Vector3 crateBoostMultipliers = new(2f,2.5f,3f);
+    [SerializeField] Slider boostBar;
 
     float sign = 1f;
 
@@ -85,6 +86,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private GameObject dropAllUI;
     [SerializeField] private Slider dropAllSlider;
     [SerializeField] private GameOverPanel gameOverMenu;
+	[SerializeField] private GameObject breakFreePrompt;
 
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
@@ -109,7 +111,6 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
-    [SerializeField] private float cameraUpDist;
     [SerializeField] private List<string> cameraRayCastMask = new List<string>();
     Vector3 rootForward, rootReverse;
     Vector3 lookAtPosition;
@@ -153,6 +154,8 @@ public class DrivingController : MonoBehaviour
     [SerializeField] Animator frontwheel2;
     [SerializeField] Animator backwheel2;
 
+    [SerializeField] Animator stunanim;
+
     public void setPlayerGamepad(Gamepad gamepad)
     {
         playerGamepad = gamepad;
@@ -185,6 +188,8 @@ public class DrivingController : MonoBehaviour
         if(transform.parent == null)
         {
             selfIsLifted = false;
+			breakFreePrompt.SetActive(false);
+			
             rigidBody.isKinematic = false;
             GetComponent<BoxCollider>().enabled = true;
         }
@@ -208,6 +213,18 @@ public class DrivingController : MonoBehaviour
         backwheel.SetFloat("wheeldir", movement.turningValue);
         frontwheel2.SetFloat("wheeldir", movement.turningValue);
         backwheel2.SetFloat("wheeldir", movement.turningValue);
+        
+        if (speed > 10f)
+        {
+            if (bounced == true)
+            {
+                stunanim.SetBool("Stun", true);
+            }
+        }
+        else {
+                stunanim.SetBool("Stun", false);
+        }
+        
 
         if (TiersEnabled)
         {
@@ -443,8 +460,6 @@ public class DrivingController : MonoBehaviour
 #region Input Functions
     public void OnMove(InputValue value)
     {
-        if (!isGrounded) return;
-
         movement.movingValue = value.Get<Vector2>().y;
 
         if (movement.movingValue != 0)
@@ -546,15 +561,6 @@ public class DrivingController : MonoBehaviour
         holdingInteract = false;
     }
 
-    public void OnLookUp()
-    {
-        lookingUp = !lookingUp;
-
-        lookAtTransform.SetLocalPositionAndRotation(
-            lookAtTransform.localPosition + new Vector3(0.0f,(lookingUp ? 1 : -1) * cameraUpDist,0.0f),
-            Quaternion.identity);
-    }
-
     public void DriftBoost()
     {
         if (drifting)
@@ -598,6 +604,9 @@ public class DrivingController : MonoBehaviour
             driftingEffects.SetEffectTier(boostTier);
             driftingEffects.Emit(true);
             driftingEffects.Play();
+
+            boostBar.gameObject.SetActive(true);
+            boostBar.value = Mathf.Min(boostTimer / (3 * boostTierTimeIncrement), 3);
 
             /* This sucks btw
             if (boostTimer <= boostTierTimeIncrement)
@@ -685,12 +694,17 @@ public class DrivingController : MonoBehaviour
             driftingEffects.Stop();
             boostTimer = 0f;
             boostTier = 0;
+
+            boostBar.value = 0f;
+            boostBar.gameObject.SetActive(false);
         }
     }
 
     public void togglePlayerLifted(bool lifted, CratePickUp cratePickUp = null)
     {
         selfIsLifted = !selfIsLifted;
+		breakFreePrompt.SetActive(selfIsLifted);
+		
         lifterPickup = cratePickUp;
 
         Debug.Log($"You called on {gameObject.name}");
@@ -733,8 +747,8 @@ public class DrivingController : MonoBehaviour
         {
             manuallyStopDrifting();
         }
-
-
+        
+        
         bounced = true;
 
         Vector3 forceDirection = Vector3.zero;

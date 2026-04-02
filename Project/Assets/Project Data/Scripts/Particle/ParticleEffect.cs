@@ -17,16 +17,16 @@ using UnityEngine;
 /// This class has the basic functions for handling the lifetime of the particle effect and its particle system.
 /// Any more complex particle effect should be casted to a specified type.
 /// </summary>
+[RequireComponent(typeof(ParticleSystem))]
 public abstract class ParticleEffect : MonoBehaviour
 {
-    public ParticleSystem ParticleSystem { get; private set; }
+    ParticleSystem ps;
 
-    private void Awake()
+    // When first getting the particle system it will fetch the component
+    public ParticleSystem ParticleSystem 
     {
-        if (TryGetComponent<ParticleSystem>(out var ps))
-        {
-            ParticleSystem = ps;
-        }
+        get => GetPS();
+        protected set => ps = value; 
     }
 
     public ParticleEffect AtPosition(Vector3 position)
@@ -58,4 +58,11 @@ public abstract class ParticleEffect : MonoBehaviour
         yield return new WaitWhile(() => ParticleSystem.isPlaying);
         Destroy(gameObject);
     }
+
+    ParticleSystem GetPS()
+    {
+        if (ps == null) ps = GetComponent<ParticleSystem>();
+        return ps;
+    }
+
 }
