@@ -361,6 +361,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376726355412353011, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 78165680028063f47a8f88b3edfee53d, type: 2}
     - target: {fileID: 7859546558363616204, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
       propertyPath: m_Name
       value: TrophyGroup (2)
@@ -463,6 +467,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376726355412353011, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 457f12ac371621b49a7890e99154fb60, type: 2}
     - target: {fileID: 7859546558363616204, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
       propertyPath: m_Name
       value: TrophyGroup (5)
@@ -910,6 +918,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376726355412353011, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 419c5fd631e90c040897411e0a616bf5, type: 2}
     - target: {fileID: 7859546558363616204, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
       propertyPath: m_Name
       value: TrophyGroup (4)
@@ -1589,6 +1601,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5376726355412353011, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
+      propertyPath: achievement
+      value: 
+      objectReference: {fileID: 11400000, guid: 0b6b5b1cabd1ef843b680262fefd0c00, type: 2}
     - target: {fileID: 7859546558363616204, guid: cddd34b1365f3cd4f936a56d965390f1, type: 3}
       propertyPath: m_Name
       value: TrophyGroup (3)

@@ -48,6 +48,10 @@ MonoBehaviour:
   achievements:
   - {fileID: 11400000, guid: bf99e1cbfc965664e81b46068df649c6, type: 2}
   - {fileID: 11400000, guid: a51aa74eacbb6b846956649e4f6ee91a, type: 2}
+  - {fileID: 11400000, guid: 78165680028063f47a8f88b3edfee53d, type: 2}
+  - {fileID: 11400000, guid: 0b6b5b1cabd1ef843b680262fefd0c00, type: 2}
+  - {fileID: 11400000, guid: 419c5fd631e90c040897411e0a616bf5, type: 2}
+  - {fileID: 11400000, guid: 457f12ac371621b49a7890e99154fb60, type: 2}
 --- !u!82 &707928508676986723
 AudioSource:
   m_ObjectHideFlags: 0
