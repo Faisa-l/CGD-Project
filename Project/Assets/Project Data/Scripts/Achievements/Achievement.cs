@@ -62,7 +62,7 @@ public class Achievement : ScriptableObject
 		
 		// Show achievement unlocked notification
 		if (ToastNotificationManager.instance)
-			ToastNotificationManager.instance.Add("Achievement Unlocked", displayName);
+			ToastNotificationManager.instance.Add("Trophy Unlocked", displayName);
 		else
 			Debug.LogWarning("Achievement couldn't find Toast Notification Manager");
 	}
