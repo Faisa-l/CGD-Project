@@ -27,6 +27,7 @@ public class PlayerManager : MonoBehaviour
 #else
     bool debug_mode_on = false;
 #endif
+    [SerializeField] bool singleController = false;
     [SerializeField] GameObject player_prefab;
 	[SerializeField] [Range(1, 4)] int debugPlayerCount = 4;
 
@@ -58,8 +59,11 @@ public class PlayerManager : MonoBehaviour
             {
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
 
-                player.SwitchCurrentControlScheme(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count-1)]);
-                player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
+                if (i == 0 && singleController)
+                {
+                    player.SwitchCurrentControlScheme(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
+                    player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
+                }
             }
 
             // minimap.RepositionPanel(input_manager.maxPlayerCount);
@@ -70,9 +74,16 @@ public class PlayerManager : MonoBehaviour
 			print(LobbyMenuManager.currentPlayers.Count);
 			
 			// LobbyMenuManager.currentPlayers = Gamepads in order they pressed join button on lobby screen
-			for (int i = 0; i < LobbyMenuManager.currentPlayers.Count; i++)
+			for (int i = 0; i < LobbyMenuManager.getMaxPlayers(); i++)
 			{
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
+
+                if (i >= LobbyMenuManager.currentPlayers.Count)
+                {
+                    player.gameObject.transform.position = player_positions[player.playerIndex].position;
+                    player.gameObject.transform.rotation = player_positions[player.playerIndex].rotation;
+                    continue;
+                }
 
                 player.SwitchCurrentControlScheme(LobbyMenuManager.currentPlayers[i]);
                 player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(LobbyMenuManager.currentPlayers[i]);

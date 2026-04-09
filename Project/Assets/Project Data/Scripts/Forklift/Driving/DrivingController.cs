@@ -70,6 +70,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] float boostTierTimeIncrement = 0.5f;
     [SerializeField] GameObject speedLinesImage;
     [SerializeField] Vector3 crateBoostMultipliers = new(2f,2.5f,3f);
+    [SerializeField] Slider boostBar;
 
     float sign = 1f;
 
@@ -110,7 +111,6 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private Transform lookAtTransform;
     [SerializeField] private Transform cameraForwardPos;
     [SerializeField] private Transform cameraReversePos;
-    [SerializeField] private float cameraUpDist;
     [SerializeField] private List<string> cameraRayCastMask = new List<string>();
     Vector3 rootForward, rootReverse;
     Vector3 lookAtPosition;
@@ -460,8 +460,6 @@ public class DrivingController : MonoBehaviour
 #region Input Functions
     public void OnMove(InputValue value)
     {
-        if (!isGrounded) return;
-
         movement.movingValue = value.Get<Vector2>().y;
 
         if (movement.movingValue != 0)
@@ -563,15 +561,6 @@ public class DrivingController : MonoBehaviour
         holdingInteract = false;
     }
 
-    public void OnLookUp()
-    {
-        lookingUp = !lookingUp;
-
-        lookAtTransform.SetLocalPositionAndRotation(
-            lookAtTransform.localPosition + new Vector3(0.0f,(lookingUp ? 1 : -1) * cameraUpDist,0.0f),
-            Quaternion.identity);
-    }
-
     public void DriftBoost()
     {
         if (drifting)
@@ -615,6 +604,9 @@ public class DrivingController : MonoBehaviour
             driftingEffects.SetEffectTier(boostTier);
             driftingEffects.Emit(true);
             driftingEffects.Play();
+
+            boostBar.gameObject.SetActive(true);
+            boostBar.value = Mathf.Min(boostTimer / (3 * boostTierTimeIncrement), 3);
 
             /* This sucks btw
             if (boostTimer <= boostTierTimeIncrement)
@@ -702,6 +694,9 @@ public class DrivingController : MonoBehaviour
             driftingEffects.Stop();
             boostTimer = 0f;
             boostTier = 0;
+
+            boostBar.value = 0f;
+            boostBar.gameObject.SetActive(false);
         }
     }
 

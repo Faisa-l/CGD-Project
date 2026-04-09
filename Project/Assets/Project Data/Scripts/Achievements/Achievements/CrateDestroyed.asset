@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ebdd82b5512fead42bcc315e3ffe4418, type: 3}
-  m_Name: Test Cheevo
+  m_Script: {fileID: 11500000, guid: a35664ada0fe71c4282317eefe477059, type: 3}
+  m_Name: CrateDestroyed
   m_EditorClassIdentifier: 
-  displayName: Test Cheevo
+  displayName: Accidents Happen
+  description: Destroy a crate
   requiredProgress: 1

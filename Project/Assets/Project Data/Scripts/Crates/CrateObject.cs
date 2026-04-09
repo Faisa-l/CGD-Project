@@ -31,6 +31,7 @@ public class CrateObject : MonoBehaviour, ICollectable
 
     [SerializeField]
     UnityEvent onDestroyed;
+	public static UnityEvent onAnyDestroyed = new UnityEvent();
 
     float maxScore;
     string startingPromptText;
@@ -124,9 +125,13 @@ public class CrateObject : MonoBehaviour, ICollectable
             score = value;
             if (score <= 0)
             {
-                Destroy(GameObject, 1.3f);
-                //onDestroyed uses audio for when the crate's number reaches 0 - Callum.S
-                onDestroyed.Invoke();
+				// Let others (such as Achievement System) know
+				onAnyDestroyed?.Invoke();
+				
+                effectLibrary.Play("Explosion", transform.position);
+                Destroy(GameObject);
+                // onDestroyed uses audio for when the crate's number reaches 0 - Callum.S
+                // onDestroyed.Invoke();
             }
 
             else UpdateTextObjects();

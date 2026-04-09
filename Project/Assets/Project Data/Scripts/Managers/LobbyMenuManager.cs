@@ -13,13 +13,16 @@ public class LobbyMenuManager : MonoBehaviour
 	[SerializeField][Range(1,4)] private int minPlayerCount = 1;
 	// Incase we ever want to adjust the maximum player count in the future
 	[SerializeField][Range(1,4)] private int maxPlayerCount = 4;
-	
+
+	static int maxPlayers;
+
 	[Header("Cache")]
 	[Tooltip("References to the Game Object in the scene each gamepad image is on. Index 0 (the first one) will be player 1 and so on.")]
 	[SerializeField] private GameObject[] playerControllerImages; // Offset by 1 (0 = player 1)
     [SerializeField] private GameObject[] playerButtonImages; // Offset by 1 (0 = player 1)
     [SerializeField] private GameObject[] playerNumberText; // Offset by 1 (0 = player 1)
     [SerializeField] private GameObject[] playerConnectText; // Offset by 1 (0 = player 1)
+    [SerializeField] private Animator[] playerConnectAnims; // Offset by 1 (0 = player 1)
     [Tooltip("Reference to the Button in the scene that will start the game")]
 	[SerializeField] private Button startButton;
 	[Tooltip("Reference to the Game Object with the instructions text in the scene")]
@@ -38,6 +41,8 @@ public class LobbyMenuManager : MonoBehaviour
 	{
 		// Reset list of players whether this is the first time or players quit to main menu then re-entered
 		currentPlayers = new List<Gamepad>();
+
+		maxPlayers = maxPlayerCount;
 	}
 	
 	private void Update()
@@ -60,8 +65,8 @@ public class LobbyMenuManager : MonoBehaviour
 		// Source - https://docs.unity3d.com/Packages/com.unity.inputsystem@1.0/api/UnityEngine.InputSystem.Gamepad.html
 		foreach (Gamepad gamepad in Gamepad.all)
 		{
-			// Has this gamepad just pressed the A button?
-			if (gamepad.buttonSouth.wasPressedThisFrame)
+			// Has this gamepad just pressed the Y button?
+			if (gamepad.buttonNorth.wasPressedThisFrame)
 			{
 				// Prevent the same player joining twice
 				if (!currentPlayers.Contains(gamepad))
@@ -127,35 +132,60 @@ public class LobbyMenuManager : MonoBehaviour
 		{
 			// Do we have this many players?
 			if (currentPlayers.Count > i)
-				// Should this player is active
+			{
+				// Show this player is active
 				playerControllerImages[i].SetActive(true);
-			else
+				playerNumberText[i].SetActive(true);
+				
+				playerButtonImages[i].SetActive(false);
+				playerConnectText[i].SetActive(false);
+				
+				playerConnectAnims[i].SetBool("Animate", false);
+			}
+			/*else
+			{
 				// Show this player isn't active
 				playerControllerImages[i].SetActive(false);
+				
+				playerButtonImages[i].SetActive(true);
+				playerConnectText[i].SetActive(true);
+			}*/
 
             // Do we have this many players?
-            if (currentPlayers.Count > i)
-                // Should this player is active
+            /*if (currentPlayers.Count > i)
+			{
+                // Show this player is active
                 playerButtonImages[i].SetActive(false);
+			}
             else
+			{
                 // Show this player isn't active
                 playerButtonImages[i].SetActive(true);
+			}
 
             // Do we have this many players?
             if (currentPlayers.Count > i)
-                // Should this player is active
+			{
+                // Show this player is active
                 playerNumberText[i].SetActive(true);
+			}
             else
+			{
                 // Show this player isn't active
                 playerNumberText[i].SetActive(false);
+			}
 
             // Do we have this many players?
             if (currentPlayers.Count > i)
-                // Should this player is active
+			{
+                // Show this player is active
                 playerConnectText[i].SetActive(false);
+			}
             else
+			{
                 // Show this player isn't active
                 playerConnectText[i].SetActive(true);
+			}*/
         }
 	}
 	
@@ -173,6 +203,11 @@ public class LobbyMenuManager : MonoBehaviour
 		if (sceneToLoad != string.Empty)
 			// Load the scene by first unloading the current scene, then loading the new scene (the default Unity way)
 			SceneManager.LoadScene(sceneToLoad);
+	}
+
+	static public int getMaxPlayers()
+	{
+		return maxPlayers;
 	}
 	
 	#endregion Utility
