@@ -5,6 +5,7 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Controls;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 public class LoadingSceneManager : MonoBehaviour
 {
@@ -19,6 +20,10 @@ public class LoadingSceneManager : MonoBehaviour
     [SerializeField] float maxTime = 3f;
     float totalTime = 0f;
     float time = 0f;
+	
+	// Events
+	public UnityEvent loadingComplete = new UnityEvent();
+	
     void Start()
     {
         totalTime = Random.Range(minTime, maxTime);
@@ -67,8 +72,12 @@ public class LoadingSceneManager : MonoBehaviour
         }
 
         //when all of the loading is done, turn off the text and turn on the start prompt
-        text.gameObject.SetActive(false);
+        //text.gameObject.SetActive(false);
+		text.text = "Loading Complete";
+		
         startPrompt.SetActive(true);
+		
+		loadingComplete?.Invoke();
 
         yield return null;
     }
