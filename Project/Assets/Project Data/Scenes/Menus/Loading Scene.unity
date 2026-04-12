@@ -497,7 +497,7 @@ GameObject:
   - component: {fileID: 359690800}
   - component: {fileID: 359690799}
   m_Layer: 5
-  m_Name: HIntNumberText
+  m_Name: HintNumberText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -544,8 +544,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Warehouse Safety Manual No. 44
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b173760a3824f1d458bda96b6300865c, type: 2}
+  m_sharedMaterial: {fileID: 4552674456462128492, guid: b173760a3824f1d458bda96b6300865c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1118,8 +1118,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Hitting objects at fast speeds is not recommended. However is possible
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: b173760a3824f1d458bda96b6300865c, type: 2}
+  m_sharedMaterial: {fileID: 4552674456462128492, guid: b173760a3824f1d458bda96b6300865c, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
