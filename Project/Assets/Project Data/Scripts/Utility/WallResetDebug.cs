@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using UnityEditor;
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(BreakableWall))]
 public class WallResetDebug : Editor
 {
@@ -16,3 +17,4 @@ public class WallResetDebug : Editor
         }
     }
 }
+#endif
