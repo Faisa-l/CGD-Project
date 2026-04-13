@@ -14,7 +14,7 @@ public class SaveData
 {
 	// Containers for variables
 	// Grouped to make it more manageable as we add more
-	public AudioSaveData audio;
+	public AudioSaveData audio = new AudioSaveData();
 	public AchievementSaveData achievements = new AchievementSaveData();
 }
 
