@@ -1232,9 +1232,9 @@ MonoBehaviour:
   - "Crates come with various values, don\u2019t forget to check them. "
   - "Crates come with various values, don\u2019t forget to check them. "
   arrayIndexString: 'Warehouse Safety Manual No. '
-  shouldRefresh: 0
-  minimumRefreshDelay: 3
-  maximumRefreshDelay: 5
+  shouldRefresh: 1
+  minimumRefreshDelay: 8
+  maximumRefreshDelay: 10
   text: {fileID: 532182379}
   arrayIndexText: {fileID: 359690799}
 --- !u!1 &552145300
@@ -1483,6 +1483,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5720573071671059105, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
       propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5720573071671059105, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
+      propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5957374651335090734, guid: 06db6eadb62f4ac44af72e2fc8e216c5, type: 3}
