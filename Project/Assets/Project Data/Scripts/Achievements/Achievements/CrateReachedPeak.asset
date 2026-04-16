@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: CrateReachedPeak
   m_EditorClassIdentifier: 
   displayName: Peak
-  description: Place a crate on the highest point of the warehouse
+  description: Place a crate on the highest map point
   requiredProgress: 1

@@ -13,10 +13,6 @@ using static CrateExtensions;
 public class CrateCollector : MonoBehaviour
 {
     [SerializeField]
-    StarScore starScore;
-
-
-    [SerializeField]
     ScoreObject scoreObject;
 
     [SerializeField]
@@ -31,18 +27,19 @@ public class CrateCollector : MonoBehaviour
     [SerializeField]
     ArrayArrangement gridArrangement;
 
+    [SerializeField]
+    AudioClip confettiSound;
+
+    [SerializeField]
+    Vector2 pitchRandomise = new(-0.05f, 0.05f);
+
+    [SerializeField, Tooltip("Confetti rotation is based on the forward vector.")]
+    Transform[] confettiTransform;
+
     [Space, Header("Event Bindings")]
-
-    [SerializeField]
-    UnityEvent<ScheduleQuota> onRequirementUpdate;
-
-    [SerializeField]
-    UnityEvent<float> onItemsForCollectionChanged;
-
-    [SerializeField]
-    UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded;
-
-    [SerializeField]
+    public UnityEvent<ScheduleQuota> onRequirementUpdate;
+    public UnityEvent<float> onItemsForCollectionChanged;
+    public UnityEvent onCollectionPeriodStarted, onCollectionPeriodEnded;
     public UnityEvent<bool> onEvaluatedRequirement;
 
     float currentCollectionScore = 0f;
@@ -50,9 +47,6 @@ public class CrateCollector : MonoBehaviour
     bool wasStarted = false;
     List<ICollectable> forCollection;
     ScheduleQuota collectionRequirement;
-
-    // Get vector for launching a crate
-    Vector3 GetLaunchForce(float magnitude) => transform.forward * magnitude + new Vector3(0f, 5f, 0f);
 
     // Returns predicted score
     float GetScoreWaitingInCollection() => forCollection.Sum(item => item.Score);
@@ -78,6 +72,11 @@ public class CrateCollector : MonoBehaviour
         }
          
         forCollection = new List<ICollectable>();
+        if (confettiTransform.Length == 0)
+        {
+            confettiTransform = new Transform[1];
+            confettiTransform[0] = transform;
+        }
     }
 
     private void Awake()
@@ -134,6 +133,7 @@ public class CrateCollector : MonoBehaviour
         collectable.CanDamage = collectable.CanCollect = false;
         forCollection.Add(collectable);
         gridArrangement.Add(collectable.GameObject.transform);
+        DisplayConfettiParticles(collectable.Tag.GetColourFromTag());
         onItemsForCollectionChanged.Invoke(GetScoreWaitingInCollection());
     }
 
@@ -167,7 +167,11 @@ public class CrateCollector : MonoBehaviour
         // Collect everything that should be collected
         foreach(var c in forCollection) CollectCrate(c);
         bool isSuccess = (currentCollectionScore >= collectionRequirement.requiredScore);
-        currentCollectionScore *= isSuccess ? scheduler.BonusQuotaMultipler : 1f;
+        if (isSuccess)
+        {
+            currentCollectionScore *= scheduler.BonusQuotaMultipler;
+            DisplayConfettiParticles(collectionRequirement.requiredTag.GetColourFromTag());
+        }
 
         // Add score + invoke events
         scoreObject.AddScore(currentCollectionScore);
@@ -175,10 +179,24 @@ public class CrateCollector : MonoBehaviour
         currentCollectionScore = 0f;
 
         forCollection.Clear();
-        
+    }
 
-        starScore.ShowStars();
-
+    void DisplayConfettiParticles(Color color)
+    {
+        bool playSound = true;
+        foreach (Transform point in confettiTransform)
+        {
+            var confetti = effectLibrary.Get<ColoredParticleEffect>(ParticleEffectLibrary.Confetti);
+            confetti.color = confetti.emissionColor = color;
+            if (playSound)
+            {
+                confetti.WithSound(confettiSound, pitchRandomise: pitchRandomise);
+                playSound = false;
+            }
+            confetti.AtPosition(point.position)
+                    .AtRotation(point.rotation)
+                    .Play();
+        }
     }
 
     // For invocation whenever the schedule changes the current collection requirement

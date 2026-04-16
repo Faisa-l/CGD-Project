@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
+using UnityEngine.Audio;
 
 /// <summary>
 /// Represents a collection of particle systems for specific particle effects.
@@ -19,6 +21,15 @@ public class ParticleEffectLibrary : ScriptableObject
     [field: SerializeField, Tooltip("The internal name of a particle effect and the particle effect script attached to the prefab, NOT the prefab itself.")]
     public List<Pair> ParticleEffects { get ; private set; }
 
+    [Tooltip("This library's default audio mixer group which you could use when adding sounds to particle effects, via ParticleEffect.WithSound()")]
+    public AudioMixerGroup libraryAudioMixerGroup;
+
+    /// <summary>
+    /// The default audio mixer used by sounds added with <see cref="ParticleEffect.WithSound(AudioClip, AudioMixerGroup, float, float, Vector2)"/>. 
+    /// The value is based on the first existing ParticleEffectLibrary instance the game recognises.
+    /// </summary>
+    public static AudioMixerGroup defaultMixer;
+
     /// <summary>
     /// Play a particle effect prefab. The object is destroyed once the effect ends.
     /// </summary>
@@ -35,7 +46,6 @@ public class ParticleEffectLibrary : ScriptableObject
             .AtRotation(rotation);
 
         effect.Play();
-
         return effect;
     }
 
@@ -56,4 +66,15 @@ public class ParticleEffectLibrary : ScriptableObject
     public static readonly string
         CrateCollisionSparks = "CrateCollisionSparks",
         Confetti = "Confetti";
+
+    // This stuff assigns an initial defaultMixer don't worry if you don't understand it (this is how you can do a default value for a ScriptableObject)
+    static readonly List<ParticleEffectLibrary> instances = new();
+    private void OnEnable() => instances.Add(this);
+    private void OnDisable() => instances.Remove(this);
+
+    // Function is called before scene loads
+    // If there are multiple instances, it only picks the first one to set the default
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    static void SetMixer() => defaultMixer = (defaultMixer == null) ? instances.First().libraryAudioMixerGroup : defaultMixer;
+    
 }
