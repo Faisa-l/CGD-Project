@@ -2760,6 +2760,10 @@ PrefabInstance:
       propertyPath: timeManager
       value: 
       objectReference: {fileID: 1405153915}
+    - target: {fileID: 3161992959443360596, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3230950075365678826, guid: 410c88e1cb4dcc640b3f30ea679b8900, type: 3}
       propertyPath: crateCollector
       value: 
