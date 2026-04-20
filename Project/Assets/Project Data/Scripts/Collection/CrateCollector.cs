@@ -190,7 +190,7 @@ public class CrateCollector : MonoBehaviour
             confetti.color = confetti.emissionColor = color;
             if (playSound)
             {
-                confetti.WithSound(confettiSound, pitchRandomise: pitchRandomise);
+                confetti.WithSound(confettiSound, pitchRandomise: pitchRandomise, spatialBlend: 1f);
                 playSound = false;
             }
             confetti.AtPosition(point.position)
