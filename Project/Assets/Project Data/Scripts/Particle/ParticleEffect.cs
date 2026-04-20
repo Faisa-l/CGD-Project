@@ -52,8 +52,9 @@ public abstract class ParticleEffect : MonoBehaviour
     /// <param name="volume"> Volume of the clip. </param>
     /// <param name="pitch"> Pitch of the clip. </param>
     /// <param name="pitchRandomise"> The randomised pitch range the clip can play at. </param>
+    /// <param name="spatialBlend"> How much the sound is affected by 3D space. 0.0 makes the sound 2D, 1.0 makes the sound 3D. </param>
     /// <returns></returns>
-    public ParticleEffect WithSound(AudioClip clip, AudioMixerGroup mixer = default, float volume = 1f, float pitch = 1f, Vector2 pitchRandomise = default)
+    public ParticleEffect WithSound(AudioClip clip, AudioMixerGroup mixer = default, float volume = 1f, float pitch = 1f, Vector2 pitchRandomise = default, float spatialBlend = 0f)
     {
         var source = gameObject.AddComponent<AudioSource>();
         sounds.Add(source);
@@ -66,6 +67,7 @@ public abstract class ParticleEffect : MonoBehaviour
         source.outputAudioMixerGroup = (mixer == default) ? ParticleEffectLibrary.defaultMixer : mixer;
         source.volume = Mathf.Clamp(volume, 0f, 1f);
         source.pitch = newPitch;
+        source.spatialBlend = Mathf.Clamp(spatialBlend, 0f, 1f);
 
         return this;
     }
