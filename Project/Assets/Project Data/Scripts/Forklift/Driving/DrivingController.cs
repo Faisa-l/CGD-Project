@@ -93,7 +93,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer playerMesh;
     // This data type so we can change the skin to match player getting in after alpha
 
-    [Header("Audio Variables")]
+    [Header("Audio Variables and Settings")]
     [SerializeField] AudioSource runningSound;
     [SerializeField] float runningMaxPitch;
     [SerializeField] float audioSpeedRatio;
@@ -264,6 +264,7 @@ public class DrivingController : MonoBehaviour
         {
             playerCamera.GetComponent<CameraController>().resetFOV();
             speedLinesImage.SetActive(false);
+                        audio_enabler.Disable("boost");
         }
 
         if (!isGrounded || selfIsLifted) return;
@@ -661,6 +662,7 @@ public class DrivingController : MonoBehaviour
         }
         else if (!drifting && boostReady)
         {
+            audio_enabler.Enable("boost");
             controller.fov = controller.startingFov * fovChangeMultiplier;
 
             speedLinesImage.SetActive(true);
@@ -691,7 +693,6 @@ public class DrivingController : MonoBehaviour
             {
                 speed = maxBoostSpeed;
             }
-
         }
         else if (!drifting && !boostReady)
         {
