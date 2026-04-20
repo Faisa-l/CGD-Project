@@ -156,6 +156,14 @@ public class DrivingController : MonoBehaviour
 
     [SerializeField] Animator stunanim;
 
+    [SerializeField] List<Texture> playerMaterials;
+    [SerializeField] Renderer bodyRenderer;
+
+    public void setPlayerMaterial(int num)
+    {
+        bodyRenderer.material.SetTexture("_BaseMap", playerMaterials[num]);
+    }
+
     public void setPlayerGamepad(Gamepad gamepad)
     {
         playerGamepad = gamepad;
