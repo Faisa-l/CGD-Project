@@ -1,5 +1,7 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Audio;
+using System.Collections.Generic;
 
 /* I decided to make the particle effect system revolve around this abstract class since it seemed to be the most simple method of implementing  
  * a 'Particle System Library' that could host different kinds of particle effects.
@@ -21,6 +23,7 @@ using UnityEngine;
 public abstract class ParticleEffect : MonoBehaviour
 {
     ParticleSystem ps;
+    readonly List<AudioSource> sounds = new();
 
     // When first getting the particle system it will fetch the component
     public ParticleSystem ParticleSystem 
@@ -42,6 +45,34 @@ public abstract class ParticleEffect : MonoBehaviour
     }
 
     /// <summary>
+    /// Add a sound to the particle effect.
+    /// </summary>
+    /// <param name="clip"> Sound clip to play. </param>
+    /// <param name="mixer"> Mixer for audio output. </param>
+    /// <param name="volume"> Volume of the clip. </param>
+    /// <param name="pitch"> Pitch of the clip. </param>
+    /// <param name="pitchRandomise"> The randomised pitch range the clip can play at. </param>
+    /// <param name="spatialBlend"> How much the sound is affected by 3D space. 0.0 makes the sound 2D, 1.0 makes the sound 3D. </param>
+    /// <returns></returns>
+    public ParticleEffect WithSound(AudioClip clip, AudioMixerGroup mixer = default, float volume = 1f, float pitch = 1f, Vector2 pitchRandomise = default, float spatialBlend = 0f)
+    {
+        var source = gameObject.AddComponent<AudioSource>();
+        sounds.Add(source);
+        float newPitch = Mathf.Clamp(pitchRandomise == default ? pitch : Random.Range(pitch - pitchRandomise.x, pitch + pitchRandomise.y), -3f, 3f);
+
+        // Assign clip stuff
+        source.clip = clip;
+        source.loop = false;
+        source.playOnAwake = false;
+        source.outputAudioMixerGroup = (mixer == default) ? ParticleEffectLibrary.defaultMixer : mixer;
+        source.volume = Mathf.Clamp(volume, 0f, 1f);
+        source.pitch = newPitch;
+        source.spatialBlend = Mathf.Clamp(spatialBlend, 0f, 1f);
+
+        return this;
+    }
+
+    /// <summary>
     /// Calls <see cref="ParticleSystem.Play()"/> and destroy's this object once the effect stops.
     /// </summary>
     /// <remarks> When overriding this function, ensure that any logic or setup is done before calling base.Play() </remarks>
@@ -49,14 +80,29 @@ public abstract class ParticleEffect : MonoBehaviour
     {
         var main = ParticleSystem.main;
         if (!ParticleSystem.isPlaying) ParticleSystem.Play();
+        if (sounds.Count > 0) foreach (var sound in sounds) sound.Play();
         if (!main.loop || main.playOnAwake) StartCoroutine(YieldForDestroy());
     }
 
     // Destroys this object when the particle system stops playing
     IEnumerator YieldForDestroy()
     {
-        yield return new WaitWhile(() => ParticleSystem.isPlaying);
+        yield return new WaitWhile(() => ParticleSystem.isPlaying || IsSoundPlaying);
         Destroy(gameObject);
+    }
+
+    // If there are sounds, it will return true if any of them are playing
+    bool IsSoundPlaying
+    {
+        get
+        {
+            if (sounds.Count == 0) return false;
+            foreach (var sound in sounds)
+            {
+                if (sound.isPlaying) return true;
+            }
+            return false;
+        }
     }
 
     ParticleSystem GetPS()

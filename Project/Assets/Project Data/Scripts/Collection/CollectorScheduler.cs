@@ -80,8 +80,8 @@ public class CollectorScheduler : MonoBehaviour
     /// </summary>
     public void StartScheduler()
     {
-        isRunning = true;
         SchedulerStarted.Invoke();
+        isRunning = true;
         SetSchedule();
         UpdateSchedule();
     }

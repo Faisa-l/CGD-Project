@@ -13,8 +13,10 @@ public class LevelPanel : MonoBehaviour
 	[SerializeField] private TMP_Text levelNameText;
 	[SerializeField] private Image levelScreenshot;
 	[Tooltip("0 = one star, 1 = 2 star, 2 = 3 star")]
-	[SerializeField] private Image[] starRatingImages;
+	[SerializeField] private GameObject[] stars;
 	[SerializeField] private TMP_Text bestScoreText;
+
+	[SerializeField] LoadingVariables loadingVariables;
 	
 	private void Start()
 	{
@@ -33,6 +35,31 @@ public class LevelPanel : MonoBehaviour
 		
 		if (levelScreenshot)
 			levelScreenshot.sprite = level.GetScreenshot();
+		
+		// Get score for this level (otherwise use the default zero text in the scene)
+		if (SaveManager.instance != null && SaveManager.instance.currentSaveData != null)
+		{
+			float levelScore = SaveManager.instance.currentSaveData.scores.warehouse;
+			
+			bestScoreText.text = $"Best Score: {levelScore}";
+			
+			SetupStars(levelScore);
+		}
+	}
+	
+	private void SetupStars(float levelScore)
+	{
+		if (!level)
+			return;
+		
+		
+		// Calculate star rating
+		float starRating = level.GetStarRating(levelScore);
+		
+		for (int i = 0; i < starRating; i++)
+		{
+			stars[i].SetActive(true);
+		}
 	}
 	
 	// Use for button onclicked event
@@ -50,6 +77,7 @@ public class LevelPanel : MonoBehaviour
 			return;	
 		}
 		
-        SceneManager.LoadScene(level.GetSceneName());
+		loadingVariables.sceneName = level.GetSceneName();
+		loadingVariables.activateScene();
     }
 }

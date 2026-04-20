@@ -93,7 +93,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private SkinnedMeshRenderer playerMesh;
     // This data type so we can change the skin to match player getting in after alpha
 
-    [Header("Audio Variables")]
+    [Header("Audio Variables and Settings")]
     [SerializeField] AudioSource runningSound;
     [SerializeField] float runningMaxPitch;
     [SerializeField] float audioSpeedRatio;
@@ -204,7 +204,16 @@ public class DrivingController : MonoBehaviour
         repositionCameraTransforms();
 
         transform.SetPositionAndRotation(transform.position, new Quaternion(0, transform.rotation.y, 0, transform.rotation.w));
-        
+
+        if (holdingInteract)
+        {
+            interactHoldTime += Time.deltaTime / 0.4f; //default max hold time
+            dropAllSlider.value = interactHoldTime;
+        }
+
+        if (selfIsLifted) return;
+        //the sections after here shoudln't currently be able to run while the forklift is lifted
+
         frontwheel.SetFloat("Speed", speed);
         backwheel.SetFloat("Speed", speed);
         frontwheel2.SetFloat("Speed", speed);
@@ -214,17 +223,14 @@ public class DrivingController : MonoBehaviour
         frontwheel2.SetFloat("wheeldir", movement.turningValue);
         backwheel2.SetFloat("wheeldir", movement.turningValue);
         
-        if (speed > 10f)
+        if (speed > 10f && bounced == true)
         {
-            if (bounced == true)
-            {
-                stunanim.SetBool("Stun", true);
-            }
+            stunanim.SetBool("Stun", true);   
         }
-        else {
-                stunanim.SetBool("Stun", false);
-        }
-        
+        else
+        {
+            stunanim.SetBool("Stun", false);
+        }    
 
         if (TiersEnabled)
         {
@@ -241,12 +247,6 @@ public class DrivingController : MonoBehaviour
         //Audio changes pitch depending on the speed of the forklift.
         audioSpeedRatio = speed;
         runningSound.pitch = Mathf.Lerp(speed / 2, runningMaxPitch, Time.deltaTime * audioSpeedRatio);
-
-        if(holdingInteract)
-        {
-            interactHoldTime += Time.deltaTime / 0.4f; //default max hold time
-            dropAllSlider.value = interactHoldTime;
-        }
     }
 
 #region Updating functions
@@ -481,17 +481,25 @@ public class DrivingController : MonoBehaviour
         }
     }
 
-    public void OnDrift()
+    public void OnDrift(InputValue value)
     {
+        var pressVal = value.Get<float>();
+
+        // you can't drift while lifted
+        if (selfIsLifted) return;
+
         if(manuallyStoppedDrift)
         {
             manuallyStoppedDrift = false;
         }
         else
         {
-            drifting = !drifting;
+            drifting = !drifting & (pressVal == 1);
         }
 
+        if(boostReady && !drifting)
+            audio_enabler.Enable("boost", true);
+        
 
 
         if(drifting)
@@ -607,52 +615,6 @@ public class DrivingController : MonoBehaviour
 
             boostBar.gameObject.SetActive(true);
             boostBar.value = Mathf.Min(boostTimer / (3 * boostTierTimeIncrement), 3);
-
-            /* This sucks btw
-            if (boostTimer <= boostTierTimeIncrement)
-            {
-                boostTier = 0;
-                boostReady = false;
-            }
-            else if (boostTimer <= 2 * boostTierTimeIncrement)
-            {
-                boostTier = 1;
-                boostReady = true;
-                
-                boostParticlesBL.SetActive(true);
-                boostParticlesBR.SetActive(true);
-
-                ma.startColor = Color.yellow;
-                ma1.startColor = Color.yellow;
-                 
-            }
-            else if (boostTimer <= 3 * boostTierTimeIncrement)
-            {
-                boostTier = 2;
-                boostReady = true;
-
-                
-                boostParticlesBL.SetActive(true);
-                boostParticlesBR.SetActive(true);
-
-                ma.startColor = Color.red;
-                ma1.startColor = Color.red;
-                 
-            }
-            else if (boostTimer < 4 * boostTierTimeIncrement)
-            {
-                boostTier = 3;
-                boostReady = true;
-
-                
-                boostParticlesBL.SetActive(true);
-                boostParticlesBR.SetActive(true);
-
-                ma.startColor = Color.blue;
-                ma1.startColor = Color.blue;
-                
-            }
-             */
         }
         else if (!drifting && boostReady)
         {
@@ -686,7 +648,6 @@ public class DrivingController : MonoBehaviour
             {
                 speed = maxBoostSpeed;
             }
-
         }
         else if (!drifting && !boostReady)
         {
@@ -707,12 +668,20 @@ public class DrivingController : MonoBehaviour
 		
         lifterPickup = cratePickUp;
 
-        Debug.Log($"You called on {gameObject.name}");
+        if(selfIsLifted)
+        {
+            stopAllAnimations();
+        }
     }
 
     public void OnDisconnectFromPickup()
     {
         lifterPickup?.DropHeld();
+    }
+
+    public void OnHonk()
+    {
+        audio_enabler.Enable("horn", true);
     }
 
     #endregion
@@ -810,5 +779,31 @@ public class DrivingController : MonoBehaviour
 
         currentTrailRight.transform.parent = driftTrailsContainer.transform;
         currentTrailLeft.transform.parent = driftTrailsContainer.transform;
+    }
+
+    private void stopAllAnimations()
+    {
+        DriftBody.SetFloat("DriftDirection", 0);
+
+        frontwheel.SetFloat("Speed", 0);
+        backwheel.SetFloat("Speed", 0);
+        frontwheel2.SetFloat("Speed", 0);
+        backwheel2.SetFloat("Speed", 0);
+
+        frontwheel.SetFloat("wheeldir", 0);
+        backwheel.SetFloat("wheeldir", 0);
+        frontwheel2.SetFloat("wheeldir", 0);
+        backwheel2.SetFloat("wheeldir", 0);
+
+        stunanim.SetBool("Stun", false);
+    }
+
+    public bool TryBreakBreakableWall()
+    {
+        if (speed >= 5)
+        {
+            return true;
+        }
+        return false;
     }
 }

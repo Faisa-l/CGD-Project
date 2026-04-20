@@ -1,11 +1,16 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 
 public class QuotaDisplayText : MonoBehaviour 
 {
-    [SerializeField]
-    TextMeshProUGUI quotaReqs, quotaTimer;
+    [SerializeField] TextMeshProUGUI quotaReqs, quotaProgressText;
+    [SerializeField] Slider quotaTimer, quotaProgressBar;
+    [SerializeField] Image progressImage;
+
+    [SerializeField] Image background;
+    [SerializeField] Sprite redCentre, greenCentre, blueCentre;
 
 	[SerializeField]
 	Animator anim;
@@ -18,7 +23,8 @@ public class QuotaDisplayText : MonoBehaviour
     CrateExtensions.ScheduleQuota requirement;
     float trackedScore;
 
-    string ReqsText => $"COLLECT\n<color={requirement.requiredTag.ToString()}>{requirement.requiredTag} CRATES</color><line-height=50>\n</line-height>NEEDED\r\n{trackedScore}/{requirement.requiredScore}";
+    string ReqsText => $"<color={requirement.requiredTag.ToString()}>>{requirement.requiredTag} Crates<";
+    string progressText => $"{trackedScore}/{requirement.requiredScore}";
     string GetQuotaTimeString(float time) => $"{time:F0}s REMAINING";
 	
 	// Red text
@@ -28,7 +34,7 @@ public class QuotaDisplayText : MonoBehaviour
     private void Awake()
     {
         trackedScore = 0f;
-        HideText();
+        //HideText();
     }
 
     private void OnEnable()
@@ -63,12 +69,11 @@ public class QuotaDisplayText : MonoBehaviour
     public void OnRequirementUpdated(CrateExtensions.ScheduleQuota requirement)
     {
         this.requirement = requirement;
-        trackedScore = 0f;
-        quotaReqs.SetText(ReqsText);
-		
+
+        updateProgress();
+        
 		// Reset red text
 		timeNearlyUpTriggered = false;
-		quotaTimer.color = Color.white;
 		anim.SetBool("Animate", false);
     }
 
@@ -76,7 +81,8 @@ public class QuotaDisplayText : MonoBehaviour
     public void OnCollectionScoreUpdated(float score)
     {
         trackedScore = score;
-        quotaReqs.SetText(ReqsText);
+        quotaProgressBar.value = score / requirement.requiredScore;
+        quotaProgressText.SetText(progressText);
     }
 
     public void OnRunningSchedulerUpdate(float time)
@@ -87,11 +93,35 @@ public class QuotaDisplayText : MonoBehaviour
 			// Prevent triggering every frame
 			timeNearlyUpTriggered = true;
 			
-			quotaTimer.color = Color.red;
 			anim.SetBool("Animate", true);
 		}
 		
-        quotaTimer.SetText(GetQuotaTimeString(time));
+        quotaTimer.value = time / requirement.timeLimit;
+    }
+
+    public void updateProgress()
+    {
+        trackedScore = 0f;
+        quotaReqs.SetText(ReqsText);
+        quotaProgressText.SetText(progressText);
+
+        quotaProgressBar.value = 0f;
+
+        if (requirement.requiredTag == CrateExtensions.CrateTag.Red)
+        {
+            progressImage.color = Color.red;
+            background.sprite = redCentre;
+        }
+        else if (requirement.requiredTag == CrateExtensions.CrateTag.Green)
+        {
+            progressImage.color = Color.green;
+            background.sprite = greenCentre;
+        }
+        else
+        {
+            progressImage.color = Color.blue;
+            background.sprite = blueCentre;
+        }
     }
 
     // Shows the text box

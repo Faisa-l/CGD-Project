@@ -13,11 +13,17 @@ public class IndividualPlayerHud : MonoBehaviour
 	[SerializeField] private GameObject downArrow;
 	[SerializeField] private Animator upAnim;
 	[SerializeField] private Animator downAnim;
+	[SerializeField] private float liftHeight = 150f;
 	
 	[Header("Crates")]
 	[SerializeField] private GameObject[] crates;
 	[SerializeField] private Image[] crateImages;
 	[SerializeField] private TMP_Text[] cratesText;
+	
+	[Header("Component Cache")]
+	[SerializeField] RectTransform cratesHeldRect;
+	
+	private float cratesHeldRectStartingY;
 	
 	// Cache
 	private CratePickUp cratePickUp;
@@ -25,6 +31,9 @@ public class IndividualPlayerHud : MonoBehaviour
 	private void Start()
 	{
 		StartCoroutine(FindPlayer());
+		
+		if (cratesHeldRect)
+			cratesHeldRectStartingY = cratesHeldRect.anchoredPosition.y;
 	}
 	
 	private void Update()
@@ -110,17 +119,27 @@ public class IndividualPlayerHud : MonoBehaviour
 		if (isLifting)
 		{
 			upArrow.SetActive(true);
-			upAnim.SetTrigger("Flash");
+			
+			if (upAnim)
+				upAnim.SetTrigger("Flash");
 			
 			downArrow.SetActive(false);
+			
+			if (cratesHeldRect)
+				cratesHeldRect.anchoredPosition = new Vector2(cratesHeldRect.anchoredPosition.x, liftHeight);
 		}
 		// Going down
 		else
 		{
 			downArrow.SetActive(true);
-			downAnim.SetTrigger("Flash");
+			
+			if (downAnim)
+				downAnim.SetTrigger("Flash");
 			
 			upArrow.SetActive(false);
+			
+			if (cratesHeldRect)
+				cratesHeldRect.anchoredPosition = new Vector2(cratesHeldRect.anchoredPosition.x, cratesHeldRectStartingY);
 		}
 	}
 	

@@ -16,6 +16,8 @@ public class TutorialManager : MonoBehaviour
 	private int currentTutorialStage = -1;
 	private bool tutorialComplete;
 	
+	public static UnityEvent onTutorialComplete = new UnityEvent();
+	
 	private void Start()
 	{
 		// Make sure events trigger
@@ -38,6 +40,8 @@ public class TutorialManager : MonoBehaviour
 		if (currentTutorialStage >= tutorialStages.Length)
 		{
 			tutorialComplete = true;
+			
+			onTutorialComplete?.Invoke();
 			
 			gameManager.SetVictoryState();
 			
