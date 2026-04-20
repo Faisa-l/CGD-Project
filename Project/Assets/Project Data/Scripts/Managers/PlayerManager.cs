@@ -108,6 +108,8 @@ public class PlayerManager : MonoBehaviour
             playerJoined.Invoke(player_count, player.gameObject.transform);
             player.gameObject.name = $"Player {player_count}";
 
+            player.GetComponent<DrivingController>().setPlayerMaterial(player_count - 1);
+
             return;
         }
 
@@ -119,15 +121,6 @@ public class PlayerManager : MonoBehaviour
         }
 
         InputDevice playerDevice = player.devices[0]; // the only device used for player is controller at index 0
-		
-		if (debug_mode_on)
-		{
-			Gamepad playerGamepad = (Gamepad)InputSystem.GetDeviceById(playerDevice.deviceId); // cast the device as a gamepad using the associated id.
-
-			player.SwitchCurrentControlScheme(playerGamepad);
-
-			player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(playerGamepad);
-		}
 
         player.gameObject.transform.position = player_positions[player.playerIndex].position;
         player.gameObject.transform.rotation = player_positions[player.playerIndex].rotation;
@@ -135,5 +128,7 @@ public class PlayerManager : MonoBehaviour
         playerJoined.Invoke(player_count, player.gameObject.transform);
 
         player.gameObject.name = $"Player {player_count}";
+
+        player.GetComponent<DrivingController>().setPlayerMaterial(player_count - 1);
     }
 }
