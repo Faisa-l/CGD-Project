@@ -264,7 +264,6 @@ public class DrivingController : MonoBehaviour
         {
             playerCamera.GetComponent<CameraController>().resetFOV();
             speedLinesImage.SetActive(false);
-                        audio_enabler.Disable("boost");
         }
 
         if (!isGrounded || selfIsLifted) return;
@@ -498,6 +497,9 @@ public class DrivingController : MonoBehaviour
             drifting = !drifting & (pressVal == 1);
         }
 
+        if(boostReady && !drifting)
+            audio_enabler.Enable("boost", true);
+        
 
 
         if(drifting)
@@ -613,56 +615,9 @@ public class DrivingController : MonoBehaviour
 
             boostBar.gameObject.SetActive(true);
             boostBar.value = Mathf.Min(boostTimer / (3 * boostTierTimeIncrement), 3);
-
-            /* This sucks btw
-            if (boostTimer <= boostTierTimeIncrement)
-            {
-                boostTier = 0;
-                boostReady = false;
-            }
-            else if (boostTimer <= 2 * boostTierTimeIncrement)
-            {
-                boostTier = 1;
-                boostReady = true;
-                
-                boostParticlesBL.SetActive(true);
-                boostParticlesBR.SetActive(true);
-
-                ma.startColor = Color.yellow;
-                ma1.startColor = Color.yellow;
-                 
-            }
-            else if (boostTimer <= 3 * boostTierTimeIncrement)
-            {
-                boostTier = 2;
-                boostReady = true;
-
-                
-                boostParticlesBL.SetActive(true);
-                boostParticlesBR.SetActive(true);
-
-                ma.startColor = Color.red;
-                ma1.startColor = Color.red;
-                 
-            }
-            else if (boostTimer < 4 * boostTierTimeIncrement)
-            {
-                boostTier = 3;
-                boostReady = true;
-
-                
-                boostParticlesBL.SetActive(true);
-                boostParticlesBR.SetActive(true);
-
-                ma.startColor = Color.blue;
-                ma1.startColor = Color.blue;
-                
-            }
-             */
         }
         else if (!drifting && boostReady)
         {
-            audio_enabler.Enable("boost");
             controller.fov = controller.startingFov * fovChangeMultiplier;
 
             speedLinesImage.SetActive(true);
@@ -722,6 +677,11 @@ public class DrivingController : MonoBehaviour
     public void OnDisconnectFromPickup()
     {
         lifterPickup?.DropHeld();
+    }
+
+    public void OnHonk()
+    {
+        audio_enabler.Enable("horn", true);
     }
 
     #endregion

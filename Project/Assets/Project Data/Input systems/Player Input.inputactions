@@ -115,7 +115,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Horn",
+                    "name": "Honk",
                     "type": "Button",
                     "id": "011c459f-cebf-4657-bf4a-2198fd87f9b0",
                     "expectedControlType": "",
@@ -352,7 +352,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Horn",
+                    "action": "Honk",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }
