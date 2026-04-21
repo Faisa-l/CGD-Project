@@ -108,7 +108,7 @@ public class PlayerManager : MonoBehaviour
             playerJoined.Invoke(player_count, player.gameObject.transform);
             player.gameObject.name = $"Player {player_count}";
 
-            player.GetComponent<DrivingController>().setPlayerMaterial(player_count - 1);
+            player.GetComponent<ColourChanger>().setPlayerMaterial(player_count - 1);
 
             return;
         }
@@ -129,6 +129,6 @@ public class PlayerManager : MonoBehaviour
 
         player.gameObject.name = $"Player {player_count}";
 
-        player.GetComponent<DrivingController>().setPlayerMaterial(player_count - 1);
+        player.GetComponent<ColourChanger>().setPlayerMaterial(player_count - 1);
     }
 }
