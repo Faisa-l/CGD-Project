@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 71686d3cd35f12f4ba9df38c28b195d4
+guid: 9ed5c5eaf1401134dbea33c3808c56cf
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -8,7 +8,17 @@ ModelImporter:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: Material.001
-    second: {fileID: 2100000, guid: e1238fcb4fdd46944841effe7f58adcd, type: 2}
+    second: {fileID: 2100000, guid: bd5727a0370a0384fb3a7d596ba423b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bROKEWALLCRACKS
+    second: {fileID: 2100000, guid: 2cf000cf517ae7949bd85f583819141d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bROKEWALLCRACKS.001
+    second: {fileID: 2100000, guid: 0bbc1fc18bab3a54ca32f067a4f8438d, type: 2}
   materials:
     materialImportMode: 2
     materialName: 0
@@ -38,7 +48,7 @@ ModelImporter:
     isReadable: 0
   meshes:
     lODScreenPercentages: []
-    globalScale: 0.1
+    globalScale: 1
     meshCompression: 0
     addColliders: 0
     useSRGBMaterialColor: 1
@@ -93,7 +103,7 @@ ModelImporter:
     armStretch: 0.05
     legStretch: 0.05
     feetSpacing: 0
-    globalScale: 0.1
+    globalScale: 1
     rootMotionBoneName: 
     hasTranslationDoF: 0
     hasExtraRoot: 0
