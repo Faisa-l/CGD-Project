@@ -413,7 +413,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 466d35d072570d9408b1df413dd7663d, type: 2}
+  - {fileID: 2100000, guid: 43773671a8e41ed4583b7d3fe5719873, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1754,7 +1754,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 466d35d072570d9408b1df413dd7663d, type: 2}
+  - {fileID: 2100000, guid: 79c18635295b2bc4e96983c7b499cf05, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -14417,6 +14417,7 @@ GameObject:
   - component: {fileID: 660509750987994943}
   - component: {fileID: 5957374651335090734}
   - component: {fileID: 6575178007448525318}
+  - component: {fileID: -229226385605192434}
   m_Layer: 2
   m_Name: Forklift
   m_TagString: Player
@@ -14588,12 +14589,6 @@ MonoBehaviour:
   frontwheel2: {fileID: 4500842460840464059}
   backwheel2: {fileID: 5556618364638766973}
   stunanim: {fileID: 3484283738497431759}
-  playerMaterials:
-  - {fileID: 2800000, guid: ef13659cb6dbb39479e05d7824521d8c, type: 3}
-  - {fileID: 2800000, guid: 3d10020e98de1ea44beb38f4e5d7ec6e, type: 3}
-  - {fileID: 2800000, guid: e40387a5a8201f34e98b873dca2dfa42, type: 3}
-  - {fileID: 2800000, guid: 8d8d0d9abbc50684c94fc4e750286699, type: 3}
-  bodyRenderer: {fileID: 3142649930540391}
 --- !u!82 &-5220215563985875057
 AudioSource:
   m_ObjectHideFlags: 0
@@ -15261,6 +15256,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pickupHolder: {fileID: 5186217170744748968}
+--- !u!114 &-229226385605192434
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9127728803133528513}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bff2e81c8422d684494dfdf353f0b3de, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerMaterials:
+  - player: {fileID: 2800000, guid: ef13659cb6dbb39479e05d7824521d8c, type: 3}
+    forkliftLeft: {fileID: 2800000, guid: 3bdb536eae037d341a4cb200e2eec57d, type: 3}
+    forkliftRight: {fileID: 2800000, guid: d2e0943d7089a364a8579081432728a0, type: 3}
+  - player: {fileID: 2800000, guid: 3d10020e98de1ea44beb38f4e5d7ec6e, type: 3}
+    forkliftLeft: {fileID: 2800000, guid: 188d06ba6a444014aa687f60e0b2aca6, type: 3}
+    forkliftRight: {fileID: 2800000, guid: 52aeb94c29e04b2488d116acdd43c00f, type: 3}
+  - player: {fileID: 2800000, guid: 8d8d0d9abbc50684c94fc4e750286699, type: 3}
+    forkliftLeft: {fileID: 2800000, guid: 33004243a05f21146a6844b182049d97, type: 3}
+    forkliftRight: {fileID: 2800000, guid: df809dfbcfe52924c8c73c4067597cfb, type: 3}
+  - player: {fileID: 2800000, guid: e40387a5a8201f34e98b873dca2dfa42, type: 3}
+    forkliftLeft: {fileID: 2800000, guid: 2285db4fad7e9844e8ca28534e2e6856, type: 3}
+    forkliftRight: {fileID: 2800000, guid: 3fe9008340ac1f549894e0d54ba2fd17, type: 3}
+  bodyRenderer: {fileID: 3142649930540391}
+  forkliftLeftRenderer: {fileID: 41615592228529652}
+  forkliftRightRenderer: {fileID: 6147509221428210925}
 --- !u!1001 &1609504384734522101
 PrefabInstance:
   m_ObjectHideFlags: 0
