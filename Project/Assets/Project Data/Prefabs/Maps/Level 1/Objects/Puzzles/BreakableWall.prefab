@@ -84,6 +84,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -1660384031183063813, guid: 3e929fb02444e8b419310414434a4141, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 66f7da47e7bbcaf4396965c1010f155e, type: 2}
     - target: {fileID: 919132149155446097, guid: 3e929fb02444e8b419310414434a4141, type: 3}
       propertyPath: m_Name
       value: BreakableWall
@@ -132,6 +136,10 @@ PrefabInstance:
       propertyPath: m_Layer
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 7917160185490955905, guid: 3e929fb02444e8b419310414434a4141, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 66f7da47e7bbcaf4396965c1010f155e, type: 2}
     - target: {fileID: 8596728900396991669, guid: 3e929fb02444e8b419310414434a4141, type: 3}
       propertyPath: m_Layer
       value: 2

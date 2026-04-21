@@ -1882,6 +1882,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -7511558181221131132, guid: 0ee7f0666f962db4cba7b2aa22556c50, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 2aee9163c06c2324da9b8f4fcbbbe117, type: 2}
     - target: {fileID: 919132149155446097, guid: 0ee7f0666f962db4cba7b2aa22556c50, type: 3}
       propertyPath: m_Name
       value: TruckPortScaled

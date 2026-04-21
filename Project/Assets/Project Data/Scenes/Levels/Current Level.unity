@@ -5390,6 +5390,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Statue
       objectReference: {fileID: 0}
+    - target: {fileID: 5209632110393272298, guid: ebb51d533c7d5c14bb148d0cdf388473, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 29eff1db4f3a9cd44ad346d9fc976862, type: 2}
+    - target: {fileID: 9194509242015492025, guid: ebb51d533c7d5c14bb148d0cdf388473, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 25d91941b76836c40a080938955f55ff, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -6542,7 +6550,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 25d91941b76836c40a080938955f55ff, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -7230,6 +7238,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1844757905}
     m_Modifications:
+    - target: {fileID: 187816379144222384, guid: 657c6ad69046ecb47aa9249f6c827b5c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: edbd6c220bd0bf2479b6ec0f74ca0eb8, type: 2}
     - target: {fileID: 230706086536779919, guid: 657c6ad69046ecb47aa9249f6c827b5c, type: 3}
       propertyPath: m_LocalPosition.x
       value: 4.7090225
@@ -7270,6 +7282,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 90
       objectReference: {fileID: 0}
+    - target: {fileID: 6670878181011954849, guid: 657c6ad69046ecb47aa9249f6c827b5c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: f1d44f1bd9406c74f8c77839f6cf86b4, type: 2}
     - target: {fileID: 6995516001998568207, guid: 657c6ad69046ecb47aa9249f6c827b5c, type: 3}
       propertyPath: m_Name
       value: FloatingSignSmall
