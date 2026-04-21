@@ -1233,8 +1233,8 @@ MonoBehaviour:
   - "Crates come with various values, don\u2019t forget to check them. "
   arrayIndexString: 'Warehouse Safety Manual No. '
   shouldRefresh: 1
-  minimumRefreshDelay: 8
-  maximumRefreshDelay: 10
+  minimumRefreshDelay: 5
+  maximumRefreshDelay: 6
   text: {fileID: 532182379}
   arrayIndexText: {fileID: 359690799}
 --- !u!1 &552145300
