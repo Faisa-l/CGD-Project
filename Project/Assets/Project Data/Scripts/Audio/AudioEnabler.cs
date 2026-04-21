@@ -6,7 +6,7 @@ public class AudioEnabler : MonoBehaviour
     [SerializeField] List<AudioSource> audio_source;
     [SerializeField] List<string> names;
     
-    public void Enable(string name = "", bool overrideIsPlaying = false)
+    public void Enable(string name = "", bool overrideIsPlaying = true)
     {
         if (name == "") 
         {
