@@ -1,6 +1,7 @@
 using NUnit.Framework;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UIElements;
@@ -62,6 +63,9 @@ public class CratePickUp : MonoBehaviour
     [SerializeField] Transform rightPickUpOffset;
 
     [SerializeField] Transform forwardPickUpOffset;
+
+    [Tooltip("Amount of extra space between crates when picked up")]
+    [SerializeField] float offset = 0.1f;
 
 
     public UnityEvent onGrabbed = new UnityEvent();
@@ -340,7 +344,7 @@ public class CratePickUp : MonoBehaviour
 
     public void SetPositionInParent(Transform newPosition, int heldcount)
     {
-        pickupPositionOffset = new Vector3(0, heldObjects[0].transform.lossyScale.y * heldcount, 0);
+        pickupPositionOffset = new Vector3(0, (heldObjects[0].transform.lossyScale.y + offset) * heldcount , 0);
 
         newPosition.parent = PickupLocation.transform;
         newPosition.transform.position = PickupLocation.transform.position + pickupPositionOffset;
