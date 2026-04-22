@@ -137,9 +137,9 @@ public class CrateObject : MonoBehaviour, ICollectable
 				onAnyDestroyed?.Invoke();
 				
                 effectLibrary.Play("Explosion", transform.position);
-                Destroy(GameObject);
                 // onDestroyed uses audio for when the crate's number reaches 0 - Callum.S
-                // onDestroyed.Invoke();
+                onDestroyed.Invoke();
+                Destroy(GameObject);
             }
 
             else UpdateTextObjects();

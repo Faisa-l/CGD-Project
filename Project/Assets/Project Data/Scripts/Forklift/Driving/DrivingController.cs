@@ -138,7 +138,6 @@ public class DrivingController : MonoBehaviour
     private bool holdingInteract = false;
     private float interactHoldTime = 0f;
 
-    private bool lookingUp = false;
     private bool lookingBack = false;
 
     public Transform CameraForwardTransform => cameraForwardPos;
@@ -498,7 +497,7 @@ public class DrivingController : MonoBehaviour
         }
 
         if(boostReady && !drifting)
-            audio_enabler.Enable("boost", true);
+            audio_enabler.Enable("boost");
         
 
 
@@ -681,7 +680,7 @@ public class DrivingController : MonoBehaviour
 
     public void OnHonk()
     {
-        audio_enabler.Enable("horn", true);
+        audio_enabler.Enable("horn");
     }
 
     #endregion
