@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class QuotaDisplayText : MonoBehaviour 
 {
-    [SerializeField] TextMeshProUGUI quotaReqs, quotaProgressText;
+    [SerializeField] TextMeshProUGUI quotaReqs, quotaProgressText, quotaTimeText;
     [SerializeField] Slider quotaTimer, quotaProgressBar;
     [SerializeField] Image progressImage;
 
@@ -97,6 +97,7 @@ public class QuotaDisplayText : MonoBehaviour
 		}
 		
         quotaTimer.value = time / requirement.timeLimit;
+        quotaTimeText.SetText(GetQuotaTimeString(time));
     }
 
     public void updateProgress()
