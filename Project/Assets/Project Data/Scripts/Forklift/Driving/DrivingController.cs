@@ -33,7 +33,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] bool is_moving => (movement.movingValue != 0);
 
     [Header("Ground Checking Variables")]
-    [SerializeField] Transform groundCheckTransform;
+    [SerializeField] List<Transform> groundCheckTransform = new List<Transform>();
     [SerializeField] bool isGrounded;
     [SerializeField] float groundDistance = 0.4f;
     [SerializeField] float wheelRadius = 0.5f;
@@ -251,8 +251,19 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
-        isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength);
-        Debug.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength, isGrounded ? Color.green : Color.red);
+
+        foreach (var transform in groundCheckTransform)
+        {
+            bool grounded = Physics.Raycast(transform.position, -transform.up, out hit, rayLength);
+
+            if(grounded)
+            {
+                isGrounded = true;
+                return;
+            }
+        }
+
+        isGrounded = false;
     }
 
     private void updateMove()
@@ -687,16 +698,11 @@ public class DrivingController : MonoBehaviour
     {
         RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
-        if (Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength))
-        {
-            Gizmos.color = Color.green;
-        }
-        else
-        {
-            Gizmos.color = Color.red;
-        }
 
-        Gizmos.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength);
+        foreach (var transform in groundCheckTransform)
+        { 
+            Debug.DrawRay(transform.position, -transform.up * rayLength, isGrounded ? Color.green : Color.red);
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
