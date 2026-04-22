@@ -191,10 +191,10 @@ GameObject:
   - component: {fileID: 799914299884088629}
   - component: {fileID: 9029351545572074161}
   - component: {fileID: 6758174210526124029}
-  - component: {fileID: 2716165824081693986}
   - component: {fileID: 3960147188473178597}
   - component: {fileID: 1852464071001379209}
   - component: {fileID: 6345044637779667204}
+  - component: {fileID: 3598088885571247497}
   m_Layer: 6
   m_Name: InteractableCrate
   m_TagString: Float
@@ -242,7 +242,19 @@ MonoBehaviour:
   damageImmunityTime: 0.2
   onDestroyed:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1852464071001379209}
+        m_TargetAssemblyTypeName: UnityEngine.AudioSource, UnityEngine
+        m_MethodName: Play
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!33 &5113504707291311347
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -364,7 +376,7 @@ MonoBehaviour:
   onImpactThresholdMet:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2716165824081693986}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: AudioEnabler, Assembly-CSharp
         m_MethodName: Enable
         m_Mode: 5
@@ -376,24 +388,6 @@ MonoBehaviour:
           m_StringArgument: Impact
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &2716165824081693986
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3767048393502162153}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 960f28106e982524eb33a3af701411e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  audio_source:
-  - {fileID: 3960147188473178597}
-  - {fileID: 1852464071001379209}
-  names:
-  - Impact
-  - Destroyed
 --- !u!82 &3960147188473178597
 AudioSource:
   m_ObjectHideFlags: 0
@@ -407,7 +401,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 6418180475301049370, guid: 55c37a3d615ff4d458d122286abd3a7f, type: 2}
   m_PlayOnAwake: 0
-  m_Volume: 0.55
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -504,7 +498,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 6418180475301049370, guid: 45ad5c4c95fdde54987eefdbb816d2d4, type: 2}
   m_PlayOnAwake: 0
-  m_Volume: 0.75
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -612,6 +606,24 @@ MonoBehaviour:
   - {fileID: 2831670624676314391}
   - {fileID: 1888096333247878028}
   newMaterial: {fileID: -876546973899608171, guid: a61323f3eef9c1c44a03bb75f8bc0ef1, type: 3}
+--- !u!114 &3598088885571247497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3767048393502162153}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 960f28106e982524eb33a3af701411e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audio_source:
+  - {fileID: 3960147188473178597}
+  - {fileID: 1852464071001379209}
+  names:
+  - Impact
+  - Destroyed
 --- !u!1 &3893488551891639746
 GameObject:
   m_ObjectHideFlags: 0
