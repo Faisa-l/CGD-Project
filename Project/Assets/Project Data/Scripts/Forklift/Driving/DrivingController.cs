@@ -495,7 +495,7 @@ public class DrivingController : MonoBehaviour
         }
 
         if (boostReady && !drifting)
-            audio_enabler.Enable("boost", true);
+            audio_enabler.Enable("boost");
 
 
 
@@ -678,7 +678,7 @@ public class DrivingController : MonoBehaviour
 
     public void OnHonk()
     {
-        audio_enabler.Enable("horn", true);
+        audio_enabler.Enable("horn");
     }
 
     #endregion
@@ -760,6 +760,8 @@ public class DrivingController : MonoBehaviour
 
     private void multiplyCrateScore(float multiplier)
     {
+        if (!is_moving) return;
+
         castRay.GetComponent<CratePickUp>().multiplyCrateScore(multiplier);
     }
 
