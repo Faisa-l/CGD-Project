@@ -50,4 +50,23 @@ public class ButtonDetector : MonoBehaviour
             button.transform.position = releasedTransform.position;
         }
     }
+
+    private void OnCollisionEnter(Collider collider)
+    {
+        if (collider.gameObject.tag == "Player")
+        {
+            pressEvent?.Invoke();
+            button.transform.position = pressedTransform.position;
+            GetComponent<AudioEnabler>().Enable("Button");
+        }
+    }
+
+    private void OnCollisionExit(Collider collider)
+    {
+        if (collider.gameObject.tag == "Player")
+        {
+            releaseEvent?.Invoke();
+            button.transform.position = releasedTransform.position;
+        }
+    }
 }

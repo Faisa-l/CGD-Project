@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 2839537548899906856}
   - component: {fileID: 8709271667148245081}
   - component: {fileID: 8800519711826403695}
+  - component: {fileID: 1101949322899655665}
   m_Layer: 0
   m_Name: Button
   m_TagString: Untagged
@@ -133,6 +134,33 @@ MonoBehaviour:
   button: {fileID: 1787138147357021708}
   pressedTransform: {fileID: 1837641848390163779}
   releasedTransform: {fileID: 1090527130986001099}
+--- !u!54 &1101949322899655665
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 82386327137125239}
+  serializedVersion: 5
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 126
+  m_CollisionDetection: 0
 --- !u!1 &1787138147357021708
 GameObject:
   m_ObjectHideFlags: 0

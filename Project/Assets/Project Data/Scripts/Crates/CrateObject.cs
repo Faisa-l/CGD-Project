@@ -118,6 +118,15 @@ public class CrateObject : MonoBehaviour, ICollectable
         }
     }
 
+    private void FixedUpdate()
+    {
+        if(transform.parent == null)
+        {
+            GetComponent<Rigidbody>().isKinematic = false;
+            GetComponent<Rigidbody>().useGravity = true;
+        }
+    }
+
     public float MaxScore
     {
         get => maxScore;
