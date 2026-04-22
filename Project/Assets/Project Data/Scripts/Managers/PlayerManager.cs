@@ -29,7 +29,7 @@ public class PlayerManager : MonoBehaviour
 #endif
     [SerializeField] bool singleController = false;
     [SerializeField] GameObject player_prefab;
-	[SerializeField] [Range(1, 4)] int debugPlayerCount = 4;
+    [SerializeField][Range(1, 4)] int debugPlayerCount = 4;
 
     private int players = 0;
     [SerializeField] private Camera blankCamera;
@@ -49,7 +49,7 @@ public class PlayerManager : MonoBehaviour
 
         PlayerInputManager input_manager = GetComponent<PlayerInputManager>();
 
-		// Debug (for testing)
+        // Debug (for testing)
         if (debug_mode_on)
         {
             input_manager.joinBehavior = PlayerJoinBehavior.JoinPlayersWhenJoinActionIsTriggered;
@@ -59,23 +59,30 @@ public class PlayerManager : MonoBehaviour
             {
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
 
-                if (i == 0 && singleController)
+                if (singleController)
                 {
+                    if (i != 0) continue;
+
                     player.SwitchCurrentControlScheme(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
                     player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(Gamepad.all[Mathf.Min(player_count, Gamepad.all.Count - 1)]);
+                }
+                else
+                {
+                    player.SwitchCurrentControlScheme(Gamepad.all[0]);
+                    player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(Gamepad.all[0]);
                 }
             }
 
             // minimap.RepositionPanel(input_manager.maxPlayerCount);
         }
-		// Standard (build)
-		else
-		{
-			print(LobbyMenuManager.currentPlayers.Count);
-			
-			// LobbyMenuManager.currentPlayers = Gamepads in order they pressed join button on lobby screen
-			for (int i = 0; i < LobbyMenuManager.getMaxPlayers(); i++)
-			{
+        // Standard (build)
+        else
+        {
+            print(LobbyMenuManager.currentPlayers.Count);
+
+            // LobbyMenuManager.currentPlayers = Gamepads in order they pressed join button on lobby screen
+            for (int i = 0; i < LobbyMenuManager.getMaxPlayers(); i++)
+            {
                 PlayerInput player = PlayerInput.Instantiate(player_prefab, i, splitScreenIndex: i);
 
                 if (i >= LobbyMenuManager.currentPlayers.Count)
@@ -87,14 +94,14 @@ public class PlayerManager : MonoBehaviour
 
                 player.SwitchCurrentControlScheme(LobbyMenuManager.currentPlayers[i]);
                 player.gameObject.GetComponent<DrivingController>().setPlayerGamepad(LobbyMenuManager.currentPlayers[i]);
-			}
-		}
+            }
+        }
 
         blankCamera.rect = new Rect(0.5f, 0, 0.5f, 0.5f);
     }
 
     public void OnPlayerJoined(PlayerInput player)
-    {		
+    {
         blankCamera.enabled = false;
 
         inputs.Add(player.gameObject);
@@ -114,7 +121,7 @@ public class PlayerManager : MonoBehaviour
         }
 
         players++;
-        
+
         if (players == 3)
         {
             blankCamera.enabled = true;
@@ -124,7 +131,7 @@ public class PlayerManager : MonoBehaviour
 
         player.gameObject.transform.position = player_positions[player.playerIndex].position;
         player.gameObject.transform.rotation = player_positions[player.playerIndex].rotation;
-        
+
         playerJoined.Invoke(player_count, player.gameObject.transform);
 
         player.gameObject.name = $"Player {player_count}";

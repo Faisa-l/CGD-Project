@@ -51,8 +51,8 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject rightTrailStart;
     [SerializeField] DriftingEffectsController driftingEffects;
     GameObject currentTrailLeft;
-    GameObject currentTrailRight; 
-    [SerializeField]GameObject driftTrailsContainer;
+    GameObject currentTrailRight;
+    [SerializeField] GameObject driftTrailsContainer;
     bool manuallyStoppedDrift = false;
 
     [Header("Boost Variables")]
@@ -69,7 +69,7 @@ public class DrivingController : MonoBehaviour
     [SerializeField] GameObject boostParticlesBR;
     [SerializeField] float boostTierTimeIncrement = 0.5f;
     [SerializeField] GameObject speedLinesImage;
-    [SerializeField] Vector3 crateBoostMultipliers = new(2f,2.5f,3f);
+    [SerializeField] Vector3 crateBoostMultipliers = new(2f, 2.5f, 3f);
     [SerializeField] Slider boostBar;
 
     float sign = 1f;
@@ -79,14 +79,14 @@ public class DrivingController : MonoBehaviour
     [SerializeField] private float liftSpeed = 1.0f;
     [SerializeField] private float minLiftPosition = 5f;
     [SerializeField] private float maxLiftPosition = 10f;
-	public UnityEvent<bool> onLift = new UnityEvent<bool>();
+    public UnityEvent<bool> onLift = new UnityEvent<bool>();
 
     [Header("UI")]
     [SerializeField] private HudManager hudManager;
     [SerializeField] private GameObject dropAllUI;
     [SerializeField] private Slider dropAllSlider;
     [SerializeField] private GameOverPanel gameOverMenu;
-	[SerializeField] private GameObject breakFreePrompt;
+    [SerializeField] private GameObject breakFreePrompt;
 
     [Header("Other References")]
     [SerializeField] private Transform steeringWheel;
@@ -101,7 +101,7 @@ public class DrivingController : MonoBehaviour
     [Header("Bouce variables")]
     [Header("Bounce variables")]
     [SerializeField] float bouncingForceMultiplier = 5f;
-    [Range(1,2)]
+    [Range(1, 2)]
     [SerializeField] float bounceDecay = 2f;
     Vector3 addedForce = Vector3.zero;
     [SerializeField, Min(0f)] float collisionVelocityForCrateDamage = 10f;
@@ -118,18 +118,16 @@ public class DrivingController : MonoBehaviour
     Vector3 cameraForwardOrigin;
     float maxCameraReverseDist;
     float maxCameraForwardDist;
-	
-	[Header("Camera Shake")]
-	[SerializeField] ForkliftCameraShake cameraShake;
-	[SerializeField] float shakeDuration = 0.2f;
-	[SerializeField] float shakeMagnitude = 0.05f;
+
+    [Header("Camera Shake")]
+    [SerializeField] ForkliftCameraShake cameraShake;
+    [SerializeField] float shakeDuration = 0.2f;
+    [SerializeField] float shakeMagnitude = 0.05f;
 
     [Header("Camera Boost")]
     [SerializeField] float fovChangeMultiplier = 1.2f;
     [SerializeField] GameObject playerCamera = null;
     [SerializeField] private GameObject castRay;
-
-    private Rigidbody rb;
 
     private AudioEnabler audio_enabler;
 
@@ -138,6 +136,7 @@ public class DrivingController : MonoBehaviour
     private bool holdingInteract = false;
     private float interactHoldTime = 0f;
 
+    private bool lookingUp = false;
     private bool lookingBack = false;
 
     public Transform CameraForwardTransform => cameraForwardPos;
@@ -162,7 +161,6 @@ public class DrivingController : MonoBehaviour
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody>();
         audio_enabler = GetComponent<AudioEnabler>();
 
         // Camera-transform variables initialisation 
@@ -184,18 +182,18 @@ public class DrivingController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(transform.parent == null)
+        if (transform.parent == null)
         {
             selfIsLifted = false;
-			breakFreePrompt.SetActive(false);
-			
+            breakFreePrompt.SetActive(false);
+
             rigidBody.isKinematic = false;
             GetComponent<BoxCollider>().enabled = true;
+            rigidBody.angularVelocity = Vector3.zero;
         }
 
-        rb.angularVelocity = Vector3.zero;
 
-        groundCheck();  
+        groundCheck();
         updateMove();
         updateRotate();
 
@@ -221,15 +219,15 @@ public class DrivingController : MonoBehaviour
         backwheel.SetFloat("wheeldir", movement.turningValue);
         frontwheel2.SetFloat("wheeldir", movement.turningValue);
         backwheel2.SetFloat("wheeldir", movement.turningValue);
-        
+
         if (speed > 10f && bounced == true)
         {
-            stunanim.SetBool("Stun", true);   
+            stunanim.SetBool("Stun", true);
         }
         else
         {
             stunanim.SetBool("Stun", false);
-        }    
+        }
 
         if (TiersEnabled)
         {
@@ -242,16 +240,16 @@ public class DrivingController : MonoBehaviour
             maxBoostSpeed = 20f;
             DriftBoost();
         }
-        
+
         //Audio changes pitch depending on the speed of the forklift.
         audioSpeedRatio = speed;
         runningSound.pitch = Mathf.Lerp(speed / 2, runningMaxPitch, Time.deltaTime * audioSpeedRatio);
     }
 
-#region Updating functions
+    #region Updating functions
     public void groundCheck()
     {
-        RaycastHit hit; 
+        RaycastHit hit;
         float rayLength = groundDistance + wheelRadius;
         isGrounded = Physics.Raycast(groundCheckTransform.position, -groundCheckTransform.up, out hit, rayLength);
         Debug.DrawRay(groundCheckTransform.position, -groundCheckTransform.up * rayLength, isGrounded ? Color.green : Color.red);
@@ -284,19 +282,19 @@ public class DrivingController : MonoBehaviour
         //if triggers not held
         else
         {
-           speedLinesImage.SetActive(false);
+            speedLinesImage.SetActive(false);
 
-           //if speed is around 0 then stop
-           if (Mathf.Abs(speed) <= acceleration * Time.deltaTime * breakMultiplier)
-           {
-               speed = 0;    
-               movement.movingValue = 0;
+            //if speed is around 0 then stop
+            if (Mathf.Abs(speed) <= acceleration * Time.deltaTime * breakMultiplier)
+            {
+                speed = 0;
+                movement.movingValue = 0;
             }
-           //otherwise decelerate
-           else
-           {
-               speed -= acceleration * Time.deltaTime * Mathf.Sign(speed) * breakMultiplier;
-           }
+            //otherwise decelerate
+            else
+            {
+                speed -= acceleration * Time.deltaTime * Mathf.Sign(speed) * breakMultiplier;
+            }
         }
 
         if (addedForce.magnitude < 0.1)
@@ -305,7 +303,7 @@ public class DrivingController : MonoBehaviour
         }
 
         if (addedForce.magnitude > 0.1) addedForce *= 1f / bounceDecay;
-        else if(bounced)
+        else if (bounced)
         {
             bounced = false;
             addedForce = new Vector3();
@@ -327,7 +325,7 @@ public class DrivingController : MonoBehaviour
             audio_enabler.Enable("driving");
         }
     }
-    
+
     private void updateRotate()
     {
         //don't do rotations if the forklift isn't moving
@@ -337,11 +335,11 @@ public class DrivingController : MonoBehaviour
         transform.Rotate(0, movement.turningValue * (drifting ? driftSpeed * sign : rotateSpeed * Mathf.Sign(speed)) * Time.deltaTime, 0);
 
         //transform the angle of the forklift from what unity uses to a value that can be used with the maximum rotation value
-        float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f))%360;
+        float bodyAngle = Mathf.Ceil(body.transform.localEulerAngles.y - 360f * Mathf.Floor(body.transform.localEulerAngles.y / 180f)) % 360;
 
-        if(movement.turningValue == 0)
+        if (movement.turningValue == 0)
         {
-            if(Mathf.Abs(bodyAngle) >= 0.1f)
+            if (Mathf.Abs(bodyAngle) >= 0.1f)
             {
                 body.transform.RotateAround(
                  body.transform.position + body.transform.forward * body.transform.localScale.z / 2f,
@@ -355,7 +353,7 @@ public class DrivingController : MonoBehaviour
             }
         }
         //if the forklift isn't drifting, make sure it is looking forward
-        if(!drifting || movement.movingValue == -1 || movement.turningValue == 0)
+        if (!drifting || movement.movingValue == -1 || movement.turningValue == 0)
         {
             body.transform.localRotation = new();
             body.transform.localPosition = new();
@@ -367,7 +365,7 @@ public class DrivingController : MonoBehaviour
         //-----If player is drifting-----//
 
         //If the body is fully rotated, then return
-        if (Mathf.Abs(bodyAngle) >= maxRotation && Mathf.Sign(bodyAngle) == MathF.Sign(movement.turningValue)) 
+        if (Mathf.Abs(bodyAngle) >= maxRotation && Mathf.Sign(bodyAngle) == MathF.Sign(movement.turningValue))
         {
             return;
         }
@@ -454,9 +452,9 @@ public class DrivingController : MonoBehaviour
         drifting = false;
     }
 
-#endregion
+    #endregion
 
-#region Input Functions
+    #region Input Functions
     public void OnMove(InputValue value)
     {
         movement.movingValue = value.Get<Vector2>().y;
@@ -470,13 +468,13 @@ public class DrivingController : MonoBehaviour
     }
 
     public void OnTurn(InputValue value)
-    {   
+    {
         float prevTurnValue = movement.turningValue;
         movement.turningValue = value.Get<Vector2>().x;
 
-        if (movement.turningValue != prevTurnValue) 
+        if (movement.turningValue != prevTurnValue)
         {
-            boostTimer = 0; 
+            boostTimer = 0;
         }
     }
 
@@ -487,7 +485,7 @@ public class DrivingController : MonoBehaviour
         // you can't drift while lifted
         if (selfIsLifted) return;
 
-        if(manuallyStoppedDrift)
+        if (manuallyStoppedDrift)
         {
             manuallyStoppedDrift = false;
         }
@@ -496,12 +494,12 @@ public class DrivingController : MonoBehaviour
             drifting = !drifting & (pressVal == 1);
         }
 
-        if(boostReady && !drifting)
-            audio_enabler.Enable("boost");
-        
+        if (boostReady && !drifting)
+            audio_enabler.Enable("boost", true);
 
 
-        if(drifting)
+
+        if (drifting)
         {
             currentTrailLeft = Instantiate(trailPrefab);
             currentTrailLeft.transform.parent = leftTrailStart.transform;
@@ -514,15 +512,15 @@ public class DrivingController : MonoBehaviour
         else
         {
             currentTrailRight.transform.parent = driftTrailsContainer.transform;
-            currentTrailLeft.transform.parent =  driftTrailsContainer.transform;
+            currentTrailLeft.transform.parent = driftTrailsContainer.transform;
         }
     }
 
     public void OnLift()
     {
         lifting = !lifting;
-		
-		onLift?.Invoke(lifting);
+
+        onLift?.Invoke(lifting);
     }
 
     public void OnLookBack(InputValue value)
@@ -560,7 +558,7 @@ public class DrivingController : MonoBehaviour
 
         for (int i = 0; i <= cratePickup.heldObjectsCount; i++)
         {
-            cratePickup.DropHeld();    
+            cratePickup.DropHeld();
         }
 
         dropAllUI.SetActive(false);
@@ -572,19 +570,19 @@ public class DrivingController : MonoBehaviour
     {
         if (drifting)
         {
-           boostTimer += Time.deltaTime;
+            boostTimer += Time.deltaTime;
 
-           if (boostTimer >= 1f)
-           {
-               boostReady = true;
-           }
+            if (boostTimer >= 1f)
+            {
+                boostReady = true;
+            }
         }
         else if (!drifting && boostReady)
         {
             speed = speed * boostMultiplier;
             boostReady = false;
 
-            if(speed >= maxBoostSpeed)
+            if (speed >= maxBoostSpeed)
             {
                 speed = maxBoostSpeed;
             }
@@ -663,11 +661,11 @@ public class DrivingController : MonoBehaviour
     public void togglePlayerLifted(bool lifted, CratePickUp cratePickUp = null)
     {
         selfIsLifted = !selfIsLifted;
-		breakFreePrompt.SetActive(selfIsLifted);
-		
+        breakFreePrompt.SetActive(selfIsLifted);
+
         lifterPickup = cratePickUp;
 
-        if(selfIsLifted)
+        if (selfIsLifted)
         {
             stopAllAnimations();
         }
@@ -680,7 +678,7 @@ public class DrivingController : MonoBehaviour
 
     public void OnHonk()
     {
-        audio_enabler.Enable("horn");
+        audio_enabler.Enable("horn", true);
     }
 
     #endregion
@@ -705,18 +703,18 @@ public class DrivingController : MonoBehaviour
     {
         if (ignoreBounceMask.Contains(collision.gameObject.tag)) return;
 
-		// Shake camera when colliding with crates
-		if (collision.transform.CompareTag("Float"))
-		{
-			cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
+        // Shake camera when colliding with crates
+        if (collision.transform.CompareTag("Float"))
+        {
+            cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
         }
         //if collision is not with a crate then stop drifting
-        else if(drifting)
+        else if (drifting)
         {
             manuallyStopDrifting();
         }
-        
-        
+
+
         bounced = true;
 
         Vector3 forceDirection = Vector3.zero;
@@ -727,27 +725,27 @@ public class DrivingController : MonoBehaviour
         forceDirection = normalDir;
 
         addedForce =
-            forceDirection * bouncingForceMultiplier * rigidBody.mass * 
+            forceDirection * bouncingForceMultiplier * rigidBody.mass *
             -Mathf.Sign(Vector3.Dot(normalDir, (collision.gameObject.transform.position - transform.position).normalized));
 
-        
+
 
         movement.movingValue = 0;
 
         rigidBody.AddForce(addedForce);
-		
-		// Camera shake
-		cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
+
+        // Camera shake
+        cameraShake.Shake(shakeDuration, shakeMagnitude * speed);
 
         TryDropOnCollision(collision);
-        
+
         //Audio impact for when the forklift bounces from a wall, it plays a sound
         if (bounced == true)
         {
             audio_enabler.Enable("impact");
             //print("IMPACT FORKLIFT");
         }
-        if(collision.gameObject.tag == "Player" || collision.gameObject.tag == "Float")
+        if (collision.gameObject.tag == "Player" || collision.gameObject.tag == "Float")
             TryDropOnCollision(collision);
     }
 
@@ -804,5 +802,30 @@ public class DrivingController : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    public void toggleRigidbody(bool active)
+    {
+        if (!active)
+        {
+            Destroy(rigidBody);
+            //body.transform.localRotation = Quaternion.Euler(-90,0,0);
+        }
+        else
+        {
+            rigidBody = gameObject.AddComponent<Rigidbody>(); ;
+            rigidBody.mass = 1000;
+            rigidBody.linearDamping = 0f;
+            rigidBody.angularDamping = 0.05f;
+            rigidBody.automaticCenterOfMass = true;
+            rigidBody.automaticInertiaTensor = true;
+            rigidBody.useGravity = true;
+            rigidBody.isKinematic = false;
+            rigidBody.interpolation = RigidbodyInterpolation.None;
+            rigidBody.collisionDetectionMode = CollisionDetectionMode.Continuous;
+            rigidBody.constraints = RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezeRotationX;
+
+            Debug.Break();
+        }
     }
 }
