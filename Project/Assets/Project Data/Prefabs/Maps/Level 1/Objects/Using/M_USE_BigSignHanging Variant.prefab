@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
       objectReference: {fileID: 2100000, guid: 84f79dae53afb1c48beb4e13b3716351, type: 2}
+    - target: {fileID: 4250892007382598530, guid: 38907a174e669444f8624dfe22ef7086, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: edbd6c220bd0bf2479b6ec0f74ca0eb8, type: 2}
     - target: {fileID: 5586621162481978227, guid: 38907a174e669444f8624dfe22ef7086, type: 3}
       propertyPath: m_LocalPosition.x
       value: 1.234
@@ -102,7 +106,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8789237677631384441, guid: 38907a174e669444f8624dfe22ef7086, type: 3}
       propertyPath: m_Name
-      value: BigSignHanging Variant
+      value: M_USE_BigSignHanging Variant
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
