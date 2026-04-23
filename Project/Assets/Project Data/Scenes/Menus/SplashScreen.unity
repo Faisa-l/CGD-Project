@@ -1002,6 +1002,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2601205830627581158, guid: d2fd07fa35e0fd7439d528a4ecb27585, type: 3}
+      propertyPath: sceneMusic.Array.data[2].sceneName
+      value: Current Level
+      objectReference: {fileID: 0}
     - target: {fileID: 4010359062348069460, guid: d2fd07fa35e0fd7439d528a4ecb27585, type: 3}
       propertyPath: m_Name
       value: Music Manager

@@ -38,6 +38,8 @@ public class CrateObject : MonoBehaviour, ICollectable
     UnityEvent onDestroyed;
 	public static UnityEvent onAnyDestroyed = new UnityEvent();
 
+    [SerializeField] GameObject breakAudio;
+
     float maxScore;
     string startingPromptText;
     ContextualPromptSource promptSource;
@@ -230,6 +232,8 @@ public class CrateObject : MonoBehaviour, ICollectable
     {
         if (damage > 0)
         {
+            GetComponent<AudioEnabler>().Enable("Impact");
+
 			// Get direction to nearest player (most likely the one that hit the crate)
 			Collider[] hitColliders = Physics.OverlapSphere(transform.position, floatingTextPlayerDetectionRadius);
 			foreach (var hitCollider in hitColliders)
