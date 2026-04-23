@@ -8012,7 +8012,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cheatRequired: {fileID: 11400000, guid: 3b4157d1b312afd42869d2e326cadd44, type: 2}
-  transformToEffect: {fileID: 0}
+  transformToEffect: {fileID: 1434890929055569206}
   newScale: {x: 2, y: 2, z: 2}
 --- !u!114 &7680937337185648737
 MonoBehaviour:
@@ -8027,7 +8027,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cheatRequired: {fileID: 11400000, guid: 0ed2112ac5eb7cf4693ee91779b90d5b, type: 2}
-  meshToChange: {fileID: 0}
+  meshToChange: {fileID: 3142649930540391}
   newMesh: {fileID: 4300000, guid: 477c3a0d92aa1424db2ac70c581d1745, type: 3}
 --- !u!1 &6029006062953194881
 GameObject:
@@ -15895,6 +15895,11 @@ PrefabInstance:
 --- !u!137 &3142649930540391 stripped
 SkinnedMeshRenderer:
   m_CorrespondingSourceObject: {fileID: 7837870953997903286, guid: ebe1b206c765aa64599c264bcbd37003, type: 3}
+  m_PrefabInstance: {fileID: 7840375671890559185}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &1434890929055569206 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9162394843076318695, guid: ebe1b206c765aa64599c264bcbd37003, type: 3}
   m_PrefabInstance: {fileID: 7840375671890559185}
   m_PrefabAsset: {fileID: 0}
 --- !u!4 &7729343951804278586 stripped
