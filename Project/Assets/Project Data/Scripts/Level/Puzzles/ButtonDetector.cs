@@ -50,7 +50,7 @@ public class ButtonDetector : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collider collider)
+    private void OnCollisionEnter(Collision collider)
     {
         if (collider.gameObject.tag == "Player")
         {
@@ -60,7 +60,7 @@ public class ButtonDetector : MonoBehaviour
         }
     }
 
-    private void OnCollisionExit(Collider collider)
+    private void OnCollisionExit(Collision collider)
     {
         if (collider.gameObject.tag == "Player")
         {
